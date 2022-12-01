@@ -168,7 +168,7 @@ public final class Unsafe {
                             JarEntry jarEntry = new JarEntry("tools/unsafe/agent/UnsafeAgent.class");
                             jarOutputStream.putNextEntry(jarEntry);
 
-                            InputStream resourceAsStream = Main.class.getClassLoader().getResourceAsStream("tools/unsafe/agent/UnsafeAgent.class");
+                            InputStream resourceAsStream = Unsafe.class.getClassLoader().getResourceAsStream("tools/unsafe/agent/UnsafeAgent.class");
                             byte[] buffer = new byte[1024];
                             while (true) {
                                 int count = resourceAsStream.read(buffer);
