@@ -1,10 +1,11 @@
-package tools.unsafe.reflection.field;
+package tools.unsafe.reflection.field.resolved;
 
 import tools.unsafe.reflection.clazz.ClassRef;
+import tools.unsafe.reflection.field.FieldRef;
 
 import java.lang.reflect.Field;
 
-public abstract class AbstractFieldRef<C> {
+public abstract class AbstractFieldRef<C> implements FieldRef<C> {
 
     protected final ClassRef<C> classRef;
     protected final Field field;

@@ -4,6 +4,10 @@ import tools.unsafe.reflection.UnresolvedRef;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.constructor.UnresolvedZeroArgsClassConstructorRef;
 import tools.unsafe.reflection.field.*;
+import tools.unsafe.reflection.field.resolved.ResolvedDynamicObjectFieldRef;
+import tools.unsafe.reflection.field.resolved.ResolvedStaticObjectFieldRef;
+import tools.unsafe.reflection.field.unresolved.UnresolvedDynamicObjectFieldRef;
+import tools.unsafe.reflection.field.unresolved.UnresolvedStaticObjectFieldRef;
 import tools.unsafe.reflection.method.UnresolvedNonStaticMethodRef;
 import tools.unsafe.reflection.method.UnresolvedNonStaticNonVoidMethodRef;
 import tools.unsafe.reflection.method.UnresolvedStaticMethodRef;
@@ -66,23 +70,23 @@ public class UnresolvedClassRef<C> extends UnresolvedRef<ClassRef<C>> {
     }
 
     @Nonnull
-    public <T> UnresolvedNonStaticObjectFieldRef<C, T> tryGetNonStaticField(@Nonnull String fieldName) {
+    public <T> UnresolvedDynamicObjectFieldRef<C, T> tryGetNonStaticField(@Nonnull String fieldName) {
         try {
             return getNonStaticField(fieldName);
         } catch (Throwable e) {
-            return new UnresolvedNonStaticObjectFieldRef<C, T>(null, e);
+            return new UnresolvedDynamicObjectFieldRef<C, T>(null, e);
         }
     }
 
-    public @Nonnull <T> UnresolvedNonStaticObjectFieldRef<C, T> getNonStaticField(@Nonnull String fieldName) throws UnresolvedRefException {
+    public @Nonnull <T> UnresolvedDynamicObjectFieldRef<C, T> getNonStaticField(@Nonnull String fieldName) throws UnresolvedRefException {
         return resolve().getNonStaticField(fieldName);
     }
 
-    public @Nonnull <T> UnresolvedNonStaticObjectFieldRef<C, T> findFirstNonStaticField(@Nullable FieldFilter fieldFilter, boolean recursive) throws UnresolvedRefException {
+    public @Nonnull <T> UnresolvedDynamicObjectFieldRef<C, T> findFirstNonStaticField(@Nullable FieldFilter fieldFilter, boolean recursive) throws UnresolvedRefException {
         return resolve().findFirstNonStaticField(fieldFilter, recursive);
     }
 
-    public @Nonnull Map<String, ResolvedNonStaticObjectFieldRef<C, Object>> findNonStaticFields(@Nullable FieldFilter fieldFilter, boolean recursive) throws UnresolvedRefException {
+    public @Nonnull Map<String, ResolvedDynamicObjectFieldRef<C, Object>> findNonStaticFields(@Nullable FieldFilter fieldFilter, boolean recursive) throws UnresolvedRefException {
         return resolve().findNonStaticFields(fieldFilter, recursive);
     }
 

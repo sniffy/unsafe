@@ -3,8 +3,8 @@ package tools.unsafe.reflection.constructor;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
-import tools.unsafe.reflection.field.UnresolvedNonStaticObjectFieldRef;
-import tools.unsafe.reflection.field.UnresolvedStaticObjectFieldRef;
+import tools.unsafe.reflection.field.unresolved.UnresolvedDynamicObjectFieldRef;
+import tools.unsafe.reflection.field.unresolved.UnresolvedStaticObjectFieldRef;
 import tools.unsafe.Unsafe;
 
 import java.lang.invoke.MethodHandle;
@@ -41,10 +41,10 @@ public class ConstructorMethodHandleBuilder {
         MethodType constructorMethodType = MethodType.methodType(Void.TYPE);
         MethodHandle constructor = implLookup.findConstructor(clazz, constructorMethodType);
 
-        UnresolvedNonStaticObjectFieldRef<Object, Object> initMethodFieldRef = Unsafe.$("java.lang.invoke.DirectMethodHandle$Constructor").getNonStaticField("initMethod");
+        UnresolvedDynamicObjectFieldRef<Object, Object> initMethodFieldRef = Unsafe.$("java.lang.invoke.DirectMethodHandle$Constructor").getNonStaticField("initMethod");
         /* MemberName */ Object initMemberName = initMethodFieldRef.get(constructor);
 
-        UnresolvedNonStaticObjectFieldRef<Object, Integer> memberNameFlagsFieldRef = Unsafe.$("java.lang.invoke.MemberName").getNonStaticField("flags");
+        UnresolvedDynamicObjectFieldRef<Object, Integer> memberNameFlagsFieldRef = Unsafe.$("java.lang.invoke.MemberName").getNonStaticField("flags");
         int flags = memberNameFlagsFieldRef.get(initMemberName);
         flags &= ~0x00020000; // remove "is constructor"
         flags |= 0x00010000; // add "is (non-constructor) method"

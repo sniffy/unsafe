@@ -11,7 +11,6 @@ public interface UnresolvedFieldRef<C> {
 
     Field getField() throws UnresolvedRefException;
 
-    // TODO: compare and set
     // TODO: introduce BooleanFieldRef and other similar classes
 
 }

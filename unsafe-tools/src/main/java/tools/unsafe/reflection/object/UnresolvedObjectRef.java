@@ -3,7 +3,7 @@ package tools.unsafe.reflection.object;
 import tools.unsafe.reflection.UnresolvedRef;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
-import tools.unsafe.reflection.field.ResolvedInstanceObjectFieldRef;
+import tools.unsafe.reflection.field.resolved.ResolvedInstanceObjectFieldRef;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;

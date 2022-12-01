@@ -3,8 +3,8 @@ package tools.unsafe.reflection.object;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
-import tools.unsafe.reflection.field.ResolvedInstanceObjectFieldRef;
-import tools.unsafe.reflection.field.UnresolvedNonStaticObjectFieldRef;
+import tools.unsafe.reflection.field.resolved.ResolvedInstanceObjectFieldRef;
+import tools.unsafe.reflection.field.unresolved.UnresolvedDynamicObjectFieldRef;
 import tools.unsafe.reflection.method.ObjectNonVoidMethodRef;
 
 import java.lang.reflect.InvocationTargetException;
@@ -25,7 +25,7 @@ public class ObjectRef<C> {
     }
 
     public <T> UnresolvedObjectRef<T> $(String fieldName) {
-        UnresolvedNonStaticObjectFieldRef<C, T> nonStaticField = classRef.<T>getNonStaticField(fieldName);
+        UnresolvedDynamicObjectFieldRef<C, T> nonStaticField = classRef.<T>getNonStaticField(fieldName);
         T fieldValue = null;
         Exception exception = null;
         Class<T> fieldType = null;

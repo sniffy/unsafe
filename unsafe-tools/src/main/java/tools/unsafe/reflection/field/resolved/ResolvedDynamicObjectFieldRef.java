@@ -1,19 +1,21 @@
-package tools.unsafe.reflection.field;
+package tools.unsafe.reflection.field.resolved;
 
 import tools.unsafe.Unsafe;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
+import tools.unsafe.reflection.field.types.DynamicObjectFieldRef;
+import tools.unsafe.reflection.field.FieldRef;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-public class ResolvedStaticObjectFieldRef<C,T> extends AbstractFieldRef<C> implements FieldRef<C>, ObjectFieldRef<T> {
+public class ResolvedDynamicObjectFieldRef<C, T> extends AbstractDynamicObjectFieldRef<C,T> implements FieldRef<C>, DynamicObjectFieldRef<C,T> {
 
-    public ResolvedStaticObjectFieldRef(ClassRef<C> classRef, Field field) {
+    public ResolvedDynamicObjectFieldRef(ClassRef<C> classRef, Field field) {
         super(classRef, field);
     }
 
-    public boolean compareAndSet(T oldValue, T newValue) throws UnsafeInvocationException {
+    public boolean compareAndSet(C instance, T oldValue, T newValue) throws UnsafeInvocationException {
         try {
 
             sun.misc.Unsafe UNSAFE = Unsafe.getSunMiscUnsafe();
@@ -23,9 +25,9 @@ public class ResolvedStaticObjectFieldRef<C,T> extends AbstractFieldRef<C> imple
              */
             UNSAFE.ensureClassInitialized(field.getDeclaringClass());
 
-            long offset = UNSAFE.staticFieldOffset(field);
+            long offset = UNSAFE.objectFieldOffset(field);
 
-            Object object = field.getDeclaringClass();
+            Object object = instance;
 
             // TODO: validate conversion below; use new Unsafe on modern JDK
 
@@ -108,7 +110,7 @@ public class ResolvedStaticObjectFieldRef<C,T> extends AbstractFieldRef<C> imple
         }
     }*/
 
-    public void set(T value) throws UnsafeInvocationException {
+    public void set(C instance, T value) throws UnsafeInvocationException {
         try {
 
             /*if (!field.isAccessible()) {
@@ -131,9 +133,9 @@ public class ResolvedStaticObjectFieldRef<C,T> extends AbstractFieldRef<C> imple
              */
             UNSAFE.ensureClassInitialized(field.getDeclaringClass());
 
-            long offset = UNSAFE.staticFieldOffset(field);
+            long offset = UNSAFE.objectFieldOffset(field);
 
-            Object object = field.getDeclaringClass();
+            Object object = instance;
 
             if (field.getType() == Boolean.TYPE && value instanceof Boolean) {
                 if (Modifier.isVolatile(field.getModifiers())) {
@@ -142,13 +144,11 @@ public class ResolvedStaticObjectFieldRef<C,T> extends AbstractFieldRef<C> imple
                     UNSAFE.putBoolean(object, offset, (Boolean) value);
                 }
             } else if (field.getType() == Integer.TYPE && value instanceof Number) {
-                if (Modifier.isVolatile(field.getModifiers()) || Modifier.isFinal(field.getModifiers())) {
+                if (Modifier.isVolatile(field.getModifiers())) {
                     UNSAFE.putIntVolatile(object, offset, ((Number) value).intValue());
                 } else {
                     UNSAFE.putInt(object, offset, ((Number) value).intValue());
                 }
-                //UNSAFE.fullFence();
-
             } else if (field.getType() == Long.TYPE && value instanceof Number) {
                 if (Modifier.isVolatile(field.getModifiers())) {
                     UNSAFE.putLongVolatile(object, offset, ((Number) value).longValue());
@@ -189,7 +189,6 @@ public class ResolvedStaticObjectFieldRef<C,T> extends AbstractFieldRef<C> imple
                 if (Modifier.isVolatile(field.getModifiers()) || Modifier.isFinal(field.getModifiers())) { // TODO: use *volatile for other final fields as well
                     // TODO: switch to putReferenceVolatile from jdk.internal.reflect.Unsafe since it provdies better object visibility
                     UNSAFE.putObjectVolatile(object, offset, value);
-                    //UNSAFE.fullFence();
                 } else {
                     UNSAFE.putObject(object, offset, value);
                 }
@@ -200,7 +199,7 @@ public class ResolvedStaticObjectFieldRef<C,T> extends AbstractFieldRef<C> imple
         }
     }
 
-    public T get() throws UnsafeInvocationException {
+    public T get(C instance) throws UnsafeInvocationException {
         try {
 
             sun.misc.Unsafe UNSAFE = Unsafe.getSunMiscUnsafe();
@@ -209,10 +208,11 @@ public class ResolvedStaticObjectFieldRef<C,T> extends AbstractFieldRef<C> imple
             Ensure the given class has been initialized. This is often needed in conjunction with obtaining the static field base of a class.
              */
             UNSAFE.ensureClassInitialized(field.getDeclaringClass());
-            
-            long offset = UNSAFE.staticFieldOffset(field);
 
-            Object object = field.getDeclaringClass();
+            long offset = UNSAFE.objectFieldOffset(field);
+
+            Object object = instance;
+
             if (field.getType() == Boolean.TYPE) {
                 if (Modifier.isVolatile(field.getModifiers())) {
                     return (T) (Boolean) UNSAFE.getBooleanVolatile(object, offset);
