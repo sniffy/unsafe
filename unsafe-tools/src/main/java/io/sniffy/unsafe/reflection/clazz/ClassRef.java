@@ -1,7 +1,7 @@
 package io.sniffy.unsafe.reflection.clazz;
 
 import io.sniffy.unsafe.reflection.UnresolvedRefException;
-import io.sniffy.unsafe.reflection.Unsafe;
+import io.sniffy.unsafe.Unsafe;
 import io.sniffy.unsafe.reflection.UnsafeInvocationException;
 import io.sniffy.unsafe.reflection.constructor.UnresolvedZeroArgsClassConstructorRef;
 import io.sniffy.unsafe.reflection.constructor.ZeroArgsClassConstructorRef;
@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import static io.sniffy.unsafe.reflection.Unsafe.$;
+import static io.sniffy.unsafe.Unsafe.$;
 
 // TODO: use declaredFields0 and declaredMethods0 to also cover super system methods
 

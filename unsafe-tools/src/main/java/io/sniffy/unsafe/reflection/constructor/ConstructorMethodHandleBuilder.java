@@ -10,7 +10,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 
-import static io.sniffy.unsafe.reflection.Unsafe.$;
+import static io.sniffy.unsafe.Unsafe.$;
 
 /**
  * <a href="https://stackoverflow.com/questions/48616630/is-it-possible-to-call-constructor-on-existing-instance">See stackoverflow discussion</a>

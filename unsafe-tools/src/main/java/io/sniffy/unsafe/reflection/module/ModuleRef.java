@@ -5,7 +5,7 @@ import io.sniffy.unsafe.reflection.UnsafeInvocationException;
 
 import java.lang.reflect.InvocationTargetException;
 
-import static io.sniffy.unsafe.reflection.Unsafe.$;
+import static io.sniffy.unsafe.Unsafe.$;
 
 public class ModuleRef {
 

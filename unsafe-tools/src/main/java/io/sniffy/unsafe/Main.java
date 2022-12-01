@@ -1,6 +1,5 @@
 package io.sniffy.unsafe;
 
-import io.sniffy.unsafe.reflection.Unsafe;
 import io.sniffy.unsafe.reflection.clazz.UnresolvedClassRef;
 import io.sniffy.unsafe.reflection.field.StaticFieldRef;
 import sun.security.jca.ProviderList;
@@ -13,7 +12,7 @@ import java.lang.instrument.Instrumentation;
 import java.lang.management.ManagementFactory;
 import java.util.concurrent.Future;
 
-import static io.sniffy.unsafe.reflection.Unsafe.$;
+import static io.sniffy.unsafe.Unsafe.$;
 
 // TODO: hide illegal reflect access warning
 public class Main {

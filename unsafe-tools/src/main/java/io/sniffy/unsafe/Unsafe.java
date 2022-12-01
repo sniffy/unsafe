@@ -1,10 +1,9 @@
-package io.sniffy.unsafe.reflection;
+package io.sniffy.unsafe;
 
-import io.sniffy.unsafe.Main;
+import io.sniffy.unsafe.reflection.UnsafeException;
 import io.sniffy.unsafe.reflection.clazz.ClassRef;
 import io.sniffy.unsafe.reflection.clazz.UnresolvedClassRef;
 import io.sniffy.unsafe.reflection.object.ObjectRef;
-import io.sniffy.unsafe.reflection.object.UnresolvedObjectRef;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

@@ -1,6 +1,6 @@
 package io.sniffy.unsafe.reflection.constructor;
 
-import io.sniffy.unsafe.reflection.Unsafe;
+import io.sniffy.unsafe.Unsafe;
 import io.sniffy.unsafe.reflection.UnsafeInvocationException;
 
 import java.lang.reflect.Constructor;
