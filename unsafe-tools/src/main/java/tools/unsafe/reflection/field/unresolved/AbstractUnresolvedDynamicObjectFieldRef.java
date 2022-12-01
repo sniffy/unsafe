@@ -3,9 +3,7 @@ package tools.unsafe.reflection.field.unresolved;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.field.resolved.AbstractDynamicObjectFieldRef;
-import tools.unsafe.reflection.field.resolved.AbstractObjectFieldRef;
 import tools.unsafe.reflection.field.types.DynamicObjectFieldRef;
-import tools.unsafe.reflection.field.types.ObjectFieldRef;
 import tools.unsafe.reflection.object.ObjectRef;
 
 import javax.annotation.Nonnull;
@@ -79,21 +77,30 @@ public class AbstractUnresolvedDynamicObjectFieldRef<R extends AbstractDynamicOb
         }
     }
 
-    public T getNotNull(C instance, T defaultValue) throws UnresolvedRefException, UnsafeInvocationException {
-        return resolve().getNotNull(instance, defaultValue);
+    @Nonnull
+    public T getNotNull(C instance, @Nonnull T defaultValue) throws UnsafeInvocationException {
+        try {
+            return resolve().getNotNull(instance, defaultValue);
+        } catch (UnresolvedRefException e) {
+            throw new UnsafeInvocationException(e);
+        }
     }
 
     public boolean tryCopy(C from, C to) {
         try {
-            resolve().copy(from, to);
+            copy(from, to);
             return true;
         } catch (Throwable e) {
             return false;
         }
     }
 
-    public void copy(C from, C to) throws UnsafeInvocationException, UnresolvedRefException {
-        resolve().copy(from, to);
+    public void copy(@Nonnull C from, @Nonnull C to) throws UnsafeInvocationException {
+        try {
+            resolve().copy(from, to);
+        } catch (UnresolvedRefException e) {
+            throw new UnsafeInvocationException(e);
+        }
     }
 
 }

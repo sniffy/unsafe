@@ -14,6 +14,8 @@ public interface ObjectFieldRef<T> {
     @Nonnull
     ObjectRef<T> objectRef() throws UnsafeInvocationException;
 
+    @Nonnull T getNotNull(@Nonnull T defaultValue) throws UnsafeInvocationException;
+
     void set(@Nullable T value) throws UnsafeInvocationException;
 
     boolean compareAndSet(@Nullable T oldValue, @Nullable T newValue) throws UnsafeInvocationException;

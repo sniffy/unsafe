@@ -34,6 +34,12 @@ public abstract class AbstractObjectFieldRef<C,T> extends AbstractFieldRef<C> im
         );
     }
 
+    @Nonnull
+    public T getNotNull(@Nonnull T defaultValue) throws UnsafeInvocationException {
+        T value = get();
+        return null == value ? defaultValue : value;
+    }
+
     @Override
     public abstract void set(T value) throws UnsafeInvocationException;
 

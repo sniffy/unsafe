@@ -35,8 +35,8 @@ public abstract class AbstractDynamicObjectFieldRef<C,T> extends AbstractFieldRe
     }
 
 
-    // TODO: implement the same in StaticFieldRef
-    public T getNotNull(C instance, T defaultValue) throws UnsafeInvocationException {
+    @Nonnull
+    public T getNotNull(C instance, @Nonnull T defaultValue) throws UnsafeInvocationException {
         T value = get(instance);
         return null == value ? defaultValue : value;
     }
@@ -45,7 +45,7 @@ public abstract class AbstractDynamicObjectFieldRef<C,T> extends AbstractFieldRe
     public abstract void set(C instance, T value) throws UnsafeInvocationException;
 
 
-    public void copy(C from, C to) throws UnsafeInvocationException {
+    public void copy(@Nonnull C from, @Nonnull C to) throws UnsafeInvocationException {
         set(to, get(from));
     }
 

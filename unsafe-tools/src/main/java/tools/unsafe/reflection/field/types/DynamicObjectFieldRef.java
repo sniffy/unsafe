@@ -14,8 +14,12 @@ public interface DynamicObjectFieldRef<C,T> {
     @Nonnull
     ObjectRef<T> objectRef(@Nullable C instance) throws UnsafeInvocationException;
 
+    @Nonnull T getNotNull(@Nullable C instance, @Nonnull T defaultValue) throws UnsafeInvocationException;
+
     void set(@Nullable C instance, @Nullable T value) throws UnsafeInvocationException;
 
     boolean compareAndSet(@Nullable C instance, @Nullable T oldValue, @Nullable T newValue) throws UnsafeInvocationException;
+
+    void copy(@Nonnull C from, @Nonnull C to) throws UnsafeInvocationException;
 
 }

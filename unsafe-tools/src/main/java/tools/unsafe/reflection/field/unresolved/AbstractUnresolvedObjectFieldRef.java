@@ -36,6 +36,15 @@ public class AbstractUnresolvedObjectFieldRef<R extends AbstractObjectFieldRef<C
         }
     }
 
+    @Nonnull
+    public T getNotNull(@Nonnull T defaultValue) throws UnsafeInvocationException {
+        try {
+            return resolve().getNotNull(defaultValue);
+        } catch (UnresolvedRefException e) {
+            throw new UnsafeInvocationException(e);
+        }
+    }
+
     @Override
     public void set(@Nullable T value) throws UnsafeInvocationException {
         try {

@@ -7,11 +7,11 @@ import java.lang.reflect.Field;
 
 public abstract class AbstractFieldRef<C> implements FieldRef<C> {
 
-    protected final ClassRef<C> classRef;
+    protected final ClassRef<C> declaringClassRef;
     protected final Field field;
 
-    public AbstractFieldRef(ClassRef<C> classRef, Field field) {
-        this.classRef = classRef;
+    public AbstractFieldRef(ClassRef<C> declaringClassRef, Field field) {
+        this.declaringClassRef = declaringClassRef;
         this.field = field;
     }
 
@@ -20,7 +20,7 @@ public abstract class AbstractFieldRef<C> implements FieldRef<C> {
     }
 
     public ClassRef<C> getDeclaringClassRef() {
-        return classRef;
+        return declaringClassRef;
     }
 
 }
