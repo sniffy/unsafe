@@ -1,9 +1,10 @@
-package tools.unsafe.reflection.field.unresolved;
+package tools.unsafe.reflection.field.objects.unresolved;
 
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
-import tools.unsafe.reflection.field.resolved.AbstractDynamicObjectFieldRef;
-import tools.unsafe.reflection.field.types.DynamicObjectFieldRef;
+import tools.unsafe.reflection.field.AbstractUnresolvedFieldRef;
+import tools.unsafe.reflection.field.objects.DynamicObjectFieldRef;
+import tools.unsafe.reflection.field.objects.resolved.AbstractDynamicObjectFieldRef;
 import tools.unsafe.reflection.object.ObjectRef;
 
 import javax.annotation.Nonnull;

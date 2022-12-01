@@ -6,7 +6,7 @@ import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import org.junit.jupiter.api.Test;
 import tools.unsafe.reflection.clazz.UnresolvedClassRef;
-import tools.unsafe.reflection.field.resolved.ResolvedStaticObjectFieldRef;
+import tools.unsafe.reflection.field.objects.resolved.ResolvedStaticObjectFieldRef;
 
 import javax.net.ssl.SSLContext;
 import java.lang.instrument.Instrumentation;

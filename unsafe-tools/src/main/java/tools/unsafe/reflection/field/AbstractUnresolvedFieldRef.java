@@ -1,10 +1,8 @@
-package tools.unsafe.reflection.field.unresolved;
+package tools.unsafe.reflection.field;
 
 import tools.unsafe.reflection.UnresolvedRef;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.clazz.ClassRef;
-import tools.unsafe.reflection.field.UnresolvedFieldRef;
-import tools.unsafe.reflection.field.resolved.AbstractFieldRef;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;

@@ -1,9 +1,9 @@
-package tools.unsafe.reflection.field.resolved;
+package tools.unsafe.reflection.field.objects.resolved;
 
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
 import tools.unsafe.reflection.field.FieldRef;
-import tools.unsafe.reflection.field.types.ObjectFieldRef;
+import tools.unsafe.reflection.field.objects.ObjectFieldRef;
 
 public class ResolvedInstanceObjectFieldRef<C, T> extends AbstractObjectFieldRef<C, T> implements FieldRef<C>, ObjectFieldRef<T> {
 
@@ -11,7 +11,7 @@ public class ResolvedInstanceObjectFieldRef<C, T> extends AbstractObjectFieldRef
     private final C object;
 
     public ResolvedInstanceObjectFieldRef(ClassRef<C> classRef, ResolvedDynamicObjectFieldRef<C, T> resolvedNonStaticObjectFieldRef, C object) {
-        super(classRef, resolvedNonStaticObjectFieldRef.getField());
+        super(classRef, resolvedNonStaticObjectFieldRef.getField(), UNSAFE.objectFieldOffset(resolvedNonStaticObjectFieldRef.getField()));
         this.resolvedNonStaticObjectFieldRef = resolvedNonStaticObjectFieldRef;
         this.object = object;
     }

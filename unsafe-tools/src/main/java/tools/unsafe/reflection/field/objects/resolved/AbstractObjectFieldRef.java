@@ -1,8 +1,9 @@
-package tools.unsafe.reflection.field.resolved;
+package tools.unsafe.reflection.field.objects.resolved;
 
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
-import tools.unsafe.reflection.field.types.ObjectFieldRef;
+import tools.unsafe.reflection.field.AbstractFieldRef;
+import tools.unsafe.reflection.field.objects.ObjectFieldRef;
 import tools.unsafe.reflection.object.ObjectRef;
 
 import javax.annotation.Nonnull;
@@ -10,8 +11,8 @@ import java.lang.reflect.Field;
 
 public abstract class AbstractObjectFieldRef<C,T> extends AbstractFieldRef<C> implements ObjectFieldRef<T> {
 
-    public AbstractObjectFieldRef(ClassRef<C> classRef, Field field) {
-        super(classRef, field);
+    public AbstractObjectFieldRef(ClassRef<C> classRef, Field field, long offset) {
+        super(classRef, field, offset);
     }
 
     public abstract T get() throws UnsafeInvocationException;

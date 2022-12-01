@@ -1,6 +1,6 @@
-package tools.unsafe.reflection.field.unresolved;
+package tools.unsafe.reflection.field.objects.unresolved;
 
-import tools.unsafe.reflection.field.resolved.ResolvedInstanceObjectFieldRef;
+import tools.unsafe.reflection.field.objects.resolved.ResolvedInstanceObjectFieldRef;
 
 public class UnresolvedInstanceObjectFieldRef<C,T> extends AbstractUnresolvedObjectFieldRef<ResolvedInstanceObjectFieldRef<C,T>, C, T> {
 

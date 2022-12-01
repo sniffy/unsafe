@@ -1,6 +1,6 @@
-package tools.unsafe.reflection.field.unresolved;
+package tools.unsafe.reflection.field.objects.unresolved;
 
-import tools.unsafe.reflection.field.resolved.ResolvedDynamicObjectFieldRef;
+import tools.unsafe.reflection.field.objects.resolved.ResolvedDynamicObjectFieldRef;
 
 public class UnresolvedDynamicObjectFieldRef<C,T> extends AbstractUnresolvedDynamicObjectFieldRef<ResolvedDynamicObjectFieldRef<C,T>, C, T> {
 

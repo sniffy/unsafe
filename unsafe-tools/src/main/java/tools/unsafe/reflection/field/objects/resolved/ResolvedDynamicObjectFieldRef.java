@@ -1,36 +1,22 @@
-package tools.unsafe.reflection.field.resolved;
+package tools.unsafe.reflection.field.objects.resolved;
 
-import tools.unsafe.Unsafe;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
 import tools.unsafe.reflection.field.FieldRef;
-import tools.unsafe.reflection.field.types.ObjectFieldRef;
+import tools.unsafe.reflection.field.objects.DynamicObjectFieldRef;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-public class ResolvedStaticObjectFieldRef<C,T> extends AbstractObjectFieldRef<C, T> implements FieldRef<C>, ObjectFieldRef<T> {
+public class ResolvedDynamicObjectFieldRef<C, T> extends AbstractDynamicObjectFieldRef<C,T> implements FieldRef<C>, DynamicObjectFieldRef<C,T> {
 
-    public ResolvedStaticObjectFieldRef(ClassRef<C> classRef, Field field) {
-        super(classRef, field);
+    public ResolvedDynamicObjectFieldRef(ClassRef<C> classRef, Field field) {
+        super(classRef, field, UNSAFE.objectFieldOffset(field));
     }
 
-    public boolean compareAndSet(T oldValue, T newValue) throws UnsafeInvocationException {
+    public boolean compareAndSet(C object, T oldValue, T newValue) throws UnsafeInvocationException {
         try {
-
-            sun.misc.Unsafe UNSAFE = Unsafe.getSunMiscUnsafe();
-
-            /*
-            Ensure the given class has been initialized. This is often needed in conjunction with obtaining the static field base of a class.
-             */
-            UNSAFE.ensureClassInitialized(field.getDeclaringClass());
-
-            long offset = UNSAFE.staticFieldOffset(field);
-
-            Object object = field.getDeclaringClass();
-
             // TODO: validate conversion below; use new Unsafe on modern JDK
-
             if (field.getType() == Integer.TYPE && oldValue instanceof Number && newValue instanceof Number) {
                 return UNSAFE.compareAndSwapInt(object, offset, ((Number) oldValue).intValue(), ((Number) newValue).intValue());
             } else if (field.getType() == Short.TYPE && oldValue instanceof Number && newValue instanceof Number) {
@@ -63,80 +49,13 @@ public class ResolvedStaticObjectFieldRef<C,T> extends AbstractObjectFieldRef<C,
             } else {
                 return UNSAFE.compareAndSwapObject(object, offset, oldValue, newValue);
             }
-
         } catch (Throwable e) {
             throw new UnsafeInvocationException(e);
         }
-
     }
 
-    /*private static Field getModifiersField() throws UnsafeException {
+    public void set(C object, T value) throws UnsafeInvocationException {
         try {
-            return Field.class.getDeclaredField("modifiers");
-        } catch (NoSuchFieldException e) {
-            try {
-                Field[] fields = getDeclaredFields(Field.class);
-                for (Field field : fields) {
-                    if ("modifiers".equals(field.getName())) {
-                        return field;
-                    }
-                }
-            } catch (Exception ex) {
-                ExceptionUtil.addSuppressed(e, ex);
-            }
-            throw new UnsafeException(e);
-        }
-    }
-
-    public static Field[] getDeclaredFields(Class<?> clazz) throws UnsafeException {
-        try {
-            Method getDeclaredFields0 = Class.class.getDeclaredMethod("getDeclaredFields0", boolean.class);
-            Unsafe.setAccessible(getDeclaredFields0);
-            return (Field[]) getDeclaredFields0.invoke(clazz, false);
-        } catch (Exception e) {
-            throw new UnsafeException(e);
-        }
-    }
-
-    public void removeFinalFlag() throws UnsafeException {
-
-        Field modifiersField = getModifiersField();
-        Unsafe.setAccessible(modifiersField);
-
-        try {
-            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-        } catch (IllegalAccessException e) {
-            throw new UnsafeException();
-        }
-    }*/
-
-    public void set(T value) throws UnsafeInvocationException {
-        try {
-
-            /*if (!field.isAccessible()) {
-                Unsafe.setAccessible(field);
-            }
-
-            if (Modifier.isFinal(field.getModifiers())) {
-                removeFinalFlag();
-            }
-
-            if (field.isAccessible()) {
-                field.set(instance, value);
-                return;
-            }*/
-
-            sun.misc.Unsafe UNSAFE = Unsafe.getSunMiscUnsafe();
-
-            /*
-            Ensure the given class has been initialized. This is often needed in conjunction with obtaining the static field base of a class.
-             */
-            UNSAFE.ensureClassInitialized(field.getDeclaringClass());
-
-            long offset = UNSAFE.staticFieldOffset(field);
-
-            Object object = field.getDeclaringClass();
-
             if (field.getType() == Boolean.TYPE && value instanceof Boolean) {
                 if (Modifier.isVolatile(field.getModifiers())) {
                     UNSAFE.putBooleanVolatile(object, offset, (Boolean) value);
@@ -144,13 +63,11 @@ public class ResolvedStaticObjectFieldRef<C,T> extends AbstractObjectFieldRef<C,
                     UNSAFE.putBoolean(object, offset, (Boolean) value);
                 }
             } else if (field.getType() == Integer.TYPE && value instanceof Number) {
-                if (Modifier.isVolatile(field.getModifiers()) || Modifier.isFinal(field.getModifiers())) {
+                if (Modifier.isVolatile(field.getModifiers())) {
                     UNSAFE.putIntVolatile(object, offset, ((Number) value).intValue());
                 } else {
                     UNSAFE.putInt(object, offset, ((Number) value).intValue());
                 }
-                //UNSAFE.fullFence();
-
             } else if (field.getType() == Long.TYPE && value instanceof Number) {
                 if (Modifier.isVolatile(field.getModifiers())) {
                     UNSAFE.putLongVolatile(object, offset, ((Number) value).longValue());
@@ -191,7 +108,6 @@ public class ResolvedStaticObjectFieldRef<C,T> extends AbstractObjectFieldRef<C,
                 if (Modifier.isVolatile(field.getModifiers()) || Modifier.isFinal(field.getModifiers())) { // TODO: use *volatile for other final fields as well
                     // TODO: switch to putReferenceVolatile from jdk.internal.reflect.Unsafe since it provdies better object visibility
                     UNSAFE.putObjectVolatile(object, offset, value);
-                    //UNSAFE.fullFence();
                 } else {
                     UNSAFE.putObject(object, offset, value);
                 }
@@ -202,19 +118,8 @@ public class ResolvedStaticObjectFieldRef<C,T> extends AbstractObjectFieldRef<C,
         }
     }
 
-    public T get() throws UnsafeInvocationException {
+    public T get(C object) throws UnsafeInvocationException {
         try {
-
-            sun.misc.Unsafe UNSAFE = Unsafe.getSunMiscUnsafe();
-
-            /*
-            Ensure the given class has been initialized. This is often needed in conjunction with obtaining the static field base of a class.
-             */
-            UNSAFE.ensureClassInitialized(field.getDeclaringClass());
-            
-            long offset = UNSAFE.staticFieldOffset(field);
-
-            Object object = field.getDeclaringClass();
             if (field.getType() == Boolean.TYPE) {
                 if (Modifier.isVolatile(field.getModifiers())) {
                     return (T) (Boolean) UNSAFE.getBooleanVolatile(object, offset);

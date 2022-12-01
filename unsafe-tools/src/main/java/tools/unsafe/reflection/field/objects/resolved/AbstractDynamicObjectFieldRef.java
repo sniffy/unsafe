@@ -1,8 +1,9 @@
-package tools.unsafe.reflection.field.resolved;
+package tools.unsafe.reflection.field.objects.resolved;
 
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
-import tools.unsafe.reflection.field.types.DynamicObjectFieldRef;
+import tools.unsafe.reflection.field.AbstractFieldRef;
+import tools.unsafe.reflection.field.objects.DynamicObjectFieldRef;
 import tools.unsafe.reflection.object.ObjectRef;
 
 import javax.annotation.Nonnull;
@@ -10,8 +11,8 @@ import java.lang.reflect.Field;
 
 public abstract class AbstractDynamicObjectFieldRef<C,T> extends AbstractFieldRef<C> implements DynamicObjectFieldRef<C, T> {
 
-    public AbstractDynamicObjectFieldRef(ClassRef<C> classRef, Field field) {
-        super(classRef, field);
+    public AbstractDynamicObjectFieldRef(ClassRef<C> classRef, Field field, long offset) {
+        super(classRef, field, offset);
     }
 
     public abstract T get(C instance) throws UnsafeInvocationException;

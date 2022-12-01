@@ -3,8 +3,8 @@ package tools.unsafe.reflection.constructor;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
-import tools.unsafe.reflection.field.unresolved.UnresolvedDynamicObjectFieldRef;
-import tools.unsafe.reflection.field.unresolved.UnresolvedStaticObjectFieldRef;
+import tools.unsafe.reflection.field.objects.unresolved.UnresolvedDynamicObjectFieldRef;
+import tools.unsafe.reflection.field.objects.unresolved.UnresolvedStaticObjectFieldRef;
 import tools.unsafe.Unsafe;
 
 import java.lang.invoke.MethodHandle;

@@ -6,10 +6,10 @@ import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.constructor.UnresolvedZeroArgsClassConstructorRef;
 import tools.unsafe.reflection.constructor.ZeroArgsClassConstructorRef;
 import tools.unsafe.reflection.field.*;
-import tools.unsafe.reflection.field.resolved.ResolvedDynamicObjectFieldRef;
-import tools.unsafe.reflection.field.resolved.ResolvedStaticObjectFieldRef;
-import tools.unsafe.reflection.field.unresolved.UnresolvedDynamicObjectFieldRef;
-import tools.unsafe.reflection.field.unresolved.UnresolvedStaticObjectFieldRef;
+import tools.unsafe.reflection.field.objects.resolved.ResolvedDynamicObjectFieldRef;
+import tools.unsafe.reflection.field.objects.resolved.ResolvedStaticObjectFieldRef;
+import tools.unsafe.reflection.field.objects.unresolved.UnresolvedDynamicObjectFieldRef;
+import tools.unsafe.reflection.field.objects.unresolved.UnresolvedStaticObjectFieldRef;
 import tools.unsafe.reflection.method.*;
 import tools.unsafe.reflection.module.ModuleRef;
 import tools.unsafe.reflection.module.UnresolvedModuleRef;
@@ -280,6 +280,10 @@ public class ClassRef<C> {
     @SuppressWarnings("SpellCheckingInspection")
     public void retransform() throws UnmodifiableClassException, ExecutionException, InterruptedException {
         Unsafe.getInstrumentationFuture().get().retransformClasses(clazz);
+    }
+
+    public void ensureClassInitialized() {
+        Unsafe.getSunMiscUnsafe().ensureClassInitialized(clazz);
     }
 
     public ObjectRef<C> $(C object) {
