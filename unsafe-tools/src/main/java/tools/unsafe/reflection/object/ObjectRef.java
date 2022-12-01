@@ -3,8 +3,8 @@ package tools.unsafe.reflection.object;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
-import tools.unsafe.reflection.field.ObjectFieldRef;
-import tools.unsafe.reflection.field.UnresolvedNonStaticFieldRef;
+import tools.unsafe.reflection.field.ResolvedInstanceObjectFieldRef;
+import tools.unsafe.reflection.field.UnresolvedNonStaticObjectFieldRef;
 import tools.unsafe.reflection.method.ObjectNonVoidMethodRef;
 
 import java.lang.reflect.InvocationTargetException;
@@ -25,7 +25,7 @@ public class ObjectRef<C> {
     }
 
     public <T> UnresolvedObjectRef<T> $(String fieldName) {
-        UnresolvedNonStaticFieldRef<C, T> nonStaticField = classRef.<T>getNonStaticField(fieldName);
+        UnresolvedNonStaticObjectFieldRef<C, T> nonStaticField = classRef.<T>getNonStaticField(fieldName);
         T fieldValue = null;
         Exception exception = null;
         Class<T> fieldType = null;
@@ -46,8 +46,8 @@ public class ObjectRef<C> {
         field(fieldName).set(value);
     }
 
-    public <T> ObjectFieldRef<C,T> field(String fieldName) throws UnresolvedRefException {
-        return new ObjectFieldRef<C,T>(classRef, classRef.<T>getNonStaticField(fieldName).resolve(), object);
+    public <T> ResolvedInstanceObjectFieldRef<C,T> field(String fieldName) throws UnresolvedRefException {
+        return new ResolvedInstanceObjectFieldRef<C,T>(classRef, classRef.<T>getNonStaticField(fieldName).resolve(), object);
     }
 
     public <T> T invoke(Class<T> returnType, String methodName, Class<?>[] parameterTypes, Object[] parameters) throws UnresolvedRefException, UnsafeInvocationException, InvocationTargetException {

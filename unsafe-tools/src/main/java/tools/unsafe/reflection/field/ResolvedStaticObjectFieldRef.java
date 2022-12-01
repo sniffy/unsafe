@@ -2,23 +2,18 @@ package tools.unsafe.reflection.field;
 
 import tools.unsafe.Unsafe;
 import tools.unsafe.reflection.UnsafeInvocationException;
+import tools.unsafe.reflection.clazz.ClassRef;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-public class NonStaticFieldRef<C, T> {
+public class ResolvedStaticObjectFieldRef<C,T> extends AbstractFieldRef<C> implements FieldRef<C>, ObjectFieldRef<T> {
 
-    private final Field field;
-
-    public NonStaticFieldRef(Field field) {
-        this.field = field;
+    public ResolvedStaticObjectFieldRef(ClassRef<C> classRef, Field field) {
+        super(classRef, field);
     }
 
-    public Field getField() {
-        return field;
-    }
-
-    public boolean compareAndSet(C instance, T oldValue, T newValue) throws UnsafeInvocationException {
+    public boolean compareAndSet(T oldValue, T newValue) throws UnsafeInvocationException {
         try {
 
             sun.misc.Unsafe UNSAFE = Unsafe.getSunMiscUnsafe();
@@ -28,9 +23,9 @@ public class NonStaticFieldRef<C, T> {
              */
             UNSAFE.ensureClassInitialized(field.getDeclaringClass());
 
-            long offset = UNSAFE.objectFieldOffset(field);
+            long offset = UNSAFE.staticFieldOffset(field);
 
-            Object object = instance;
+            Object object = field.getDeclaringClass();
 
             // TODO: validate conversion below; use new Unsafe on modern JDK
 
@@ -113,7 +108,7 @@ public class NonStaticFieldRef<C, T> {
         }
     }*/
 
-    public void set(C instance, T value) throws UnsafeInvocationException {
+    public void set(T value) throws UnsafeInvocationException {
         try {
 
             /*if (!field.isAccessible()) {
@@ -136,9 +131,9 @@ public class NonStaticFieldRef<C, T> {
              */
             UNSAFE.ensureClassInitialized(field.getDeclaringClass());
 
-            long offset = UNSAFE.objectFieldOffset(field);
+            long offset = UNSAFE.staticFieldOffset(field);
 
-            Object object = instance;
+            Object object = field.getDeclaringClass();
 
             if (field.getType() == Boolean.TYPE && value instanceof Boolean) {
                 if (Modifier.isVolatile(field.getModifiers())) {
@@ -147,11 +142,13 @@ public class NonStaticFieldRef<C, T> {
                     UNSAFE.putBoolean(object, offset, (Boolean) value);
                 }
             } else if (field.getType() == Integer.TYPE && value instanceof Number) {
-                if (Modifier.isVolatile(field.getModifiers())) {
+                if (Modifier.isVolatile(field.getModifiers()) || Modifier.isFinal(field.getModifiers())) {
                     UNSAFE.putIntVolatile(object, offset, ((Number) value).intValue());
                 } else {
                     UNSAFE.putInt(object, offset, ((Number) value).intValue());
                 }
+                //UNSAFE.fullFence();
+
             } else if (field.getType() == Long.TYPE && value instanceof Number) {
                 if (Modifier.isVolatile(field.getModifiers())) {
                     UNSAFE.putLongVolatile(object, offset, ((Number) value).longValue());
@@ -192,6 +189,7 @@ public class NonStaticFieldRef<C, T> {
                 if (Modifier.isVolatile(field.getModifiers()) || Modifier.isFinal(field.getModifiers())) { // TODO: use *volatile for other final fields as well
                     // TODO: switch to putReferenceVolatile from jdk.internal.reflect.Unsafe since it provdies better object visibility
                     UNSAFE.putObjectVolatile(object, offset, value);
+                    //UNSAFE.fullFence();
                 } else {
                     UNSAFE.putObject(object, offset, value);
                 }
@@ -202,13 +200,7 @@ public class NonStaticFieldRef<C, T> {
         }
     }
 
-    // TODO: implement the same in StaticFieldRef
-    public T getNotNull(C instance, T defaultValue) throws UnsafeInvocationException {
-        T value = get(instance);
-        return null == value ? defaultValue : value;
-    }
-
-    public T get(C instance) throws UnsafeInvocationException {
+    public T get() throws UnsafeInvocationException {
         try {
 
             sun.misc.Unsafe UNSAFE = Unsafe.getSunMiscUnsafe();
@@ -217,11 +209,10 @@ public class NonStaticFieldRef<C, T> {
             Ensure the given class has been initialized. This is often needed in conjunction with obtaining the static field base of a class.
              */
             UNSAFE.ensureClassInitialized(field.getDeclaringClass());
+            
+            long offset = UNSAFE.staticFieldOffset(field);
 
-            long offset = UNSAFE.objectFieldOffset(field);
-
-            Object object = instance;
-
+            Object object = field.getDeclaringClass();
             if (field.getType() == Boolean.TYPE) {
                 if (Modifier.isVolatile(field.getModifiers())) {
                     return (T) (Boolean) UNSAFE.getBooleanVolatile(object, offset);
@@ -281,10 +272,6 @@ public class NonStaticFieldRef<C, T> {
         } catch (Throwable e) {
             throw new UnsafeInvocationException(e);
         } 
-    }
-
-    public void copy(C from, C to) throws UnsafeInvocationException {
-        set(to, get(from));
     }
 
 }

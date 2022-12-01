@@ -6,6 +6,16 @@
 
 ### Naming conventions
 
+#### Class names
+
+`Instance*` - non-static members (fields and methods) with a reference to particular object
+`Static*` - static members (fields and methods)
+`NonStatic*` - non-static members (fields and methods) without a reference to particular object; require passing an object when working with them
+
+`Unresolved*` - unresolved references which might (or might not) throw an `UnresolvedRefException` when working with them in case say class or methog were not found
+
+#### Fluent API
+
 function `$` does the magic depending on context - i.e. creates `ClassRef` or `ObjectRef` instances for given Class, class name or arbitrary object, or creates a new `ObjectRef` instance for the given object and field name.
 
 It is not the most stongly types API but might be 

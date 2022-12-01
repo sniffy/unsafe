@@ -7,11 +7,9 @@ import tools.unsafe.reflection.constructor.UnresolvedZeroArgsClassConstructorRef
 import tools.unsafe.reflection.constructor.ZeroArgsClassConstructorRef;
 import tools.unsafe.reflection.field.*;
 import tools.unsafe.reflection.method.*;
-import tools.unsafe.reflection.field.*;
 import tools.unsafe.reflection.module.ModuleRef;
 import tools.unsafe.reflection.module.UnresolvedModuleRef;
 import tools.unsafe.reflection.object.ObjectRef;
-import tools.unsafe.reflection.method.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -56,14 +54,14 @@ public class ClassRef<C> {
         }
     }
 
-    public @Nonnull <T> UnresolvedNonStaticFieldRef<C, T> findFirstNonStaticField(@Nullable FieldFilter fieldFilter, boolean recursive) {
+    public @Nonnull <T> UnresolvedNonStaticObjectFieldRef<C, T> findFirstNonStaticField(@Nullable FieldFilter fieldFilter, boolean recursive) {
         try {
             Class<? super C> clazz = this.clazz;
             while (clazz != Object.class) {
                 Field[] declaredFields = clazz.getDeclaredFields();
                 for (Field declaredField : declaredFields) {
                     if (!Modifier.isStatic(declaredField.getModifiers()) && (null == fieldFilter || fieldFilter.include(declaredField.getName(), declaredField))) {
-                        return new UnresolvedNonStaticFieldRef<C, T>(new NonStaticFieldRef<C, T>(declaredField), null);
+                        return new UnresolvedNonStaticObjectFieldRef<C, T>(new ResolvedNonStaticObjectFieldRef<C, T>(this, declaredField), null);
                     }
                 }
                 if (recursive) {
@@ -72,20 +70,20 @@ public class ClassRef<C> {
                     break;
                 }
             }
-            return new UnresolvedNonStaticFieldRef<C, T>(null, new NoSuchFieldError());
+            return new UnresolvedNonStaticObjectFieldRef<C, T>(null, new NoSuchFieldError());
         } catch (Throwable e) {
-            return new UnresolvedNonStaticFieldRef<C, T>(null, e);
+            return new UnresolvedNonStaticObjectFieldRef<C, T>(null, e);
         }
     }
 
-    public @Nonnull Map<String, NonStaticFieldRef<C,Object>> findNonStaticFields(@Nullable FieldFilter fieldFilter, boolean recursive) {
-        Map<String, NonStaticFieldRef<C, Object>> fields = new HashMap<String, NonStaticFieldRef<C, Object>>();
+    public @Nonnull Map<String, ResolvedNonStaticObjectFieldRef<C,Object>> findNonStaticFields(@Nullable FieldFilter fieldFilter, boolean recursive) {
+        Map<String, ResolvedNonStaticObjectFieldRef<C, Object>> fields = new HashMap<String, ResolvedNonStaticObjectFieldRef<C, Object>>();
         Class<? super C> clazz = this.clazz;
         while (clazz != Object.class) {
             Field[] declaredFields = clazz.getDeclaredFields();
             for (Field field : declaredFields) {
                 if (!Modifier.isStatic(field.getModifiers()) && (null == fieldFilter || fieldFilter.include(field.getName(), field))) {
-                    fields.put(field.getName(), new NonStaticFieldRef<C, Object>(field));
+                    fields.put(field.getName(), new ResolvedNonStaticObjectFieldRef<C, Object>(this, field));
                 }
             }
             if (recursive) {
@@ -97,14 +95,14 @@ public class ClassRef<C> {
         return fields;
     }
 
-    public @Nonnull <T> UnresolvedStaticFieldRef<C,T> findFirstStaticField(@Nullable FieldFilter fieldFilter, boolean recursive) {
+    public @Nonnull <T> UnresolvedStaticObjectFieldRef<C,T> findFirstStaticField(@Nullable FieldFilter fieldFilter, boolean recursive) {
         try {
             Class<? super C> clazz = this.clazz;
             while (clazz != Object.class) {
                 Field[] declaredFields = clazz.getDeclaredFields();
                 for (Field declaredField : declaredFields) {
                     if (Modifier.isStatic(declaredField.getModifiers()) && (null == fieldFilter || fieldFilter.include(declaredField.getName(), declaredField))) {
-                        return new UnresolvedStaticFieldRef<C,T>(new StaticFieldRef<C,T>(this, declaredField), null);
+                        return new UnresolvedStaticObjectFieldRef<C,T>(new ResolvedStaticObjectFieldRef<C,T>(this, declaredField), null);
                     }
                 }
                 if (recursive) {
@@ -113,21 +111,21 @@ public class ClassRef<C> {
                     break;
                 }
             }
-            return new UnresolvedStaticFieldRef<C,T>(null, new NoSuchFieldError());
+            return new UnresolvedStaticObjectFieldRef<C,T>(null, new NoSuchFieldError());
         } catch (Throwable e) {
-            return new UnresolvedStaticFieldRef<C,T>(null, e);
+            return new UnresolvedStaticObjectFieldRef<C,T>(null, e);
         }
     }
 
-    public @Nonnull Map<String, StaticFieldRef<C,Object>> findStaticFields(@Nullable FieldFilter fieldFilter, boolean recursive) {
-        Map<String, StaticFieldRef<C,Object>> fields = new HashMap<String, StaticFieldRef<C,Object>>();
+    public @Nonnull Map<String, ResolvedStaticObjectFieldRef<C,Object>> findStaticFields(@Nullable FieldFilter fieldFilter, boolean recursive) {
+        Map<String, ResolvedStaticObjectFieldRef<C,Object>> fields = new HashMap<String, ResolvedStaticObjectFieldRef<C,Object>>();
         Class<? super C> clazz = this.clazz;
         while (clazz != Object.class) {
             Field[] declaredFields = clazz.getDeclaredFields();
             for (Field field : declaredFields) {
                 // TODO: filter out synthetic members here and everywhere
                 if (Modifier.isStatic(field.getModifiers()) && (null == fieldFilter || fieldFilter.include(field.getName(), field))) {
-                    fields.put(field.getName(), new StaticFieldRef<C,Object>(this,field));
+                    fields.put(field.getName(), new ResolvedStaticObjectFieldRef<C,Object>(this,field));
                 }
             }
             if (recursive) {
@@ -142,17 +140,17 @@ public class ClassRef<C> {
     public void copyFields(@Nonnull C from, @Nonnull C to) throws UnsafeInvocationException {
 
         // TODO: introduce caching here
-        for (NonStaticFieldRef<C,Object> fieldRef : findNonStaticFields(null, true).values()) {
+        for (ResolvedNonStaticObjectFieldRef<C,Object> fieldRef : findNonStaticFields(null, true).values()) {
             fieldRef.copy(from, to);
         }
 
     }
 
-    public @Nonnull <T> UnresolvedStaticFieldRef<C,T> getStaticField(@Nonnull String fieldName) {
+    public @Nonnull <T> UnresolvedStaticObjectFieldRef<C,T> getStaticField(@Nonnull String fieldName) {
         return findFirstStaticField(FieldFilters.byName(fieldName), true);
     }
 
-    public @Nonnull <T> UnresolvedNonStaticFieldRef<C,T> getNonStaticField(@Nonnull String fieldName) {
+    public @Nonnull <T> UnresolvedNonStaticObjectFieldRef<C,T> getNonStaticField(@Nonnull String fieldName) {
         return findFirstNonStaticField(FieldFilters.byName(fieldName), true);
     }
 

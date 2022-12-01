@@ -3,8 +3,8 @@ package tools.unsafe.reflection.constructor;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
-import tools.unsafe.reflection.field.UnresolvedNonStaticFieldRef;
-import tools.unsafe.reflection.field.UnresolvedStaticFieldRef;
+import tools.unsafe.reflection.field.UnresolvedNonStaticObjectFieldRef;
+import tools.unsafe.reflection.field.UnresolvedStaticObjectFieldRef;
 import tools.unsafe.Unsafe;
 
 import java.lang.invoke.MethodHandle;
@@ -35,16 +35,16 @@ public class ConstructorMethodHandleBuilder {
          * Even though reflection filters can be circumvented as well, there is a simpler way: Lookup contains a static field IMPL_LOOKUP, which holds a Lookup with those TRUSTED permissions. We can get this instance by using reflection and Unsafe:
          */
         ClassRef<MethodHandles.Lookup> lookupClassRef = Unsafe.$(MethodHandles.Lookup.class);
-        UnresolvedStaticFieldRef<MethodHandles.Lookup,MethodHandles.Lookup> implLookupFieldRef = lookupClassRef.getStaticField("IMPL_LOOKUP");
+        UnresolvedStaticObjectFieldRef<MethodHandles.Lookup,MethodHandles.Lookup> implLookupFieldRef = lookupClassRef.getStaticField("IMPL_LOOKUP");
         MethodHandles.Lookup implLookup = implLookupFieldRef.get();
 
         MethodType constructorMethodType = MethodType.methodType(Void.TYPE);
         MethodHandle constructor = implLookup.findConstructor(clazz, constructorMethodType);
 
-        UnresolvedNonStaticFieldRef<Object, Object> initMethodFieldRef = Unsafe.$("java.lang.invoke.DirectMethodHandle$Constructor").getNonStaticField("initMethod");
+        UnresolvedNonStaticObjectFieldRef<Object, Object> initMethodFieldRef = Unsafe.$("java.lang.invoke.DirectMethodHandle$Constructor").getNonStaticField("initMethod");
         /* MemberName */ Object initMemberName = initMethodFieldRef.get(constructor);
 
-        UnresolvedNonStaticFieldRef<Object, Integer> memberNameFlagsFieldRef = Unsafe.$("java.lang.invoke.MemberName").getNonStaticField("flags");
+        UnresolvedNonStaticObjectFieldRef<Object, Integer> memberNameFlagsFieldRef = Unsafe.$("java.lang.invoke.MemberName").getNonStaticField("flags");
         int flags = memberNameFlagsFieldRef.get(initMemberName);
         flags &= ~0x00020000; // remove "is constructor"
         flags |= 0x00010000; // add "is (non-constructor) method"

@@ -3,7 +3,7 @@ package tools.unsafe.reflection.object;
 import tools.unsafe.reflection.UnresolvedRef;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
-import tools.unsafe.reflection.field.ObjectFieldRef;
+import tools.unsafe.reflection.field.ResolvedInstanceObjectFieldRef;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
@@ -22,7 +22,7 @@ public class UnresolvedObjectRef<C> extends UnresolvedRef<ObjectRef<C>> {
         resolve().setField(fieldName, value);
     }
 
-    public <T> ObjectFieldRef<C,T> field(String fieldName) throws UnresolvedRefException {
+    public <T> ResolvedInstanceObjectFieldRef<C,T> field(String fieldName) throws UnresolvedRefException {
         return resolve().field(fieldName);
     }
 

@@ -4,10 +4,9 @@ import sun.security.jca.ProviderList;
 import sun.security.jca.Providers;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import tools.unsafe.reflection.clazz.UnresolvedClassRef;
-import tools.unsafe.reflection.field.StaticFieldRef;
+import tools.unsafe.reflection.field.ResolvedStaticObjectFieldRef;
 
 import javax.net.ssl.SSLContext;
 import java.lang.instrument.Instrumentation;
@@ -44,8 +43,8 @@ class UnsafeTest {
         UnresolvedClassRef<Object> classRef = Unsafe.$("sun.security.jca.Providers");
         classRef.getModuleRef().tryAddOpens("sun.security.jca");
 
-        StaticFieldRef<Object,ThreadLocal<ProviderList>> threadLists = classRef.<ThreadLocal<ProviderList>>getStaticField("threadLists").resolve();
-        StaticFieldRef<Object,Integer> threadListsUsed = classRef.<Integer>getStaticField("threadListsUsed").resolve();
+        ResolvedStaticObjectFieldRef<Object,ThreadLocal<ProviderList>> threadLists = classRef.<ThreadLocal<ProviderList>>getStaticField("threadLists").resolve();
+        ResolvedStaticObjectFieldRef<Object,Integer> threadListsUsed = classRef.<Integer>getStaticField("threadListsUsed").resolve();
 
         final ProviderList IT = ProviderList.newList();
 

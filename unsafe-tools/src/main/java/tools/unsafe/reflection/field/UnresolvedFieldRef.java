@@ -1,14 +1,15 @@
 package tools.unsafe.reflection.field;
 
+import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.clazz.ClassRef;
 
 import java.lang.reflect.Field;
 
-public interface FieldRef<C> {
+public interface UnresolvedFieldRef<C> {
 
-    ClassRef<C> getDeclaringClassRef();
+    ClassRef<C> getDeclaringClassRef() throws UnresolvedRefException;
 
-    Field getField();
+    Field getField() throws UnresolvedRefException;
 
     // TODO: compare and set
     // TODO: introduce BooleanFieldRef and other similar classes
