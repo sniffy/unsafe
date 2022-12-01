@@ -148,7 +148,7 @@ public final class Unsafe {
                     instrumentationFuture = attachAgentExecutor.submit(new Callable<Instrumentation>() {
                         //@Override
                         public Instrumentation call() throws Exception {
-                            $("sun.tools.attach.HotSpotVirtualMachine").getStaticField("ALLOW_ATTACH_SELF").trySet(true);
+                            $("sun.tools.attach.HotSpotVirtualMachine").staticBooleanField("ALLOW_ATTACH_SELF").trySet(true);
 
 
                             System.out.println("Hello world!");

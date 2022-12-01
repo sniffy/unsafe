@@ -31,6 +31,10 @@ public class UnresolvedRef<T> {
         }
     }
 
+    public @Nullable T resolveOrNull() {
+        return ref;
+    }
+
     public boolean isResolved() {
         return null == throwable;
     }

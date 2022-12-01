@@ -5,6 +5,7 @@ import sun.security.jca.Providers;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import org.junit.jupiter.api.Test;
+import tools.unsafe.reflection.clazz.ClassRef;
 import tools.unsafe.reflection.clazz.UnresolvedClassRef;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedStaticObjectFieldRef;
 
@@ -21,7 +22,7 @@ class UnsafeTest {
     @Test
     public void testObjectRef() throws UnresolvedRefException, UnsafeInvocationException, InvocationTargetException {
         Object object = new Object();
-        assertEquals(object.hashCode(), Unsafe.$(object).invoke(Integer.TYPE, "hashCode", new Class<?>[0], new Object[0]));
+        assertEquals(object.hashCode(), $(object).invoke(Integer.TYPE, "hashCode", new Class<?>[0], new Object[0]));
     }
 
     @Test
@@ -40,11 +41,11 @@ class UnsafeTest {
 
         assert null != instrumentation;
 
-        UnresolvedClassRef<Object> classRef = Unsafe.$("sun.security.jca.Providers");
+        ClassRef<Object> classRef = $("sun.security.jca.Providers").resolve();
         classRef.getModuleRef().tryAddOpens("sun.security.jca");
 
-        ResolvedStaticObjectFieldRef<Object,ThreadLocal<ProviderList>> threadLists = classRef.<ThreadLocal<ProviderList>>getStaticField("threadLists").resolve();
-        ResolvedStaticObjectFieldRef<Object,Integer> threadListsUsed = classRef.<Integer>getStaticField("threadListsUsed").resolve();
+        ResolvedStaticObjectFieldRef<Object,ThreadLocal<ProviderList>> threadLists = classRef.<ThreadLocal<ProviderList>>staticField("threadLists").resolve();
+        ResolvedStaticObjectFieldRef<Object,Integer> threadListsUsed = classRef.<Integer>staticField("threadListsUsed").resolve();
 
         final ProviderList IT = ProviderList.newList();
 
@@ -74,7 +75,7 @@ class UnsafeTest {
             }
         });
 
-        Unsafe.$(Providers.class).retransform();
+        $(Providers.class).retransform();
 
         ProviderList providerList = Providers.getProviderList();
 

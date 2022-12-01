@@ -4,6 +4,8 @@ import tools.unsafe.reflection.UnresolvedRef;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.constructor.UnresolvedZeroArgsClassConstructorRef;
 import tools.unsafe.reflection.field.*;
+import tools.unsafe.reflection.field.booleans.unresolved.UnresolvedDynamicBooleanFieldRef;
+import tools.unsafe.reflection.field.booleans.unresolved.UnresolvedStaticBooleanFieldRef;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedDynamicObjectFieldRef;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedStaticObjectFieldRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedDynamicObjectFieldRef;
@@ -55,6 +57,43 @@ public class UnresolvedClassRef<C> extends UnresolvedRef<ClassRef<C>> {
     public @Nonnull UnresolvedZeroArgsClassConstructorRef<C> getConstructor() throws UnresolvedRefException {
         return resolve().getConstructor();
     }
+
+    // new fields methods start
+
+    public @Nonnull <T> UnresolvedStaticObjectFieldRef<C,T> staticField(@Nonnull String fieldName) {
+        try {
+            return new UnresolvedStaticObjectFieldRef<C,T>(resolve().<T>staticField(fieldName).resolve(),null);
+        } catch (UnresolvedRefException e) {
+            return new UnresolvedStaticObjectFieldRef<C,T>(null,e);
+        }
+    }
+
+    public @Nonnull <T> UnresolvedDynamicObjectFieldRef<C,T> field(@Nonnull String fieldName) {
+        try {
+            return new UnresolvedDynamicObjectFieldRef<C,T>(resolve().<T>field(fieldName).resolve(),null);
+        } catch (UnresolvedRefException e) {
+            return new UnresolvedDynamicObjectFieldRef<C,T>(null,e);
+        }
+    }
+
+    public @Nonnull UnresolvedStaticBooleanFieldRef<C> staticBooleanField(@Nonnull String fieldName) {
+        try {
+            return new UnresolvedStaticBooleanFieldRef<C>(resolve().staticBooleanField(fieldName).resolve(),null);
+        } catch (UnresolvedRefException e) {
+            return new UnresolvedStaticBooleanFieldRef<C>(null,e);
+        }
+    }
+
+    public @Nonnull UnresolvedDynamicBooleanFieldRef<C> booleanField(@Nonnull String fieldName) {
+        try {
+            return new UnresolvedDynamicBooleanFieldRef<C>(resolve().booleanField(fieldName).resolve(),null);
+        } catch (UnresolvedRefException e) {
+            return new UnresolvedDynamicBooleanFieldRef<C>(null,e);
+        }
+    }
+
+    // new fields methods end
+
 
     public @Nonnull <T> UnresolvedStaticObjectFieldRef<C,T> tryGetStaticField(@Nonnull String fieldName) {
         try {

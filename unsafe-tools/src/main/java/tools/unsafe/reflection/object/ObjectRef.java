@@ -3,6 +3,7 @@ package tools.unsafe.reflection.object;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
+import tools.unsafe.reflection.field.booleans.resolved.ResolvedInstanceBooleanFieldRef;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedInstanceObjectFieldRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedDynamicObjectFieldRef;
 import tools.unsafe.reflection.method.ObjectNonVoidMethodRef;
@@ -48,6 +49,10 @@ public class ObjectRef<C> {
 
     public <T> ResolvedInstanceObjectFieldRef<C,T> field(String fieldName) throws UnresolvedRefException {
         return new ResolvedInstanceObjectFieldRef<C,T>(classRef, classRef.<T>field(fieldName).resolve(), object);
+    }
+
+    public <T> ResolvedInstanceBooleanFieldRef<C> booleanField(String fieldName) throws UnresolvedRefException {
+        return new ResolvedInstanceBooleanFieldRef<C>(classRef, classRef.booleanField(fieldName).resolve(), object);
     }
 
     public <T> T invoke(Class<T> returnType, String methodName, Class<?>[] parameterTypes, Object[] parameters) throws UnresolvedRefException, UnsafeInvocationException, InvocationTargetException {
