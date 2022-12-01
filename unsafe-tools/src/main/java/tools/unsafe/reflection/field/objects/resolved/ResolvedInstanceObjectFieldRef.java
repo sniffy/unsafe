@@ -2,10 +2,8 @@ package tools.unsafe.reflection.field.objects.resolved;
 
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
-import tools.unsafe.reflection.field.FieldRef;
-import tools.unsafe.reflection.field.objects.ObjectFieldRef;
 
-public class ResolvedInstanceObjectFieldRef<C, T> extends AbstractObjectFieldRef<C, T> implements FieldRef<C>, ObjectFieldRef<T> {
+public class ResolvedInstanceObjectFieldRef<C, T> extends AbstractObjectFieldRef<C, T> {
 
     private final ResolvedDynamicObjectFieldRef<C, T> resolvedNonStaticObjectFieldRef;
     private final C object;

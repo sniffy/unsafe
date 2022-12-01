@@ -2,13 +2,12 @@ package tools.unsafe.reflection.field.objects.resolved;
 
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
-import tools.unsafe.reflection.field.FieldRef;
-import tools.unsafe.reflection.field.objects.DynamicObjectFieldRef;
+import tools.unsafe.reflection.field.booleans.resolved.ResolvedDynamicBooleanFieldRef;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-public class ResolvedDynamicObjectFieldRef<C, T> extends AbstractDynamicObjectFieldRef<C,T> implements FieldRef<C>, DynamicObjectFieldRef<C,T> {
+public class ResolvedDynamicObjectFieldRef<C, T> extends AbstractDynamicObjectFieldRef<C,T> {
 
     public ResolvedDynamicObjectFieldRef(ClassRef<C> classRef, Field field) {
         super(classRef, field, UNSAFE.objectFieldOffset(field));
@@ -179,6 +178,10 @@ public class ResolvedDynamicObjectFieldRef<C, T> extends AbstractDynamicObjectFi
         } catch (Throwable e) {
             throw new UnsafeInvocationException(e);
         } 
+    }
+
+    public ResolvedDynamicBooleanFieldRef<C> asBooleanFieldRef() {
+        return new ResolvedDynamicBooleanFieldRef<C>(declaringClassRef, field);
     }
 
 }

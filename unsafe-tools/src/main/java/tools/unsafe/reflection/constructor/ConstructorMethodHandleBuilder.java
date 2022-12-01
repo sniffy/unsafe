@@ -35,7 +35,7 @@ public class ConstructorMethodHandleBuilder {
          * Even though reflection filters can be circumvented as well, there is a simpler way: Lookup contains a static field IMPL_LOOKUP, which holds a Lookup with those TRUSTED permissions. We can get this instance by using reflection and Unsafe:
          */
         ClassRef<MethodHandles.Lookup> lookupClassRef = Unsafe.$(MethodHandles.Lookup.class);
-        UnresolvedStaticObjectFieldRef<MethodHandles.Lookup,MethodHandles.Lookup> implLookupFieldRef = lookupClassRef.getStaticField("IMPL_LOOKUP");
+        UnresolvedStaticObjectFieldRef<MethodHandles.Lookup,MethodHandles.Lookup> implLookupFieldRef = lookupClassRef.staticField("IMPL_LOOKUP");
         MethodHandles.Lookup implLookup = implLookupFieldRef.get();
 
         MethodType constructorMethodType = MethodType.methodType(Void.TYPE);

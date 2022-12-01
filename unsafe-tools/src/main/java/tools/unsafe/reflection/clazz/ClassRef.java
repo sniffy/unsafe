@@ -6,6 +6,8 @@ import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.constructor.UnresolvedZeroArgsClassConstructorRef;
 import tools.unsafe.reflection.constructor.ZeroArgsClassConstructorRef;
 import tools.unsafe.reflection.field.*;
+import tools.unsafe.reflection.field.booleans.unresolved.UnresolvedDynamicBooleanFieldRef;
+import tools.unsafe.reflection.field.booleans.unresolved.UnresolvedStaticBooleanFieldRef;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedDynamicObjectFieldRef;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedStaticObjectFieldRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedDynamicObjectFieldRef;
@@ -150,12 +152,30 @@ public class ClassRef<C> {
 
     }
 
-    public @Nonnull <T> UnresolvedStaticObjectFieldRef<C,T> getStaticField(@Nonnull String fieldName) {
+    public @Nonnull <T> UnresolvedStaticObjectFieldRef<C,T> staticField(@Nonnull String fieldName) {
         return findFirstStaticField(FieldFilters.byName(fieldName), true);
     }
 
-    public @Nonnull <T> UnresolvedDynamicObjectFieldRef<C,T> getNonStaticField(@Nonnull String fieldName) {
+    public @Nonnull <T> UnresolvedDynamicObjectFieldRef<C,T> field(@Nonnull String fieldName) {
         return findFirstNonStaticField(FieldFilters.byName(fieldName), true);
+    }
+
+    public @Nonnull UnresolvedStaticBooleanFieldRef<C> staticBooleanField(@Nonnull String fieldName) {
+        return findFirstStaticField(
+                FieldFilters.and(
+                        FieldFilters.ofType(Boolean.TYPE),
+                        FieldFilters.byName(fieldName)
+                ), true
+        ).asBooleanFieldRef();
+    }
+
+    public @Nonnull UnresolvedDynamicBooleanFieldRef<C> booleanField(@Nonnull String fieldName) {
+        return findFirstNonStaticField(
+                FieldFilters.and(
+                        FieldFilters.ofType(Boolean.TYPE),
+                        FieldFilters.byName(fieldName)
+                ), true
+        ).asBooleanFieldRef();
     }
 
     // TODO: add "field" and "method" method which would return generic ref working with both static and non static members

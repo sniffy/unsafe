@@ -2,6 +2,7 @@ package tools.unsafe.reflection.field.objects.resolved;
 
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
+import tools.unsafe.reflection.field.booleans.resolved.ResolvedStaticBooleanFieldRef;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -12,6 +13,10 @@ public class ResolvedStaticObjectFieldRef<C,T> extends AbstractObjectFieldRef<C,
 
     public ResolvedStaticObjectFieldRef(ClassRef<C> classRef, Field field) {
         super(classRef, field, UNSAFE.staticFieldOffset(field));
+    }
+
+    public ResolvedStaticBooleanFieldRef<C> asBooleanFieldRef() {
+        return new ResolvedStaticBooleanFieldRef<C>(declaringClassRef, field);
     }
 
     public boolean compareAndSet(T oldValue, T newValue) throws UnsafeInvocationException {

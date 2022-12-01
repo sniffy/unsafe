@@ -25,7 +25,7 @@ public class ObjectRef<C> {
     }
 
     public <T> UnresolvedObjectRef<T> $(String fieldName) {
-        UnresolvedDynamicObjectFieldRef<C, T> nonStaticField = classRef.<T>getNonStaticField(fieldName);
+        UnresolvedDynamicObjectFieldRef<C, T> nonStaticField = classRef.<T>field(fieldName);
         T fieldValue = null;
         Exception exception = null;
         Class<T> fieldType = null;
@@ -47,7 +47,7 @@ public class ObjectRef<C> {
     }
 
     public <T> ResolvedInstanceObjectFieldRef<C,T> field(String fieldName) throws UnresolvedRefException {
-        return new ResolvedInstanceObjectFieldRef<C,T>(classRef, classRef.<T>getNonStaticField(fieldName).resolve(), object);
+        return new ResolvedInstanceObjectFieldRef<C,T>(classRef, classRef.<T>field(fieldName).resolve(), object);
     }
 
     public <T> T invoke(Class<T> returnType, String methodName, Class<?>[] parameterTypes, Object[] parameters) throws UnresolvedRefException, UnsafeInvocationException, InvocationTargetException {

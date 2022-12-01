@@ -66,7 +66,7 @@ public class UnresolvedClassRef<C> extends UnresolvedRef<ClassRef<C>> {
 
     @Nonnull
     public <T> UnresolvedStaticObjectFieldRef<C,T> getStaticField(@Nonnull String fieldName) throws UnresolvedRefException {
-        return resolve().getStaticField(fieldName);
+        return resolve().staticField(fieldName);
     }
 
     @Nonnull
@@ -79,7 +79,7 @@ public class UnresolvedClassRef<C> extends UnresolvedRef<ClassRef<C>> {
     }
 
     public @Nonnull <T> UnresolvedDynamicObjectFieldRef<C, T> getNonStaticField(@Nonnull String fieldName) throws UnresolvedRefException {
-        return resolve().getNonStaticField(fieldName);
+        return resolve().field(fieldName);
     }
 
     public @Nonnull <T> UnresolvedDynamicObjectFieldRef<C, T> findFirstNonStaticField(@Nullable FieldFilter fieldFilter, boolean recursive) throws UnresolvedRefException {

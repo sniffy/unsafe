@@ -3,6 +3,7 @@ package tools.unsafe.reflection.field;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+@SuppressWarnings("Convert2Lambda")
 public class FieldFilters {
 
     public static FieldFilter byName(final String fieldName) {
