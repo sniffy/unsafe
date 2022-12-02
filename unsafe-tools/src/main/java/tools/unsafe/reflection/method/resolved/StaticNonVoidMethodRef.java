@@ -1,19 +1,19 @@
-package tools.unsafe.reflection.method;
+package tools.unsafe.reflection.method.resolved;
 
 import tools.unsafe.reflection.UnsafeInvocationException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class StaticMethodRef {
+public class StaticNonVoidMethodRef<T> {
 
     private final Method method;
 
-    public StaticMethodRef(Method method) {
+    public StaticNonVoidMethodRef(Method method) {
         this.method = method;
     }
 
-    public <T> T invoke(Object... parameters) throws UnsafeInvocationException, InvocationTargetException {
+    public T invoke(Object... parameters) throws UnsafeInvocationException, InvocationTargetException {
         try {
             //noinspection unchecked
             return (T) method.invoke(null, parameters);

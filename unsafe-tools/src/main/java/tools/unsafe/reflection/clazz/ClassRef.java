@@ -13,6 +13,14 @@ import tools.unsafe.reflection.field.objects.resolved.ResolvedStaticObjectFieldR
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedDynamicObjectFieldRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedStaticObjectFieldRef;
 import tools.unsafe.reflection.method.*;
+import tools.unsafe.reflection.method.resolved.NonStaticMethodRef;
+import tools.unsafe.reflection.method.resolved.NonStaticNonVoidMethodRef;
+import tools.unsafe.reflection.method.resolved.StaticMethodRef;
+import tools.unsafe.reflection.method.resolved.StaticNonVoidMethodRef;
+import tools.unsafe.reflection.method.unresolved.UnresolvedNonStaticMethodRef;
+import tools.unsafe.reflection.method.unresolved.UnresolvedNonStaticNonVoidMethodRef;
+import tools.unsafe.reflection.method.unresolved.UnresolvedStaticMethodRef;
+import tools.unsafe.reflection.method.unresolved.UnresolvedStaticNonVoidMethodRef;
 import tools.unsafe.reflection.module.ModuleRef;
 import tools.unsafe.reflection.module.UnresolvedModuleRef;
 import tools.unsafe.reflection.object.ObjectRef;

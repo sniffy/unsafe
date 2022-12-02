@@ -3,10 +3,7 @@ package tools.unsafe.reflection.module;
 import tools.unsafe.Unsafe;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
-import tools.unsafe.reflection.clazz.UnresolvedClassRef;
-import tools.unsafe.reflection.method.UnresolvedNonStaticMethodRef;
-import tools.unsafe.reflection.object.ObjectRef;
-import tools.unsafe.reflection.object.UnresolvedObjectRef;
+import tools.unsafe.reflection.method.unresolved.UnresolvedNonStaticMethodRef;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;

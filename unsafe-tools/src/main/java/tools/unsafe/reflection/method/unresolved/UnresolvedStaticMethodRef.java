@@ -1,8 +1,9 @@
-package tools.unsafe.reflection.method;
+package tools.unsafe.reflection.method.unresolved;
 
 import tools.unsafe.reflection.UnresolvedRef;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
+import tools.unsafe.reflection.method.resolved.StaticMethodRef;
 
 import java.lang.reflect.InvocationTargetException;
 

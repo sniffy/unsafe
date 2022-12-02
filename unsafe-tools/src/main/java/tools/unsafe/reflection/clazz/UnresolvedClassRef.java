@@ -10,10 +10,10 @@ import tools.unsafe.reflection.field.objects.resolved.ResolvedDynamicObjectField
 import tools.unsafe.reflection.field.objects.resolved.ResolvedStaticObjectFieldRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedDynamicObjectFieldRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedStaticObjectFieldRef;
-import tools.unsafe.reflection.method.UnresolvedNonStaticMethodRef;
-import tools.unsafe.reflection.method.UnresolvedNonStaticNonVoidMethodRef;
-import tools.unsafe.reflection.method.UnresolvedStaticMethodRef;
-import tools.unsafe.reflection.method.UnresolvedStaticNonVoidMethodRef;
+import tools.unsafe.reflection.method.unresolved.UnresolvedNonStaticMethodRef;
+import tools.unsafe.reflection.method.unresolved.UnresolvedNonStaticNonVoidMethodRef;
+import tools.unsafe.reflection.method.unresolved.UnresolvedStaticMethodRef;
+import tools.unsafe.reflection.method.unresolved.UnresolvedStaticNonVoidMethodRef;
 import tools.unsafe.reflection.module.UnresolvedModuleRef;
 
 import javax.annotation.Nonnull;

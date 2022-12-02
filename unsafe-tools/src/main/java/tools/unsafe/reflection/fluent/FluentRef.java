@@ -1,7 +1,7 @@
 package tools.unsafe.reflection.fluent;
 
 import tools.unsafe.reflection.field.objects.resolved.ResolvedInstanceObjectFieldRef;
-import tools.unsafe.reflection.method.ObjectNonVoidMethodRef;
+import tools.unsafe.reflection.method.resolved.ObjectNonVoidMethodRef;
 import tools.unsafe.reflection.object.ObjectRef;
 
 /**
