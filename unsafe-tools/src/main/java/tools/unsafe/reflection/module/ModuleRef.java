@@ -2,7 +2,7 @@ package tools.unsafe.reflection.module;
 
 import tools.unsafe.Unsafe;
 import tools.unsafe.reflection.UnsafeInvocationException;
-import tools.unsafe.reflection.method.unresolved.UnresolvedDynamicMethodRef;
+import tools.unsafe.reflection.method.generic.unresolved.UnresolvedDynamicMethodRef;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;

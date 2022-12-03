@@ -1,10 +1,10 @@
-package tools.unsafe.reflection.method.unresolved;
+package tools.unsafe.reflection.method.typed.unresolved;
 
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.method.AbstractUnresolvedMethodRef;
-import tools.unsafe.reflection.method.GenericTypedMethodRef;
-import tools.unsafe.reflection.method.resolved.ResolvedStaticTypedMethodRef;
+import tools.unsafe.reflection.method.typed.GenericTypedMethodRef;
+import tools.unsafe.reflection.method.typed.resolved.ResolvedStaticTypedMethodRef;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;

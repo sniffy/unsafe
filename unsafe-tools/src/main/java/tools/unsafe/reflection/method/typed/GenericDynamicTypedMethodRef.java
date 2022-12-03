@@ -1,4 +1,4 @@
-package tools.unsafe.reflection.method;
+package tools.unsafe.reflection.method.typed;
 
 import tools.unsafe.reflection.UnsafeInvocationException;
 

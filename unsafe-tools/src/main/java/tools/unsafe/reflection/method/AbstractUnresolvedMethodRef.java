@@ -2,6 +2,7 @@ package tools.unsafe.reflection.method;
 
 import tools.unsafe.reflection.UnresolvedRef;
 import tools.unsafe.reflection.UnresolvedRefException;
+import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
 
 import javax.annotation.Nonnull;
@@ -24,4 +25,8 @@ public class AbstractUnresolvedMethodRef<T extends AbstractMethodRef<C>, C> exte
         return resolve().getMethod();
     }
 
+    @Override
+    public @Nonnull Method getAccessibleMethod() throws UnsafeInvocationException, UnresolvedRefException {
+        return resolve().getAccessibleMethod();
+    }
 }

@@ -1,9 +1,9 @@
-package tools.unsafe.reflection.method.resolved;
+package tools.unsafe.reflection.method.typed.resolved;
 
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
 import tools.unsafe.reflection.method.AbstractMethodRef;
-import tools.unsafe.reflection.method.GenericTypedMethodRef;
+import tools.unsafe.reflection.method.typed.GenericTypedMethodRef;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

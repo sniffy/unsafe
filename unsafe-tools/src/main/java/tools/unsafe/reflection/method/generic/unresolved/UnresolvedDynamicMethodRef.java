@@ -1,10 +1,10 @@
-package tools.unsafe.reflection.method.unresolved;
+package tools.unsafe.reflection.method.generic.unresolved;
 
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.method.AbstractUnresolvedMethodRef;
-import tools.unsafe.reflection.method.GenericDynamicMethodRef;
-import tools.unsafe.reflection.method.resolved.ResolvedDynamicMethodRef;
+import tools.unsafe.reflection.method.generic.GenericDynamicMethodRef;
+import tools.unsafe.reflection.method.generic.resolved.ResolvedDynamicMethodRef;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
