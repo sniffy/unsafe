@@ -6,7 +6,8 @@ import tools.unsafe.reflection.clazz.ClassRef;
 import tools.unsafe.reflection.field.booleans.resolved.ResolvedInstanceBooleanFieldRef;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedInstanceObjectFieldRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedDynamicObjectFieldRef;
-import tools.unsafe.reflection.method.resolved.ObjectNonVoidMethodRef;
+import tools.unsafe.reflection.method.resolved.ResolvedInstanceMethodRef;
+import tools.unsafe.reflection.method.resolved.ResolvedInstanceTypedMethodRef;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -56,8 +57,8 @@ public class ObjectRef<C> {
     }
 
     public <T> T invoke(Class<T> returnType, String methodName, Class<?>[] parameterTypes, Object[] parameters) throws UnresolvedRefException, UnsafeInvocationException, InvocationTargetException {
-        ObjectNonVoidMethodRef<C,T> method = new ObjectNonVoidMethodRef<C,T>(classRef.getNonStaticMethod(returnType, methodName, parameterTypes).resolve(), object);
-        return method.invoke(object, parameters);
+        ResolvedInstanceTypedMethodRef<C,T> method = new ResolvedInstanceTypedMethodRef<C,T>(classRef, classRef.method(returnType, methodName, parameterTypes).resolve().getMethod(), object);
+        return method.invoke(parameters);
     }
 
 }

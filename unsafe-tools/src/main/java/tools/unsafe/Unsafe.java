@@ -114,8 +114,8 @@ public final class Unsafe {
         try {
 
             if (Unsafe.getJavaVersion() >= 9) {
-                return $("java.lang.ProcessHandle").getNonStaticMethod(Long.TYPE, "pid").invoke(
-                        $("java.lang.ProcessHandle").getStaticMethod("current").invoke()
+                return $("java.lang.ProcessHandle").method(Long.TYPE, "pid").invoke(
+                        $("java.lang.ProcessHandle").staticMethod("current").invoke()
                 ).intValue();
                 //return (int) ProcessHandle.current().pid();
             } else {
@@ -153,7 +153,7 @@ public final class Unsafe {
 
                             System.out.println("Hello world!");
                             UnresolvedClassRef<Object> vmClassRef = $("com.sun.tools.attach.VirtualMachine");
-                            Object vm = vmClassRef.getStaticMethod(Object.class, "attach", String.class).invoke(String.valueOf(getPid()));
+                            Object vm = vmClassRef.staticMethod(Object.class, "attach", String.class).invoke(String.valueOf(getPid()));
                             System.out.println("Attached to " + vm);
 
                             Manifest manifest = new Manifest();
@@ -183,7 +183,7 @@ public final class Unsafe {
 
                             if (null != vm) {
                                 System.out.println("Attaching " + tempFile.getCanonicalPath() + " to " + vm);
-                                vmClassRef.getNonStaticMethod("loadAgent", String.class).invoke(vm, tempFile.getCanonicalPath().replaceAll("\\\\", "/"));
+                                vmClassRef.method("loadAgent", String.class).invoke(vm, tempFile.getCanonicalPath().replaceAll("\\\\", "/"));
                             }
 
                             while(!Thread.currentThread().isInterrupted()){
@@ -212,7 +212,7 @@ public final class Unsafe {
     public static void defineSystemClass(@Nonnull @Deprecated String className, @Nonnull byte[] bytes) throws UnsafeException {
         try {
             $(sun.misc.Unsafe.class).
-                    getNonStaticMethod("defineClass", String.class, byte[].class, Integer.TYPE, Integer.TYPE, ClassLoader.class, ProtectionDomain.class).
+                    method("defineClass", String.class, byte[].class, Integer.TYPE, Integer.TYPE, ClassLoader.class, ProtectionDomain.class).
                     invoke(getSunMiscUnsafe(), className, bytes, 0, bytes.length, null, null);
         } catch (Exception e) {
             throw new UnsafeException(e);

@@ -1,18 +1,18 @@
 package tools.unsafe.reflection.method.unresolved;
 
-import tools.unsafe.reflection.UnresolvedRef;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.method.AbstractUnresolvedMethodRef;
 import tools.unsafe.reflection.method.GenericMethodRef;
+import tools.unsafe.reflection.method.resolved.ResolvedInstanceMethodRef;
 import tools.unsafe.reflection.method.resolved.ResolvedStaticMethodRef;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 
-public class UnresolvedStaticMethodRef<C> extends AbstractUnresolvedMethodRef<ResolvedStaticMethodRef<C>,C> implements GenericMethodRef<C> {
+public class UnresolvedInstanceMethodRef<C> extends AbstractUnresolvedMethodRef<ResolvedInstanceMethodRef<C>,C> implements GenericMethodRef<C> {
 
-    public UnresolvedStaticMethodRef(@Nullable ResolvedStaticMethodRef<C> ref, @Nullable Throwable throwable) {
+    public UnresolvedInstanceMethodRef(@Nullable ResolvedInstanceMethodRef<C> ref, @Nullable Throwable throwable) {
         super(ref, throwable);
     }
 

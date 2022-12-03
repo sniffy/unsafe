@@ -1,5 +1,6 @@
 package tools.unsafe.reflection.method;
 
+import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
 
 import javax.annotation.Nonnull;
@@ -12,5 +13,8 @@ public interface MethodRef<C> extends UnresolvedMethodRef<C> {
 
     @Nonnull
     Method getMethod();
+
+    @Nonnull
+    Method getAccessibleMethod() throws UnsafeInvocationException;
 
 }

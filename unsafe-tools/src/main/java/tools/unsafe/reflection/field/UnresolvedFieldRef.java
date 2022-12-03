@@ -12,4 +12,6 @@ public interface UnresolvedFieldRef<C> {
 
     @Nonnull Field getField() throws UnresolvedRefException;
 
+    // TODO: add getName() method
+
 }

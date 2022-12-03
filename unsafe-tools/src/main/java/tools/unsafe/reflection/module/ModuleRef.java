@@ -1,9 +1,8 @@
 package tools.unsafe.reflection.module;
 
 import tools.unsafe.Unsafe;
-import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
-import tools.unsafe.reflection.method.unresolved.UnresolvedNonStaticMethodRef;
+import tools.unsafe.reflection.method.unresolved.UnresolvedDynamicMethodRef;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
@@ -13,7 +12,7 @@ import static tools.unsafe.Unsafe.$;
 public class ModuleRef {
 
     public static final String JAVA_LANG_MODULE = "java.lang.Module";
-    public static final UnresolvedNonStaticMethodRef<Object> IMPL_ADD_OPENS_METHOD =
+    public static final UnresolvedDynamicMethodRef<Object> IMPL_ADD_OPENS_METHOD =
             $(JAVA_LANG_MODULE).method("implAddOpens", String.class);
 
     static {
@@ -29,11 +28,7 @@ public class ModuleRef {
     }
 
     public void addOpens(@Nonnull String packageName) throws UnsafeInvocationException, InvocationTargetException {
-        try {
-            IMPL_ADD_OPENS_METHOD.invoke(module, packageName);
-        } catch (UnresolvedRefException e) {
-            throw new UnsafeInvocationException(e);
-        }
+        IMPL_ADD_OPENS_METHOD.invoke(module, packageName);
     }
 
     public boolean tryAddOpens(@Nonnull String packageName) {

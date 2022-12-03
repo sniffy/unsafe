@@ -10,10 +10,10 @@ import tools.unsafe.reflection.field.objects.resolved.ResolvedDynamicObjectField
 import tools.unsafe.reflection.field.objects.resolved.ResolvedStaticObjectFieldRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedDynamicObjectFieldRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedStaticObjectFieldRef;
-import tools.unsafe.reflection.method.unresolved.UnresolvedNonStaticMethodRef;
-import tools.unsafe.reflection.method.unresolved.UnresolvedNonStaticNonVoidMethodRef;
-import tools.unsafe.reflection.method.unresolved.UnresolvedStaticMethodRef;
-import tools.unsafe.reflection.method.unresolved.UnresolvedStaticNonVoidMethodRef;
+import tools.unsafe.reflection.method.resolved.ResolvedDynamicMethodRef;
+import tools.unsafe.reflection.method.resolved.ResolvedDynamicTypedMethodRef;
+import tools.unsafe.reflection.method.resolved.ResolvedStaticMethodRef;
+import tools.unsafe.reflection.method.unresolved.*;
 import tools.unsafe.reflection.module.UnresolvedModuleRef;
 
 import javax.annotation.Nonnull;
@@ -147,28 +147,36 @@ public class UnresolvedClassRef<C> extends UnresolvedRef<ClassRef<C>> {
 
     // methods
 
-    public @Nonnull UnresolvedNonStaticMethodRef<C> method(@Nonnull String methodName, @Nonnull Class<?>... parameterTypes) {
-        return getNonStaticMethod(methodName, parameterTypes);
-    }
-
-    public @Nonnull UnresolvedNonStaticMethodRef<C> getNonStaticMethod(@Nonnull String methodName, @Nonnull Class<?>... parameterTypes) {
+    public @Nonnull UnresolvedDynamicMethodRef<C> method(@Nonnull String methodName, @Nonnull Class<?>... parameterTypes) {
         try {
-            return resolve().getNonStaticMethod(methodName, parameterTypes);
+            return resolve().method(methodName, parameterTypes);
         } catch (UnresolvedRefException e) {
-            return new UnresolvedNonStaticMethodRef<C>(null, e);
+            return new UnresolvedDynamicMethodRef<C>(null, e);
         }
     }
 
-    public @Nonnull <T> UnresolvedNonStaticNonVoidMethodRef<C, T> getNonStaticMethod(@Nullable Class<T> returnType, @Nonnull String methodName, @Nonnull Class<?>... parameterTypes) throws UnresolvedRefException {
-        return resolve().getNonStaticMethod(returnType, methodName, parameterTypes);
+    public @Nonnull UnresolvedStaticMethodRef<C> staticMethod(@Nonnull String methodName, @Nonnull Class<?>... parameterTypes) {
+        try {
+            return resolve().staticMethod(methodName, parameterTypes);
+        } catch (UnresolvedRefException e) {
+            return new UnresolvedStaticMethodRef<C>(null, e);
+        }
     }
 
-    public @Nonnull UnresolvedStaticMethodRef getStaticMethod(@Nonnull String methodName, @Nonnull Class<?>... parameterTypes) throws UnresolvedRefException {
-        return resolve().getStaticMethod(methodName, parameterTypes);
+    public @Nonnull <T> UnresolvedStaticTypedMethodRef<C,T> staticMethod(@Nonnull Class<T> returnType, @Nonnull String methodName, @Nonnull Class<?>... parameterTypes) {
+        try {
+            return resolve().staticMethod(returnType, methodName, parameterTypes);
+        } catch (UnresolvedRefException e) {
+            return new UnresolvedStaticTypedMethodRef<C,T>(null, e);
+        }
     }
 
-    public @Nonnull <T> UnresolvedStaticNonVoidMethodRef<T> getStaticMethod(@Nullable Class<T> returnType, @Nonnull String methodName, @Nonnull Class<?>... parameterTypes) throws UnresolvedRefException {
-        return resolve().getStaticMethod(returnType, methodName, parameterTypes);
+    public @Nonnull <T> UnresolvedDynamicTypedMethodRef<C,T> method(@Nonnull Class<T> returnType, @Nonnull String methodName, @Nonnull Class<?>... parameterTypes) {
+        try {
+            return resolve().method(returnType, methodName, parameterTypes);
+        } catch (UnresolvedRefException e) {
+            return new UnresolvedDynamicTypedMethodRef<C, T>(null, e);
+        }
     }
 
     @SuppressWarnings("unused")

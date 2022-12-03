@@ -1,26 +1,23 @@
 package tools.unsafe.reflection.clazz;
 
-import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.Unsafe;
+import tools.unsafe.reflection.UnresolvedRefException;
+import tools.unsafe.reflection.UnsafeException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.constructor.UnresolvedZeroArgsClassConstructorRef;
 import tools.unsafe.reflection.constructor.ZeroArgsClassConstructorRef;
-import tools.unsafe.reflection.field.*;
+import tools.unsafe.reflection.field.FieldFilter;
+import tools.unsafe.reflection.field.FieldFilters;
 import tools.unsafe.reflection.field.booleans.unresolved.UnresolvedDynamicBooleanFieldRef;
 import tools.unsafe.reflection.field.booleans.unresolved.UnresolvedStaticBooleanFieldRef;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedDynamicObjectFieldRef;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedStaticObjectFieldRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedDynamicObjectFieldRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedStaticObjectFieldRef;
-import tools.unsafe.reflection.method.*;
-import tools.unsafe.reflection.method.resolved.NonStaticMethodRef;
-import tools.unsafe.reflection.method.resolved.NonStaticNonVoidMethodRef;
-import tools.unsafe.reflection.method.resolved.StaticMethodRef;
-import tools.unsafe.reflection.method.resolved.StaticNonVoidMethodRef;
-import tools.unsafe.reflection.method.unresolved.UnresolvedNonStaticMethodRef;
-import tools.unsafe.reflection.method.unresolved.UnresolvedNonStaticNonVoidMethodRef;
-import tools.unsafe.reflection.method.unresolved.UnresolvedStaticMethodRef;
-import tools.unsafe.reflection.method.unresolved.UnresolvedStaticNonVoidMethodRef;
+import tools.unsafe.reflection.method.MethodFilter;
+import tools.unsafe.reflection.method.MethodKey;
+import tools.unsafe.reflection.method.resolved.*;
+import tools.unsafe.reflection.method.unresolved.*;
 import tools.unsafe.reflection.module.ModuleRef;
 import tools.unsafe.reflection.module.UnresolvedModuleRef;
 import tools.unsafe.reflection.object.ObjectRef;
@@ -36,8 +33,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-
-import static tools.unsafe.Unsafe.$;
 
 // TODO: use declaredFields0 and declaredMethods0 to also cover super system methods
 
@@ -59,9 +54,7 @@ public class ClassRef<C> {
             Class<?> moduleClass = Class.forName("java.lang.Module");
             //noinspection rawtypes
             ClassRef<Class> classClassRef = Unsafe.$(Class.class);
-            //noinspection rawtypes
-            UnresolvedNonStaticNonVoidMethodRef<Class, ?> getModuleMethodRef = classClassRef.getNonStaticMethod(moduleClass, "getModule");
-            Object module = getModuleMethodRef.invoke(clazz);
+            Object module = classClassRef.method("getModule").invoke(clazz);
             return new UnresolvedModuleRef(new ModuleRef(module), null);
         } catch (Throwable e) {
             return new UnresolvedModuleRef(null, e);
@@ -186,6 +179,56 @@ public class ClassRef<C> {
         ).asBooleanFieldRef();
     }
 
+    // TODO: should parameters be nullable ?
+    public @Nonnull UnresolvedStaticMethodRef<C> staticMethod(@Nonnull String methodName, @Nonnull Class<?>... parameters) {
+        ResolvedStaticMethodRef<C> resolvedStaticMethodRef = null;
+        Exception exception = null;
+        try {
+            // TODO: validate it is static
+            resolvedStaticMethodRef = new ResolvedStaticMethodRef<C>(this, getDeclaredMethod(methodName, parameters));
+        } catch (NoSuchMethodException e) {
+            exception = e;
+        }
+        return new UnresolvedStaticMethodRef<C>(resolvedStaticMethodRef, exception);
+    }
+
+    // TODO: should parameters be nullable ?
+    public @Nonnull <T> UnresolvedStaticTypedMethodRef<C,T> staticMethod(@Nonnull Class<T> returnType, @Nonnull String methodName, @Nonnull Class<?>... parameters) {
+        ResolvedStaticTypedMethodRef<C,T> resolvedStaticMethodRef = null;
+        Exception exception = null;
+        try {
+            // TODO: validate it is static
+            resolvedStaticMethodRef = new ResolvedStaticTypedMethodRef<C,T>(this, getDeclaredMethod(methodName, parameters));
+        } catch (NoSuchMethodException e) {
+            exception = e;
+        }
+        return new UnresolvedStaticTypedMethodRef<C,T>(resolvedStaticMethodRef, exception);
+    }
+
+    public @Nonnull UnresolvedDynamicMethodRef<C> method(@Nonnull String methodName, @Nonnull Class<?>... parameters) {
+        ResolvedDynamicMethodRef<C> resolvedDynamicMethodRef = null;
+        Exception exception = null;
+        try {
+            // TODO: validate it is static
+            resolvedDynamicMethodRef = new ResolvedDynamicMethodRef<C>(this, getDeclaredMethod(methodName, parameters));
+        } catch (NoSuchMethodException e) {
+            exception = e;
+        }
+        return new UnresolvedDynamicMethodRef<C>(resolvedDynamicMethodRef, exception);
+    }
+
+    public @Nonnull <T> UnresolvedDynamicTypedMethodRef<C,T> method(@Nonnull Class<T> returnType, @Nonnull String methodName, @Nonnull Class<?>... parameters) {
+        ResolvedDynamicTypedMethodRef<C,T> resolvedDynamicTypedMethodRef = null;
+        Exception exception = null;
+        try {
+            // TODO: validate it is static
+            resolvedDynamicTypedMethodRef = new ResolvedDynamicTypedMethodRef<C,T>(this, getDeclaredMethod(methodName, parameters));
+        } catch (NoSuchMethodException e) {
+            exception = e;
+        }
+        return new UnresolvedDynamicTypedMethodRef<C,T>(resolvedDynamicTypedMethodRef, exception);
+    }
+
     // TODO: add "field" and "method" method which would return generic ref working with both static and non static members
 
     // TODO: add helper methods for getting constructors with arguments
@@ -209,15 +252,15 @@ public class ClassRef<C> {
     // methods
 
 
-    public @Nonnull Map<MethodKey, NonStaticMethodRef<C>> getNonStaticMethods(@Nullable Class<? super C> upperBound, @Nullable MethodFilter methodFilter) {
-        Map<MethodKey, NonStaticMethodRef<C>> methodRefs = new HashMap<MethodKey, NonStaticMethodRef<C>>();
+    public @Nonnull Map<MethodKey, ResolvedDynamicMethodRef<C>> getNonStaticMethods(@Nullable Class<? super C> upperBound, @Nullable MethodFilter methodFilter) {
+        Map<MethodKey, ResolvedDynamicMethodRef<C>> methodRefs = new HashMap<MethodKey, ResolvedDynamicMethodRef<C>>();
         Class<? super C> clazz = this.clazz;
         while (clazz != (null == upperBound ? Object.class : upperBound)) {
             for (Method method : clazz.getDeclaredMethods()) {
                 if (!Modifier.isStatic(method.getModifiers())) {
                     MethodKey methodKey = new MethodKey(method);
                     if (null == methodFilter || methodFilter.include(methodKey, method)) {
-                        methodRefs.put(methodKey, new NonStaticMethodRef<C>(method));
+                        methodRefs.put(methodKey, new ResolvedDynamicMethodRef<C>(this, method));
                     }
                 }
             }
@@ -244,66 +287,6 @@ public class ClassRef<C> {
         throw new NoSuchMethodException();
     }
 
-    // new method factories
-
-
-
-    @SuppressWarnings("Convert2Diamond")
-    public @Nonnull UnresolvedNonStaticMethodRef<C> getNonStaticMethod(@Nonnull String methodName, @Nonnull Class<?>... parameterTypes) {
-        try {
-            Method declaredMethod = getDeclaredMethod(methodName, parameterTypes);
-            if (Unsafe.setAccessible(declaredMethod)) {
-                return new UnresolvedNonStaticMethodRef<C>(new NonStaticMethodRef<C>(declaredMethod), null);
-            } else {
-                return new UnresolvedNonStaticMethodRef<C>(null, new UnresolvedRefException("Method " + clazz.getName() + "." + methodName + "() is not accessible"));
-            }
-        } catch (Throwable e) {
-            return new UnresolvedNonStaticMethodRef<C>(null, e);
-        }
-    }
-
-    @SuppressWarnings("Convert2Diamond")
-    public @Nonnull <T> UnresolvedNonStaticNonVoidMethodRef<C,T> getNonStaticMethod(
-            @SuppressWarnings("unused") @Nullable Class<T> returnType,
-            @Nonnull String methodName, @Nonnull Class<?>... parameterTypes) {
-        try {
-            Method declaredMethod = getDeclaredMethod(methodName, parameterTypes);
-            if (Unsafe.setAccessible(declaredMethod)) {
-                return new UnresolvedNonStaticNonVoidMethodRef<C,T>(new NonStaticNonVoidMethodRef<C,T>(declaredMethod), null);
-            } else {
-                return new UnresolvedNonStaticNonVoidMethodRef<C,T>(null, new UnresolvedRefException("Method " + clazz.getName() + "." + methodName + "() is not accessible"));
-            }
-        } catch (Throwable e) {
-            return new UnresolvedNonStaticNonVoidMethodRef<C,T>(null, e);
-        }
-    }
-    public @Nonnull UnresolvedStaticMethodRef getStaticMethod(@Nonnull String methodName, @Nonnull Class<?>... parameterTypes) {
-        try {
-            Method declaredMethod = getDeclaredMethod(methodName, parameterTypes);
-            if (Unsafe.setAccessible(declaredMethod)) {
-                return new UnresolvedStaticMethodRef(new StaticMethodRef(declaredMethod), null);
-            } else {
-                return new UnresolvedStaticMethodRef(null, new UnresolvedRefException("Method " + clazz.getName() + "." + methodName + "() is not accessible"));
-            }
-        } catch (Throwable e) {
-            return new UnresolvedStaticMethodRef(null, e);
-        }
-    }
-
-    public @Nonnull <T> UnresolvedStaticNonVoidMethodRef<T> getStaticMethod(
-            @SuppressWarnings("unused") @Nullable Class<T> returnType,
-            @Nonnull String methodName, @Nonnull Class<?>... parameterTypes) {
-        try {
-            Method declaredMethod = getDeclaredMethod(methodName, parameterTypes);
-            if (Unsafe.setAccessible(declaredMethod)) {
-                return new UnresolvedStaticNonVoidMethodRef<T>(new StaticNonVoidMethodRef<T>(declaredMethod), null);
-            } else {
-                return new UnresolvedStaticNonVoidMethodRef<T>(null, new UnresolvedRefException("Method " + clazz.getName() + "." + methodName + "() is not accessible"));
-            }
-        } catch (Throwable e) {
-            return new UnresolvedStaticNonVoidMethodRef<T>(null, e);
-        }
-    }
 
     @SuppressWarnings("SpellCheckingInspection")
     public void retransform() throws UnmodifiableClassException, ExecutionException, InterruptedException {

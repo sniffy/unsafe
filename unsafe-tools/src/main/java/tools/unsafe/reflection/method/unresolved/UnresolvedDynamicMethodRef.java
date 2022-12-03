@@ -1,0 +1,28 @@
+package tools.unsafe.reflection.method.unresolved;
+
+import tools.unsafe.reflection.UnresolvedRefException;
+import tools.unsafe.reflection.UnsafeInvocationException;
+import tools.unsafe.reflection.method.AbstractUnresolvedMethodRef;
+import tools.unsafe.reflection.method.GenericDynamicMethodRef;
+import tools.unsafe.reflection.method.GenericMethodRef;
+import tools.unsafe.reflection.method.resolved.ResolvedDynamicMethodRef;
+import tools.unsafe.reflection.method.resolved.ResolvedInstanceMethodRef;
+
+import javax.annotation.Nullable;
+import java.lang.reflect.InvocationTargetException;
+
+public class UnresolvedDynamicMethodRef<C> extends AbstractUnresolvedMethodRef<ResolvedDynamicMethodRef<C>,C> implements GenericDynamicMethodRef<C> {
+
+    public UnresolvedDynamicMethodRef(@Nullable ResolvedDynamicMethodRef<C> ref, @Nullable Throwable throwable) {
+        super(ref, throwable);
+    }
+
+    @Override
+    public <T> T invoke(C instance, Object... parameters) throws UnsafeInvocationException, InvocationTargetException {
+        try {
+            return resolve().<T>invoke(instance, parameters);
+        } catch (UnresolvedRefException e) {
+            throw new UnsafeInvocationException(e);
+        }
+    }
+}

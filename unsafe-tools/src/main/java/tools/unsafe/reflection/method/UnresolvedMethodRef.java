@@ -13,4 +13,6 @@ public interface UnresolvedMethodRef<C> {
     @Nonnull
     Method getMethod() throws UnresolvedRefException;
 
+    // TODO: add getName() method
+
 }
