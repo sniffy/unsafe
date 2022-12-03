@@ -115,7 +115,7 @@ public final class Unsafe {
 
             if (Unsafe.getJavaVersion() >= 9) {
                 return $("java.lang.ProcessHandle").method(Long.TYPE, "pid").invoke(
-                        $("java.lang.ProcessHandle").staticMethod("current").invoke()
+                        $("java.lang.ProcessHandle").staticMethod(Integer.TYPE,"current").invoke()
                 ).intValue();
                 //return (int) ProcessHandle.current().pid();
             } else {

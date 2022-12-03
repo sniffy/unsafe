@@ -3,6 +3,7 @@ package tools.unsafe.reflection.module;
 import tools.unsafe.Unsafe;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.method.generic.unresolved.UnresolvedDynamicMethodRef;
+import tools.unsafe.reflection.method.voidresult.unresolved.UnresolvedVoidDynamicMethodRef;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
@@ -12,7 +13,7 @@ import static tools.unsafe.Unsafe.$;
 public class ModuleRef {
 
     public static final String JAVA_LANG_MODULE = "java.lang.Module";
-    public static final UnresolvedDynamicMethodRef<Object> IMPL_ADD_OPENS_METHOD =
+    public static final UnresolvedVoidDynamicMethodRef<Object> IMPL_ADD_OPENS_METHOD =
             $(JAVA_LANG_MODULE).method("implAddOpens", String.class);
 
     static {

@@ -14,6 +14,8 @@ import tools.unsafe.reflection.method.generic.unresolved.UnresolvedDynamicMethod
 import tools.unsafe.reflection.method.typed.unresolved.UnresolvedDynamicTypedMethodRef;
 import tools.unsafe.reflection.method.generic.unresolved.UnresolvedStaticMethodRef;
 import tools.unsafe.reflection.method.typed.unresolved.UnresolvedStaticTypedMethodRef;
+import tools.unsafe.reflection.method.voidresult.unresolved.UnresolvedStaticVoidMethodRef;
+import tools.unsafe.reflection.method.voidresult.unresolved.UnresolvedVoidDynamicMethodRef;
 import tools.unsafe.reflection.module.UnresolvedModuleRef;
 
 import javax.annotation.Nonnull;
@@ -148,19 +150,19 @@ public class UnresolvedClassRef<C> extends UnresolvedRef<ClassRef<C>> {
 
     // methods
 
-    public @Nonnull UnresolvedDynamicMethodRef<C> method(@Nonnull String methodName, @Nonnull Class<?>... parameterTypes) {
+    public @Nonnull UnresolvedVoidDynamicMethodRef<C> method(@Nonnull String methodName, @Nonnull Class<?>... parameterTypes) {
         try {
             return resolve().method(methodName, parameterTypes);
         } catch (UnresolvedRefException e) {
-            return new UnresolvedDynamicMethodRef<C>(null, e);
+            return new UnresolvedVoidDynamicMethodRef<C>(null, e);
         }
     }
 
-    public @Nonnull UnresolvedStaticMethodRef<C> staticMethod(@Nonnull String methodName, @Nonnull Class<?>... parameterTypes) {
+    public @Nonnull UnresolvedStaticVoidMethodRef<C> staticMethod(@Nonnull String methodName, @Nonnull Class<?>... parameterTypes) {
         try {
             return resolve().staticMethod(methodName, parameterTypes);
         } catch (UnresolvedRefException e) {
-            return new UnresolvedStaticMethodRef<C>(null, e);
+            return new UnresolvedStaticVoidMethodRef<C>(null, e);
         }
     }
 

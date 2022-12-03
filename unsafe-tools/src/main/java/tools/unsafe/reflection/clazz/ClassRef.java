@@ -17,12 +17,13 @@ import tools.unsafe.reflection.method.MethodFilter;
 import tools.unsafe.reflection.method.MethodKey;
 import tools.unsafe.reflection.method.generic.resolved.ResolvedDynamicMethodRef;
 import tools.unsafe.reflection.method.typed.resolved.ResolvedDynamicTypedMethodRef;
-import tools.unsafe.reflection.method.generic.resolved.ResolvedStaticMethodRef;
 import tools.unsafe.reflection.method.typed.resolved.ResolvedStaticTypedMethodRef;
-import tools.unsafe.reflection.method.generic.unresolved.UnresolvedDynamicMethodRef;
 import tools.unsafe.reflection.method.typed.unresolved.UnresolvedDynamicTypedMethodRef;
-import tools.unsafe.reflection.method.generic.unresolved.UnresolvedStaticMethodRef;
 import tools.unsafe.reflection.method.typed.unresolved.UnresolvedStaticTypedMethodRef;
+import tools.unsafe.reflection.method.voidresult.resolved.ResolvedStaticVoidMethodRef;
+import tools.unsafe.reflection.method.voidresult.resolved.ResolvedVoidDynamicMethodRef;
+import tools.unsafe.reflection.method.voidresult.unresolved.UnresolvedStaticVoidMethodRef;
+import tools.unsafe.reflection.method.voidresult.unresolved.UnresolvedVoidDynamicMethodRef;
 import tools.unsafe.reflection.module.ModuleRef;
 import tools.unsafe.reflection.module.UnresolvedModuleRef;
 import tools.unsafe.reflection.object.ObjectRef;
@@ -60,7 +61,7 @@ public class ClassRef<C> {
             Class<?> moduleClass = Class.forName("java.lang.Module");
             //noinspection rawtypes
             ClassRef<Class> classClassRef = Unsafe.$(Class.class);
-            Object module = classClassRef.method("getModule").invoke(clazz);
+            Object module = classClassRef.method(Object.class, "getModule").invoke(clazz);
             return new UnresolvedModuleRef(new ModuleRef(module), null);
         } catch (Throwable e) {
             return new UnresolvedModuleRef(null, e);
@@ -186,16 +187,16 @@ public class ClassRef<C> {
     }
 
     // TODO: should parameters be nullable ?
-    public @Nonnull UnresolvedStaticMethodRef<C> staticMethod(@Nonnull String methodName, @Nonnull Class<?>... parameters) {
-        ResolvedStaticMethodRef<C> resolvedStaticMethodRef = null;
+    public @Nonnull UnresolvedStaticVoidMethodRef<C> staticMethod(@Nonnull String methodName, @Nonnull Class<?>... parameters) {
+        ResolvedStaticVoidMethodRef<C> resolvedStaticMethodRef = null;
         Exception exception = null;
         try {
             // TODO: validate it is static
-            resolvedStaticMethodRef = new ResolvedStaticMethodRef<C>(this, getDeclaredMethod(methodName, parameters));
+            resolvedStaticMethodRef = new ResolvedStaticVoidMethodRef<C>(this, getDeclaredMethod(methodName, parameters));
         } catch (NoSuchMethodException e) {
             exception = e;
         }
-        return new UnresolvedStaticMethodRef<C>(resolvedStaticMethodRef, exception);
+        return new UnresolvedStaticVoidMethodRef<C>(resolvedStaticMethodRef, exception);
     }
 
     // TODO: should parameters be nullable ?
@@ -211,16 +212,16 @@ public class ClassRef<C> {
         return new UnresolvedStaticTypedMethodRef<C, T>(resolvedStaticMethodRef, exception);
     }
 
-    public @Nonnull UnresolvedDynamicMethodRef<C> method(@Nonnull String methodName, @Nonnull Class<?>... parameters) {
-        ResolvedDynamicMethodRef<C> resolvedDynamicMethodRef = null;
+    public @Nonnull UnresolvedVoidDynamicMethodRef<C> method(@Nonnull String methodName, @Nonnull Class<?>... parameters) {
+        ResolvedVoidDynamicMethodRef<C> resolvedVoidDynamicMethodRef = null;
         Exception exception = null;
         try {
             // TODO: validate it is static
-            resolvedDynamicMethodRef = new ResolvedDynamicMethodRef<C>(this, getDeclaredMethod(methodName, parameters));
+            resolvedVoidDynamicMethodRef = new ResolvedVoidDynamicMethodRef<C>(this, getDeclaredMethod(methodName, parameters));
         } catch (NoSuchMethodException e) {
             exception = e;
         }
-        return new UnresolvedDynamicMethodRef<C>(resolvedDynamicMethodRef, exception);
+        return new UnresolvedVoidDynamicMethodRef<C>(resolvedVoidDynamicMethodRef, exception);
     }
 
     public @Nonnull <T> UnresolvedDynamicTypedMethodRef<C, T> method(@Nonnull Class<T> returnType, @Nonnull String methodName, @Nonnull Class<?>... parameters) {
