@@ -6,17 +6,37 @@ import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import org.junit.jupiter.api.Test;
 import tools.unsafe.reflection.clazz.ClassRef;
+import tools.unsafe.reflection.constructor.ConstructorMethodHandleBuilder;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedStaticObjectFieldRef;
 
 import javax.net.ssl.SSLContext;
 import java.lang.instrument.Instrumentation;
+import java.lang.invoke.MethodHandle;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static tools.unsafe.fluent.Fluent.$;
 
 class UnsafeTest {
+
+    private static AtomicInteger counter = new AtomicInteger();
+
+    public UnsafeTest() {
+        counter.incrementAndGet();
+    }
+
+    @Test
+    public void testInvokeConstructor() throws Throwable {
+        UnsafeTest ut = new UnsafeTest();
+        counter.set(0);
+        MethodHandle methodHandle = ConstructorMethodHandleBuilder.constructorMethodHandle(UnsafeTest.class);
+        methodHandle.invoke(ut);
+        methodHandle.invoke(ut);
+        methodHandle.invoke(ut);
+        assertEquals(3, counter.get());
+    }
 
     @Test
     public void testObjectRef() throws UnresolvedRefException, UnsafeInvocationException, InvocationTargetException {

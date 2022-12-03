@@ -2,9 +2,27 @@
 
 ### Structure
 
-
-
 ### Naming conventions
+
+tools.unsafe.reflection.method.voidresult.oneparam.resolved.ResolvedVoidDynamicOneParamMethodRef<C, P1>
+implements GenericVoidDynamicOneParamMethodRef<C, P1>
+
+voidresult.oneparam.resolved.ResolvedVoidDynamicOneParamMethodRef
+voidresult - result (voidresult / typedresult / genericresult)
+oneparam - arguments (oneparam, twoparams, threeparams, fourparams, multipleparams)
+resolved - resolved / unresolved
+
+ResolvedVoidDynamicOneParamMethodRef
+resolved - resolved / unresolved
+void - void / typedresult / genericresult
+
+
+ResolvedInstanceVoidOneParamMethodRef
+resolved - resolved / unresolved
+instance - instance / static / dynamic
+void - void / types / generic
+oneparam - oneparam, twoparams, threeparams, fourparams, multipleparams
+
 
 #### Class names
 
