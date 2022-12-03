@@ -58,11 +58,22 @@ public class ClassRef<C> {
         this.clazz = clazz;
     }
 
+    @Nonnull
+    public static <C> ClassRef<C> of(@Nonnull Class<C> clazz) {
+        return new ClassRef<C>(clazz);
+    }
+
+    @Nonnull
+    public static <C, C1 extends C> ClassRef<C> of(@Nonnull Class<C1> clazz, @SuppressWarnings("unused") @Nullable Class<C> cast) {
+        //noinspection unchecked
+        return (ClassRef<C>) of(clazz);
+    }
+
     public @Nonnull UnresolvedModuleRef getModuleRef() {
         try {
             //noinspection rawtypes
-            ClassRef<Class> classClassRef = Unsafe.$(Class.class);
-            Object module = classClassRef.method(Unsafe.$("java.lang.Module"), "getModule").invoke(clazz);
+            ClassRef<Class> classClassRef = of(Class.class);
+            Object module = classClassRef.method(UnresolvedClassRef.of("java.lang.Module"), "getModule").invoke(clazz);
             return new UnresolvedModuleRef(new ModuleRef(module), null);
         } catch (Throwable e) {
             return new UnresolvedModuleRef(null, e);
@@ -343,7 +354,7 @@ public class ClassRef<C> {
         Unsafe.getSunMiscUnsafe().ensureClassInitialized(clazz);
     }
 
-    public ObjectRef<C> $(C object) {
+    public ObjectRef<C> objectRef(C object) {
         return new ObjectRef<C>(this, object);
     }
 

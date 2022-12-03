@@ -6,13 +6,13 @@ import tools.unsafe.reflection.clazz.UnresolvedClassRef;
 import tools.unsafe.reflection.object.ObjectRef;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.instrument.Instrumentation;
 import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
@@ -114,12 +114,12 @@ public final class Unsafe {
         try {
 
             if (Unsafe.getJavaVersion() >= 9) {
-                return $("java.lang.ProcessHandle").method(Long.TYPE, "pid").invoke(
-                        $("java.lang.ProcessHandle").staticMethod(Integer.TYPE, "current").invoke()
+                return UnresolvedClassRef.of("java.lang.ProcessHandle").method(Long.TYPE, "pid").invoke(
+                        UnresolvedClassRef.of("java.lang.ProcessHandle").staticMethod(Integer.TYPE, "current").invoke()
                 ).intValue();
                 //return (int) ProcessHandle.current().pid();
             } else {
-                return $(ManagementFactory.getRuntimeMXBean()).$("jvm").$(Integer.TYPE, "getProcessId");
+                return ObjectRef.<RuntimeMXBean>of(ManagementFactory.getRuntimeMXBean()).field("jvm").objectRef().invoke(Integer.TYPE, "getProcessId", new Class<?>[0], new Object[0]);
             }
 
         } catch (Exception e) {
@@ -148,11 +148,11 @@ public final class Unsafe {
                     instrumentationFuture = attachAgentExecutor.submit(new Callable<Instrumentation>() {
                         //@Override
                         public Instrumentation call() throws Exception {
-                            $("sun.tools.attach.HotSpotVirtualMachine").staticBooleanField("ALLOW_ATTACH_SELF").trySet(true);
+                            UnresolvedClassRef.of("sun.tools.attach.HotSpotVirtualMachine").staticBooleanField("ALLOW_ATTACH_SELF").trySet(true);
 
 
                             System.out.println("Hello world!");
-                            UnresolvedClassRef<Object> vmClassRef = $("com.sun.tools.attach.VirtualMachine");
+                            UnresolvedClassRef<Object> vmClassRef = UnresolvedClassRef.of("com.sun.tools.attach.VirtualMachine");
                             Object vm = vmClassRef.staticMethod(Object.class, "attach", String.class).invoke(String.valueOf(getPid()));
                             System.out.println("Attached to " + vm);
 
@@ -188,7 +188,7 @@ public final class Unsafe {
 
                             while (!Thread.currentThread().isInterrupted()) {
                                 //do something
-                                UnresolvedClassRef<Object> classRef = $("tools.unsafe.agent.UnsafeAgent");
+                                UnresolvedClassRef<Object> classRef = UnresolvedClassRef.of("tools.unsafe.agent.UnsafeAgent");
                                 if (classRef.isResolved()) {
                                     attachAgentExecutor.shutdown();
                                     return classRef.<Instrumentation>tryGetStaticField("instrumentation").getOrDefault(null);
@@ -211,47 +211,12 @@ public final class Unsafe {
     @SuppressWarnings("unused")
     public static void defineSystemClass(@Nonnull @Deprecated String className, @Nonnull byte[] bytes) throws UnsafeException {
         try {
-            $(sun.misc.Unsafe.class).
+            ClassRef.of(sun.misc.Unsafe.class).
                     method("defineClass", String.class, byte[].class, Integer.TYPE, Integer.TYPE, ClassLoader.class, ProtectionDomain.class).
                     invoke(getSunMiscUnsafe(), className, bytes, 0, bytes.length, null, null);
         } catch (Exception e) {
             throw new UnsafeException(e);
         }
-    }
-
-    public static @Nonnull <C> UnresolvedClassRef<C> $(@Nonnull String className) {
-        try {
-            //noinspection unchecked
-            Class<C> clazz = (Class<C>) Class.forName(className);
-            return new UnresolvedClassRef<C>(new ClassRef<C>(clazz), null);
-        } catch (Throwable e) {
-            return new UnresolvedClassRef<C>(null, e);
-        }
-    }
-
-    public static <C> ObjectRef<C> $(@Nonnull C object) {
-        //noinspection unchecked
-        return new ObjectRef<C>(
-                (ClassRef<C>) $(object.getClass(), Object.class),
-                object
-        );
-    }
-
-    @SuppressWarnings("unchecked")
-    @Nonnull
-    public static <C, C1 extends C> ClassRef<C> $(@Nonnull Class<C1> clazz, @SuppressWarnings("unused") @Nullable Class<C> cast) {
-        return (ClassRef<C>) $(clazz);
-    }
-
-    @Nonnull
-    public static <C> UnresolvedClassRef<C> $(@Nonnull String className, @SuppressWarnings("unused") @Nullable Class<C> cast) {
-        return $(className);
-    }
-
-    // TODO: introduce caching
-    @Nonnull
-    public static <C> ClassRef<C> $(@Nonnull Class<C> clazz) {
-        return new ClassRef<C>(clazz);
     }
 
     public static boolean setAccessible(@Nonnull AccessibleObject ao) throws UnsafeException {

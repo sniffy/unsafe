@@ -36,6 +36,21 @@ public class UnresolvedClassRef<C> extends UnresolvedRef<ClassRef<C>> {
         super(ref, throwable);
     }
 
+    public static @Nonnull <C> UnresolvedClassRef<C> of(@Nonnull String className) {
+        try {
+            //noinspection unchecked
+            Class<C> clazz = (Class<C>) Class.forName(className);
+            return new UnresolvedClassRef<C>(new ClassRef<C>(clazz), null);
+        } catch (Throwable e) {
+            return new UnresolvedClassRef<C>(null, e);
+        }
+    }
+
+    @Nonnull
+    public static <C> UnresolvedClassRef<C> of(@Nonnull String className, @SuppressWarnings("unused") @Nullable Class<C> cast) {
+        return of(className);
+    }
+
     public @Nonnull UnresolvedModuleRef tryGetModuleRef() {
         try {
             return getModuleRef();

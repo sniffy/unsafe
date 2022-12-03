@@ -6,7 +6,6 @@ import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import org.junit.jupiter.api.Test;
 import tools.unsafe.reflection.clazz.ClassRef;
-import tools.unsafe.reflection.clazz.UnresolvedClassRef;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedStaticObjectFieldRef;
 
 import javax.net.ssl.SSLContext;
@@ -15,7 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.Future;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static tools.unsafe.Unsafe.$;
+import static tools.unsafe.fluent.Fluent.$;
 
 class UnsafeTest {
 

@@ -8,6 +8,7 @@ import tools.unsafe.reflection.field.objects.resolved.ResolvedInstanceObjectFiel
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedDynamicObjectFieldRef;
 import tools.unsafe.reflection.method.typedresult.resolved.ResolvedInstanceTypedMethodRef;
 
+import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
 
 public class ObjectRef<C> {
@@ -21,11 +22,19 @@ public class ObjectRef<C> {
         this.object = object;
     }
 
+    public static <C> ObjectRef<C> of(@Nonnull C object) {
+        //noinspection unchecked
+        return new ObjectRef<C>(
+                (ClassRef<C>) ClassRef.of(object.getClass(), Object.class),
+                object
+        );
+    }
+
     public <T> T getField(String fieldName) throws UnresolvedRefException, UnsafeInvocationException {
         return this.<T>field(fieldName).get();
     }
 
-    public <T> UnresolvedObjectRef<T> $(String fieldName) {
+    public <T> UnresolvedObjectRef<T> fieldObjectRef(String fieldName) {
         UnresolvedDynamicObjectFieldRef<C, T> nonStaticField = classRef.field(fieldName);
         T fieldValue = null;
         Exception exception = null;

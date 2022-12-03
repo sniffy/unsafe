@@ -26,14 +26,11 @@ public class UnresolvedObjectRef<C> extends UnresolvedRef<ObjectRef<C>> {
         return resolve().field(fieldName);
     }
 
-    public <T> UnresolvedObjectRef<T> $(String fieldName) throws UnresolvedRefException {
-        return resolve().$(fieldName);
+    public <T> UnresolvedObjectRef<T> fieldObjectRef(String fieldName) throws UnresolvedRefException {
+        return resolve().fieldObjectRef(fieldName);
     }
 
-    public <T> T $(Class<T> returnType, String methodName) throws UnresolvedRefException, UnsafeInvocationException, InvocationTargetException {
-        return invoke(returnType, methodName);
-    }
-
+    // TODO: add more methods similar to what is there in ClassRef (method, voidMEthod, etc.)
     public <T> T invoke(Class<T> returnType, String methodName) throws UnresolvedRefException, UnsafeInvocationException, InvocationTargetException {
         return resolve().invoke(returnType, methodName, new Class<?>[0], new Object[0]);
     }
