@@ -20,6 +20,8 @@ import tools.unsafe.reflection.method.typed.resolved.ResolvedDynamicTypedMethodR
 import tools.unsafe.reflection.method.typed.resolved.ResolvedStaticTypedMethodRef;
 import tools.unsafe.reflection.method.typed.unresolved.UnresolvedDynamicTypedMethodRef;
 import tools.unsafe.reflection.method.typed.unresolved.UnresolvedStaticTypedMethodRef;
+import tools.unsafe.reflection.method.voidresult.oneparam.resolved.ResolvedVoidDynamicOneParamMethodRef;
+import tools.unsafe.reflection.method.voidresult.oneparam.unresolved.UnresolvedVoidDynamicOneParamMethodRef;
 import tools.unsafe.reflection.method.voidresult.resolved.ResolvedStaticVoidMethodRef;
 import tools.unsafe.reflection.method.voidresult.resolved.ResolvedVoidDynamicMethodRef;
 import tools.unsafe.reflection.method.voidresult.unresolved.UnresolvedStaticVoidMethodRef;
@@ -234,6 +236,20 @@ public class ClassRef<C> {
             exception = e;
         }
         return new UnresolvedDynamicTypedMethodRef<C, T>(resolvedDynamicTypedMethodRef, exception);
+    }
+
+    // one param methods
+
+    public <P1> @Nonnull UnresolvedVoidDynamicOneParamMethodRef<C, P1> method(@Nonnull String methodName, @Nonnull Class<P1> C1) {
+        ResolvedVoidDynamicOneParamMethodRef<C, P1> resolvedVoidDynamicMethodRef = null;
+        Exception exception = null;
+        try {
+            // TODO: validate it is static
+            resolvedVoidDynamicMethodRef = new ResolvedVoidDynamicOneParamMethodRef<C, P1>(this, getDeclaredMethod(methodName, C1));
+        } catch (NoSuchMethodException e) {
+            exception = e;
+        }
+        return new UnresolvedVoidDynamicOneParamMethodRef<C, P1>(resolvedVoidDynamicMethodRef, exception);
     }
 
     // TODO: add "field" and "method" method which would return generic ref working with both static and non static members

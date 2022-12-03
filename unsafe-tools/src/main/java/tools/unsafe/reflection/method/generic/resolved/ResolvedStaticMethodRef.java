@@ -1,7 +1,6 @@
 package tools.unsafe.reflection.method.generic.resolved;
 
 import tools.unsafe.reflection.clazz.ClassRef;
-import tools.unsafe.reflection.method.generic.resolved.AbstractResolvedMethodRef;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Method;

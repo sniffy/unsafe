@@ -10,10 +10,9 @@ import tools.unsafe.reflection.field.objects.resolved.ResolvedDynamicObjectField
 import tools.unsafe.reflection.field.objects.resolved.ResolvedStaticObjectFieldRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedDynamicObjectFieldRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedStaticObjectFieldRef;
-import tools.unsafe.reflection.method.generic.unresolved.UnresolvedDynamicMethodRef;
 import tools.unsafe.reflection.method.typed.unresolved.UnresolvedDynamicTypedMethodRef;
-import tools.unsafe.reflection.method.generic.unresolved.UnresolvedStaticMethodRef;
 import tools.unsafe.reflection.method.typed.unresolved.UnresolvedStaticTypedMethodRef;
+import tools.unsafe.reflection.method.voidresult.oneparam.unresolved.UnresolvedVoidDynamicOneParamMethodRef;
 import tools.unsafe.reflection.method.voidresult.unresolved.UnresolvedStaticVoidMethodRef;
 import tools.unsafe.reflection.method.voidresult.unresolved.UnresolvedVoidDynamicMethodRef;
 import tools.unsafe.reflection.module.UnresolvedModuleRef;
@@ -181,6 +180,19 @@ public class UnresolvedClassRef<C> extends UnresolvedRef<ClassRef<C>> {
             return new UnresolvedDynamicTypedMethodRef<C, T>(null, e);
         }
     }
+
+    // one param methods
+
+
+    public <P1> @Nonnull UnresolvedVoidDynamicOneParamMethodRef<C, P1> method(@Nonnull String methodName, @Nonnull Class<P1> C1) {
+        try {
+            return resolve().method(methodName, C1);
+        } catch (UnresolvedRefException e) {
+            return new UnresolvedVoidDynamicOneParamMethodRef<C, P1>(null, e);
+        }
+    }
+
+    // other methods
 
     @SuppressWarnings("unused")
     public void retransform() throws UnmodifiableClassException, UnresolvedRefException, ExecutionException, InterruptedException {
