@@ -77,13 +77,13 @@ public final class Unsafe {
     }
 
     public static @Nonnull RuntimeException throwException(@Nonnull Throwable e) {
-        Unsafe.<RuntimeException>throwAny(e);
+        Unsafe.throwAny(e);
         return new RuntimeException(e);
     }
 
     @SuppressWarnings("unchecked")
     private static <E extends Throwable> void throwAny(@Nonnull Throwable e) throws E {
-        throw (E)e;
+        throw (E) e;
     }
 
     private static class SunMiscUnsafeHolder {
@@ -186,7 +186,7 @@ public final class Unsafe {
                                 vmClassRef.method("loadAgent", String.class).invoke(vm, tempFile.getCanonicalPath().replaceAll("\\\\", "/"));
                             }
 
-                            while(!Thread.currentThread().isInterrupted()){
+                            while (!Thread.currentThread().isInterrupted()) {
                                 //do something
                                 UnresolvedClassRef<Object> classRef = $("tools.unsafe.agent.UnsafeAgent");
                                 if (classRef.isResolved()) {
@@ -222,8 +222,8 @@ public final class Unsafe {
     public static @Nonnull <C> UnresolvedClassRef<C> $(@Nonnull String className) {
         try {
             //noinspection unchecked
-            Class<C> clazz = (Class<C>)Class.forName(className);
-            return new UnresolvedClassRef<C>(new ClassRef<C>( clazz), null);
+            Class<C> clazz = (Class<C>) Class.forName(className);
+            return new UnresolvedClassRef<C>(new ClassRef<C>(clazz), null);
         } catch (Throwable e) {
             return new UnresolvedClassRef<C>(null, e);
         }
@@ -239,7 +239,7 @@ public final class Unsafe {
 
     @SuppressWarnings("unchecked")
     @Nonnull
-    public static <C,C1 extends C> ClassRef<C> $(@Nonnull Class<C1> clazz, @SuppressWarnings("unused") @Nullable Class<C> cast) {
+    public static <C, C1 extends C> ClassRef<C> $(@Nonnull Class<C1> clazz, @SuppressWarnings("unused") @Nullable Class<C> cast) {
         return (ClassRef<C>) $(clazz);
     }
 

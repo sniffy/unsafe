@@ -6,7 +6,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Method;
 
-public class ResolvedInstanceTypedMethodRef<C,T> extends AbstractResolvedTypedMethodRef<C,T> {
+public class ResolvedInstanceTypedMethodRef<C, T> extends AbstractResolvedTypedMethodRef<C, T> {
 
     // TODO: should we pass ObjectRef here instead?
 

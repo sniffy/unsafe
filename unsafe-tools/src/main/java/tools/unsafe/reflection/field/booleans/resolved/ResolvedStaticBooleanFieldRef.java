@@ -35,7 +35,7 @@ public class ResolvedStaticBooleanFieldRef<C> extends AbstractBooleanFieldRef<C>
             }
         } catch (Throwable e) {
             throw new UnsafeInvocationException(e);
-        } 
+        }
     }
 
 }

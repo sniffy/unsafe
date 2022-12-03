@@ -9,7 +9,7 @@ import tools.unsafe.reflection.object.ObjectRef;
 import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
 
-public abstract class AbstractObjectFieldRef<C,T> extends AbstractFieldRef<C> implements ObjectFieldRef<T> {
+public abstract class AbstractObjectFieldRef<C, T> extends AbstractFieldRef<C> implements ObjectFieldRef<T> {
 
     public AbstractObjectFieldRef(ClassRef<C> classRef, Field field, long offset) {
         super(classRef, field, offset);

@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Method;
 
-public class AbstractUnresolvedMethodRef<T extends AbstractMethodRef<C>,C> extends UnresolvedRef<T> implements UnresolvedMethodRef<C> {
+public class AbstractUnresolvedMethodRef<T extends AbstractMethodRef<C>, C> extends UnresolvedRef<T> implements UnresolvedMethodRef<C> {
 
     public AbstractUnresolvedMethodRef(@Nullable T ref, @Nullable Throwable throwable) {
         super(ref, throwable);

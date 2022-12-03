@@ -3,7 +3,6 @@ package tools.unsafe.reflection.method.resolved;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
 import tools.unsafe.reflection.method.AbstractMethodRef;
-import tools.unsafe.reflection.method.GenericMethodRef;
 import tools.unsafe.reflection.method.GenericTypedMethodRef;
 
 import javax.annotation.Nonnull;
@@ -11,7 +10,7 @@ import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class AbstractResolvedTypedMethodRef<C,T> extends AbstractMethodRef<C> implements GenericTypedMethodRef<C,T> {
+public class AbstractResolvedTypedMethodRef<C, T> extends AbstractMethodRef<C> implements GenericTypedMethodRef<C, T> {
 
     @Nullable
     private final C instance;

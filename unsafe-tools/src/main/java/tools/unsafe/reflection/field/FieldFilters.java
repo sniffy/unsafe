@@ -14,6 +14,7 @@ public class FieldFilters {
             }
         };
     }
+
     public static FieldFilter ofType(final Class<?> type) {
         return new FieldFilter() {
             @Override

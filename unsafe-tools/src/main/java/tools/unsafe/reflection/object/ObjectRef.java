@@ -6,7 +6,6 @@ import tools.unsafe.reflection.clazz.ClassRef;
 import tools.unsafe.reflection.field.booleans.resolved.ResolvedInstanceBooleanFieldRef;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedInstanceObjectFieldRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedDynamicObjectFieldRef;
-import tools.unsafe.reflection.method.resolved.ResolvedInstanceMethodRef;
 import tools.unsafe.reflection.method.resolved.ResolvedInstanceTypedMethodRef;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,7 +26,7 @@ public class ObjectRef<C> {
     }
 
     public <T> UnresolvedObjectRef<T> $(String fieldName) {
-        UnresolvedDynamicObjectFieldRef<C, T> nonStaticField = classRef.<T>field(fieldName);
+        UnresolvedDynamicObjectFieldRef<C, T> nonStaticField = classRef.field(fieldName);
         T fieldValue = null;
         Exception exception = null;
         Class<T> fieldType = null;
@@ -48,8 +47,8 @@ public class ObjectRef<C> {
         field(fieldName).set(value);
     }
 
-    public <T> ResolvedInstanceObjectFieldRef<C,T> field(String fieldName) throws UnresolvedRefException {
-        return new ResolvedInstanceObjectFieldRef<C,T>(classRef, classRef.<T>field(fieldName).resolve(), object);
+    public <T> ResolvedInstanceObjectFieldRef<C, T> field(String fieldName) throws UnresolvedRefException {
+        return new ResolvedInstanceObjectFieldRef<C, T>(classRef, classRef.<T>field(fieldName).resolve(), object);
     }
 
     public <T> ResolvedInstanceBooleanFieldRef<C> booleanField(String fieldName) throws UnresolvedRefException {
@@ -57,7 +56,7 @@ public class ObjectRef<C> {
     }
 
     public <T> T invoke(Class<T> returnType, String methodName, Class<?>[] parameterTypes, Object[] parameters) throws UnresolvedRefException, UnsafeInvocationException, InvocationTargetException {
-        ResolvedInstanceTypedMethodRef<C,T> method = new ResolvedInstanceTypedMethodRef<C,T>(classRef, classRef.method(returnType, methodName, parameterTypes).resolve().getMethod(), object);
+        ResolvedInstanceTypedMethodRef<C, T> method = new ResolvedInstanceTypedMethodRef<C, T>(classRef, classRef.method(returnType, methodName, parameterTypes).resolve().getMethod(), object);
         return method.invoke(parameters);
     }
 

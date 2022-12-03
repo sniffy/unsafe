@@ -5,9 +5,9 @@ import tools.unsafe.reflection.field.booleans.resolved.ResolvedDynamicBooleanFie
 import tools.unsafe.reflection.field.booleans.unresolved.UnresolvedDynamicBooleanFieldRef;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedDynamicObjectFieldRef;
 
-public class UnresolvedDynamicObjectFieldRef<C,T> extends AbstractUnresolvedDynamicObjectFieldRef<ResolvedDynamicObjectFieldRef<C,T>, C, T> {
+public class UnresolvedDynamicObjectFieldRef<C, T> extends AbstractUnresolvedDynamicObjectFieldRef<ResolvedDynamicObjectFieldRef<C, T>, C, T> {
 
-    public UnresolvedDynamicObjectFieldRef(ResolvedDynamicObjectFieldRef<C,T> ref, Throwable throwable) {
+    public UnresolvedDynamicObjectFieldRef(ResolvedDynamicObjectFieldRef<C, T> ref, Throwable throwable) {
         super(ref, throwable);
     }
 

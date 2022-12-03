@@ -10,7 +10,7 @@ import tools.unsafe.reflection.object.ObjectRef;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class AbstractUnresolvedDynamicObjectFieldRef<R extends AbstractDynamicObjectFieldRef<C,T>, C, T> extends AbstractUnresolvedFieldRef<R,C> implements DynamicObjectFieldRef<C,T> {
+public class AbstractUnresolvedDynamicObjectFieldRef<R extends AbstractDynamicObjectFieldRef<C, T>, C, T> extends AbstractUnresolvedFieldRef<R, C> implements DynamicObjectFieldRef<C, T> {
 
     public AbstractUnresolvedDynamicObjectFieldRef(@Nullable R ref, @Nullable Throwable throwable) {
         super(ref, throwable);

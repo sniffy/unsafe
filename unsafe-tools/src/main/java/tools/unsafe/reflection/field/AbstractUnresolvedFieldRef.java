@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 
-public class AbstractUnresolvedFieldRef<T extends AbstractFieldRef<C>,C> extends UnresolvedRef<T> implements UnresolvedFieldRef<C> {
+public class AbstractUnresolvedFieldRef<T extends AbstractFieldRef<C>, C> extends UnresolvedRef<T> implements UnresolvedFieldRef<C> {
 
     public AbstractUnresolvedFieldRef(@Nullable T ref, @Nullable Throwable throwable) {
         super(ref, throwable);

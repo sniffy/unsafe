@@ -9,7 +9,7 @@ import tools.unsafe.reflection.object.ObjectRef;
 import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
 
-public abstract class AbstractDynamicObjectFieldRef<C,T> extends AbstractFieldRef<C> implements DynamicObjectFieldRef<C, T> {
+public abstract class AbstractDynamicObjectFieldRef<C, T> extends AbstractFieldRef<C> implements DynamicObjectFieldRef<C, T> {
 
     public AbstractDynamicObjectFieldRef(ClassRef<C> classRef, Field field, long offset) {
         super(classRef, field, offset);

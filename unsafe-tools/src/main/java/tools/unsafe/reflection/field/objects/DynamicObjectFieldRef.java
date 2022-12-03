@@ -6,7 +6,7 @@ import tools.unsafe.reflection.object.ObjectRef;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public interface DynamicObjectFieldRef<C,T> {
+public interface DynamicObjectFieldRef<C, T> {
 
     @Nullable
     T get(@Nullable C instance) throws UnsafeInvocationException;
@@ -14,7 +14,8 @@ public interface DynamicObjectFieldRef<C,T> {
     @Nonnull
     ObjectRef<T> objectRef(@Nullable C instance) throws UnsafeInvocationException;
 
-    @Nonnull T getNotNull(@Nullable C instance, @Nonnull T defaultValue) throws UnsafeInvocationException;
+    @Nonnull
+    T getNotNull(@Nullable C instance, @Nonnull T defaultValue) throws UnsafeInvocationException;
 
     void set(@Nullable C instance, @Nullable T value) throws UnsafeInvocationException;
 

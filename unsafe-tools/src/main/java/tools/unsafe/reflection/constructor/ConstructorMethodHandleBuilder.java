@@ -1,17 +1,15 @@
 package tools.unsafe.reflection.constructor;
 
+import tools.unsafe.Unsafe;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedDynamicObjectFieldRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedStaticObjectFieldRef;
-import tools.unsafe.Unsafe;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
-
-import static tools.unsafe.Unsafe.$;
 
 /**
  * <a href="https://stackoverflow.com/questions/48616630/is-it-possible-to-call-constructor-on-existing-instance">See stackoverflow discussion</a>
@@ -35,14 +33,15 @@ public class ConstructorMethodHandleBuilder {
          * Even though reflection filters can be circumvented as well, there is a simpler way: Lookup contains a static field IMPL_LOOKUP, which holds a Lookup with those TRUSTED permissions. We can get this instance by using reflection and Unsafe:
          */
         ClassRef<MethodHandles.Lookup> lookupClassRef = Unsafe.$(MethodHandles.Lookup.class);
-        UnresolvedStaticObjectFieldRef<MethodHandles.Lookup,MethodHandles.Lookup> implLookupFieldRef = lookupClassRef.staticField("IMPL_LOOKUP");
+        UnresolvedStaticObjectFieldRef<MethodHandles.Lookup, MethodHandles.Lookup> implLookupFieldRef = lookupClassRef.staticField("IMPL_LOOKUP");
         MethodHandles.Lookup implLookup = implLookupFieldRef.get();
 
         MethodType constructorMethodType = MethodType.methodType(Void.TYPE);
         MethodHandle constructor = implLookup.findConstructor(clazz, constructorMethodType);
 
         UnresolvedDynamicObjectFieldRef<Object, Object> initMethodFieldRef = Unsafe.$("java.lang.invoke.DirectMethodHandle$Constructor").getNonStaticField("initMethod");
-        /* MemberName */ Object initMemberName = initMethodFieldRef.get(constructor);
+        /* MemberName */
+        Object initMemberName = initMethodFieldRef.get(constructor);
 
         UnresolvedDynamicObjectFieldRef<Object, Integer> memberNameFlagsFieldRef = Unsafe.$("java.lang.invoke.MemberName").getNonStaticField("flags");
         int flags = memberNameFlagsFieldRef.get(initMemberName);

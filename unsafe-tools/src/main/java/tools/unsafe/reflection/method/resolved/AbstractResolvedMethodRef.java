@@ -3,7 +3,6 @@ package tools.unsafe.reflection.method.resolved;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
 import tools.unsafe.reflection.method.AbstractMethodRef;
-import tools.unsafe.reflection.method.GenericDynamicMethodRef;
 import tools.unsafe.reflection.method.GenericMethodRef;
 
 import javax.annotation.Nonnull;

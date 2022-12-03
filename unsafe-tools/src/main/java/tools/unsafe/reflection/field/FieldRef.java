@@ -10,6 +10,7 @@ public interface FieldRef<C> extends UnresolvedFieldRef<C> {
     @Nonnull
     ClassRef<C> getDeclaringClassRef();
 
-    @Nonnull Field getField();
+    @Nonnull
+    Field getField();
 
 }

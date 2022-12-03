@@ -8,9 +8,11 @@ import java.lang.reflect.Field;
 
 public interface UnresolvedFieldRef<C> {
 
-    @Nonnull ClassRef<C> getDeclaringClassRef() throws UnresolvedRefException;
+    @Nonnull
+    ClassRef<C> getDeclaringClassRef() throws UnresolvedRefException;
 
-    @Nonnull Field getField() throws UnresolvedRefException;
+    @Nonnull
+    Field getField() throws UnresolvedRefException;
 
     // TODO: add getName() method
 

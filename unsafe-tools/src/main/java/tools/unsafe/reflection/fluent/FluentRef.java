@@ -7,9 +7,9 @@ import tools.unsafe.reflection.object.ObjectRef;
 /**
  * Represents one of FieldRef, MethodRef or ObjectRef
  */
-public class FluentRef<C,T> {
+public class FluentRef<C, T> {
 
-    private final ResolvedInstanceObjectFieldRef<C,T> fieldRef;
+    private final ResolvedInstanceObjectFieldRef<C, T> fieldRef;
     private final ResolvedInstanceMethodRef<C> methodRef;
     private final ObjectRef<C> objectRef;
 
@@ -26,7 +26,6 @@ public class FluentRef<C,T> {
     public <T> void set(T value) {
 
     }
-
 
 
 }

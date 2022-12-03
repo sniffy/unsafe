@@ -22,7 +22,7 @@ public class UnresolvedObjectRef<C> extends UnresolvedRef<ObjectRef<C>> {
         resolve().setField(fieldName, value);
     }
 
-    public <T> ResolvedInstanceObjectFieldRef<C,T> field(String fieldName) throws UnresolvedRefException {
+    public <T> ResolvedInstanceObjectFieldRef<C, T> field(String fieldName) throws UnresolvedRefException {
         return resolve().field(fieldName);
     }
 

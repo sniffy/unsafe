@@ -7,7 +7,7 @@ import tools.unsafe.reflection.field.booleans.resolved.ResolvedDynamicBooleanFie
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-public class ResolvedDynamicObjectFieldRef<C, T> extends AbstractDynamicObjectFieldRef<C,T> {
+public class ResolvedDynamicObjectFieldRef<C, T> extends AbstractDynamicObjectFieldRef<C, T> {
 
     public ResolvedDynamicObjectFieldRef(ClassRef<C> classRef, Field field) {
         super(classRef, field, UNSAFE.objectFieldOffset(field));
@@ -111,7 +111,7 @@ public class ResolvedDynamicObjectFieldRef<C, T> extends AbstractDynamicObjectFi
                     UNSAFE.putObject(object, offset, value);
                 }
             }
-            
+
         } catch (Throwable e) {
             throw new UnsafeInvocationException(e);
         }
@@ -174,10 +174,10 @@ public class ResolvedDynamicObjectFieldRef<C, T> extends AbstractDynamicObjectFi
                     return (T) UNSAFE.getObject(object, offset);
                 }
             }
-            
+
         } catch (Throwable e) {
             throw new UnsafeInvocationException(e);
-        } 
+        }
     }
 
     public ResolvedDynamicBooleanFieldRef<C> asBooleanFieldRef() {

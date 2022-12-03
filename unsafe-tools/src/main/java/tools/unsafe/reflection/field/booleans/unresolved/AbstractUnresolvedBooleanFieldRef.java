@@ -8,7 +8,7 @@ import tools.unsafe.reflection.field.booleans.resolved.AbstractBooleanFieldRef;
 
 import javax.annotation.Nullable;
 
-public class AbstractUnresolvedBooleanFieldRef<R extends AbstractBooleanFieldRef<C>, C> extends AbstractUnresolvedFieldRef<R,C> implements BooleanFieldRef {
+public class AbstractUnresolvedBooleanFieldRef<R extends AbstractBooleanFieldRef<C>, C> extends AbstractUnresolvedFieldRef<R, C> implements BooleanFieldRef {
 
     public AbstractUnresolvedBooleanFieldRef(@Nullable R ref, @Nullable Throwable throwable) {
         super(ref, throwable);

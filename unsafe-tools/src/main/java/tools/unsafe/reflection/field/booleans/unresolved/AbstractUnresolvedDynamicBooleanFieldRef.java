@@ -9,7 +9,7 @@ import tools.unsafe.reflection.field.booleans.resolved.AbstractDynamicBooleanFie
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class AbstractUnresolvedDynamicBooleanFieldRef<R extends AbstractDynamicBooleanFieldRef<C>, C> extends AbstractUnresolvedFieldRef<R,C> implements DynamicBooleanFieldRef<C> {
+public class AbstractUnresolvedDynamicBooleanFieldRef<R extends AbstractDynamicBooleanFieldRef<C>, C> extends AbstractUnresolvedFieldRef<R, C> implements DynamicBooleanFieldRef<C> {
 
     public AbstractUnresolvedDynamicBooleanFieldRef(@Nullable R ref, @Nullable Throwable throwable) {
         super(ref, throwable);

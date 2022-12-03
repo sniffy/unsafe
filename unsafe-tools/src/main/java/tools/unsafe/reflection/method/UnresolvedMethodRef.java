@@ -8,7 +8,8 @@ import java.lang.reflect.Method;
 
 public interface UnresolvedMethodRef<C> {
 
-    @Nonnull ClassRef<C> getDeclaringClassRef() throws UnresolvedRefException;
+    @Nonnull
+    ClassRef<C> getDeclaringClassRef() throws UnresolvedRefException;
 
     @Nonnull
     Method getMethod() throws UnresolvedRefException;

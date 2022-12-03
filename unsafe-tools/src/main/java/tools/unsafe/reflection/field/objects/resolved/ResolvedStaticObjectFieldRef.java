@@ -7,7 +7,7 @@ import tools.unsafe.reflection.field.booleans.resolved.ResolvedStaticBooleanFiel
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-public class ResolvedStaticObjectFieldRef<C,T> extends AbstractObjectFieldRef<C, T> {
+public class ResolvedStaticObjectFieldRef<C, T> extends AbstractObjectFieldRef<C, T> {
 
     private final Object object = field.getDeclaringClass();
 
@@ -180,7 +180,7 @@ public class ResolvedStaticObjectFieldRef<C,T> extends AbstractObjectFieldRef<C,
             }
         } catch (Throwable e) {
             throw new UnsafeInvocationException(e);
-        } 
+        }
     }
 
 }

@@ -2,7 +2,6 @@ package tools.unsafe.reflection.clazz;
 
 import tools.unsafe.Unsafe;
 import tools.unsafe.reflection.UnresolvedRefException;
-import tools.unsafe.reflection.UnsafeException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.constructor.UnresolvedZeroArgsClassConstructorRef;
 import tools.unsafe.reflection.constructor.ZeroArgsClassConstructorRef;
@@ -16,8 +15,14 @@ import tools.unsafe.reflection.field.objects.unresolved.UnresolvedDynamicObjectF
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedStaticObjectFieldRef;
 import tools.unsafe.reflection.method.MethodFilter;
 import tools.unsafe.reflection.method.MethodKey;
-import tools.unsafe.reflection.method.resolved.*;
-import tools.unsafe.reflection.method.unresolved.*;
+import tools.unsafe.reflection.method.resolved.ResolvedDynamicMethodRef;
+import tools.unsafe.reflection.method.resolved.ResolvedDynamicTypedMethodRef;
+import tools.unsafe.reflection.method.resolved.ResolvedStaticMethodRef;
+import tools.unsafe.reflection.method.resolved.ResolvedStaticTypedMethodRef;
+import tools.unsafe.reflection.method.unresolved.UnresolvedDynamicMethodRef;
+import tools.unsafe.reflection.method.unresolved.UnresolvedDynamicTypedMethodRef;
+import tools.unsafe.reflection.method.unresolved.UnresolvedStaticMethodRef;
+import tools.unsafe.reflection.method.unresolved.UnresolvedStaticTypedMethodRef;
 import tools.unsafe.reflection.module.ModuleRef;
 import tools.unsafe.reflection.module.UnresolvedModuleRef;
 import tools.unsafe.reflection.object.ObjectRef;
@@ -38,6 +43,7 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Provides a set of convenient methods for working with classes via reflection
+ *
  * @param <C>
  */
 @SuppressWarnings({"Convert2Diamond"})
@@ -83,7 +89,7 @@ public class ClassRef<C> {
         }
     }
 
-    public @Nonnull Map<String, ResolvedDynamicObjectFieldRef<C,Object>> findNonStaticFields(@Nullable FieldFilter fieldFilter, boolean recursive) {
+    public @Nonnull Map<String, ResolvedDynamicObjectFieldRef<C, Object>> findNonStaticFields(@Nullable FieldFilter fieldFilter, boolean recursive) {
         Map<String, ResolvedDynamicObjectFieldRef<C, Object>> fields = new HashMap<String, ResolvedDynamicObjectFieldRef<C, Object>>();
         Class<? super C> clazz = this.clazz;
         while (clazz != Object.class) {
@@ -102,14 +108,14 @@ public class ClassRef<C> {
         return fields;
     }
 
-    public @Nonnull <T> UnresolvedStaticObjectFieldRef<C,T> findFirstStaticField(@Nullable FieldFilter fieldFilter, boolean recursive) {
+    public @Nonnull <T> UnresolvedStaticObjectFieldRef<C, T> findFirstStaticField(@Nullable FieldFilter fieldFilter, boolean recursive) {
         try {
             Class<? super C> clazz = this.clazz;
             while (clazz != Object.class) {
                 Field[] declaredFields = clazz.getDeclaredFields();
                 for (Field declaredField : declaredFields) {
                     if (Modifier.isStatic(declaredField.getModifiers()) && (null == fieldFilter || fieldFilter.include(declaredField.getName(), declaredField))) {
-                        return new UnresolvedStaticObjectFieldRef<C,T>(new ResolvedStaticObjectFieldRef<C,T>(this, declaredField), null);
+                        return new UnresolvedStaticObjectFieldRef<C, T>(new ResolvedStaticObjectFieldRef<C, T>(this, declaredField), null);
                     }
                 }
                 if (recursive) {
@@ -118,21 +124,21 @@ public class ClassRef<C> {
                     break;
                 }
             }
-            return new UnresolvedStaticObjectFieldRef<C,T>(null, new NoSuchFieldError());
+            return new UnresolvedStaticObjectFieldRef<C, T>(null, new NoSuchFieldError());
         } catch (Throwable e) {
-            return new UnresolvedStaticObjectFieldRef<C,T>(null, e);
+            return new UnresolvedStaticObjectFieldRef<C, T>(null, e);
         }
     }
 
-    public @Nonnull Map<String, ResolvedStaticObjectFieldRef<C,Object>> findStaticFields(@Nullable FieldFilter fieldFilter, boolean recursive) {
-        Map<String, ResolvedStaticObjectFieldRef<C,Object>> fields = new HashMap<String, ResolvedStaticObjectFieldRef<C,Object>>();
+    public @Nonnull Map<String, ResolvedStaticObjectFieldRef<C, Object>> findStaticFields(@Nullable FieldFilter fieldFilter, boolean recursive) {
+        Map<String, ResolvedStaticObjectFieldRef<C, Object>> fields = new HashMap<String, ResolvedStaticObjectFieldRef<C, Object>>();
         Class<? super C> clazz = this.clazz;
         while (clazz != Object.class) {
             Field[] declaredFields = clazz.getDeclaredFields();
             for (Field field : declaredFields) {
                 // TODO: filter out synthetic members here and everywhere
                 if (Modifier.isStatic(field.getModifiers()) && (null == fieldFilter || fieldFilter.include(field.getName(), field))) {
-                    fields.put(field.getName(), new ResolvedStaticObjectFieldRef<C,Object>(this,field));
+                    fields.put(field.getName(), new ResolvedStaticObjectFieldRef<C, Object>(this, field));
                 }
             }
             if (recursive) {
@@ -147,17 +153,17 @@ public class ClassRef<C> {
     public void copyFields(@Nonnull C from, @Nonnull C to) throws UnsafeInvocationException {
 
         // TODO: introduce caching here
-        for (ResolvedDynamicObjectFieldRef<C,Object> fieldRef : findNonStaticFields(null, true).values()) {
+        for (ResolvedDynamicObjectFieldRef<C, Object> fieldRef : findNonStaticFields(null, true).values()) {
             fieldRef.copy(from, to);
         }
 
     }
 
-    public @Nonnull <T> UnresolvedStaticObjectFieldRef<C,T> staticField(@Nonnull String fieldName) {
+    public @Nonnull <T> UnresolvedStaticObjectFieldRef<C, T> staticField(@Nonnull String fieldName) {
         return findFirstStaticField(FieldFilters.byName(fieldName), true);
     }
 
-    public @Nonnull <T> UnresolvedDynamicObjectFieldRef<C,T> field(@Nonnull String fieldName) {
+    public @Nonnull <T> UnresolvedDynamicObjectFieldRef<C, T> field(@Nonnull String fieldName) {
         return findFirstNonStaticField(FieldFilters.byName(fieldName), true);
     }
 
@@ -193,16 +199,16 @@ public class ClassRef<C> {
     }
 
     // TODO: should parameters be nullable ?
-    public @Nonnull <T> UnresolvedStaticTypedMethodRef<C,T> staticMethod(@Nonnull Class<T> returnType, @Nonnull String methodName, @Nonnull Class<?>... parameters) {
-        ResolvedStaticTypedMethodRef<C,T> resolvedStaticMethodRef = null;
+    public @Nonnull <T> UnresolvedStaticTypedMethodRef<C, T> staticMethod(@Nonnull Class<T> returnType, @Nonnull String methodName, @Nonnull Class<?>... parameters) {
+        ResolvedStaticTypedMethodRef<C, T> resolvedStaticMethodRef = null;
         Exception exception = null;
         try {
             // TODO: validate it is static
-            resolvedStaticMethodRef = new ResolvedStaticTypedMethodRef<C,T>(this, getDeclaredMethod(methodName, parameters));
+            resolvedStaticMethodRef = new ResolvedStaticTypedMethodRef<C, T>(this, getDeclaredMethod(methodName, parameters));
         } catch (NoSuchMethodException e) {
             exception = e;
         }
-        return new UnresolvedStaticTypedMethodRef<C,T>(resolvedStaticMethodRef, exception);
+        return new UnresolvedStaticTypedMethodRef<C, T>(resolvedStaticMethodRef, exception);
     }
 
     public @Nonnull UnresolvedDynamicMethodRef<C> method(@Nonnull String methodName, @Nonnull Class<?>... parameters) {
@@ -217,16 +223,16 @@ public class ClassRef<C> {
         return new UnresolvedDynamicMethodRef<C>(resolvedDynamicMethodRef, exception);
     }
 
-    public @Nonnull <T> UnresolvedDynamicTypedMethodRef<C,T> method(@Nonnull Class<T> returnType, @Nonnull String methodName, @Nonnull Class<?>... parameters) {
-        ResolvedDynamicTypedMethodRef<C,T> resolvedDynamicTypedMethodRef = null;
+    public @Nonnull <T> UnresolvedDynamicTypedMethodRef<C, T> method(@Nonnull Class<T> returnType, @Nonnull String methodName, @Nonnull Class<?>... parameters) {
+        ResolvedDynamicTypedMethodRef<C, T> resolvedDynamicTypedMethodRef = null;
         Exception exception = null;
         try {
             // TODO: validate it is static
-            resolvedDynamicTypedMethodRef = new ResolvedDynamicTypedMethodRef<C,T>(this, getDeclaredMethod(methodName, parameters));
+            resolvedDynamicTypedMethodRef = new ResolvedDynamicTypedMethodRef<C, T>(this, getDeclaredMethod(methodName, parameters));
         } catch (NoSuchMethodException e) {
             exception = e;
         }
-        return new UnresolvedDynamicTypedMethodRef<C,T>(resolvedDynamicTypedMethodRef, exception);
+        return new UnresolvedDynamicTypedMethodRef<C, T>(resolvedDynamicTypedMethodRef, exception);
     }
 
     // TODO: add "field" and "method" method which would return generic ref working with both static and non static members

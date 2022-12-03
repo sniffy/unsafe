@@ -5,9 +5,9 @@ import tools.unsafe.reflection.field.booleans.resolved.ResolvedStaticBooleanFiel
 import tools.unsafe.reflection.field.booleans.unresolved.UnresolvedStaticBooleanFieldRef;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedStaticObjectFieldRef;
 
-public class UnresolvedStaticObjectFieldRef<C,T> extends AbstractUnresolvedObjectFieldRef<ResolvedStaticObjectFieldRef<C,T>, C, T> {
+public class UnresolvedStaticObjectFieldRef<C, T> extends AbstractUnresolvedObjectFieldRef<ResolvedStaticObjectFieldRef<C, T>, C, T> {
 
-    public UnresolvedStaticObjectFieldRef(ResolvedStaticObjectFieldRef<C,T> ref, Throwable throwable) {
+    public UnresolvedStaticObjectFieldRef(ResolvedStaticObjectFieldRef<C, T> ref, Throwable throwable) {
         super(ref, throwable);
     }
 
