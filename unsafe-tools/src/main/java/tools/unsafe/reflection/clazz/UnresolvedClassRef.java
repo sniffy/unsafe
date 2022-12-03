@@ -10,8 +10,8 @@ import tools.unsafe.reflection.field.objects.resolved.ResolvedDynamicObjectField
 import tools.unsafe.reflection.field.objects.resolved.ResolvedStaticObjectFieldRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedDynamicObjectFieldRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedStaticObjectFieldRef;
-import tools.unsafe.reflection.method.typed.unresolved.UnresolvedDynamicTypedMethodRef;
-import tools.unsafe.reflection.method.typed.unresolved.UnresolvedStaticTypedMethodRef;
+import tools.unsafe.reflection.method.typedresult.unresolved.UnresolvedDynamicTypedMethodRef;
+import tools.unsafe.reflection.method.typedresult.unresolved.UnresolvedStaticTypedMethodRef;
 import tools.unsafe.reflection.method.voidresult.oneparam.unresolved.UnresolvedVoidDynamicOneParamMethodRef;
 import tools.unsafe.reflection.method.voidresult.unresolved.UnresolvedStaticVoidMethodRef;
 import tools.unsafe.reflection.method.voidresult.unresolved.UnresolvedVoidDynamicMethodRef;

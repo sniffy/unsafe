@@ -6,7 +6,7 @@ import tools.unsafe.reflection.clazz.ClassRef;
 import tools.unsafe.reflection.field.booleans.resolved.ResolvedInstanceBooleanFieldRef;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedInstanceObjectFieldRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedDynamicObjectFieldRef;
-import tools.unsafe.reflection.method.typed.resolved.ResolvedInstanceTypedMethodRef;
+import tools.unsafe.reflection.method.typedresult.resolved.ResolvedInstanceTypedMethodRef;
 
 import java.lang.reflect.InvocationTargetException;
 

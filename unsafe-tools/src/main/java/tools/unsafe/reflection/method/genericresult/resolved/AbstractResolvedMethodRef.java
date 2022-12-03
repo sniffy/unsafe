@@ -1,21 +1,26 @@
-package tools.unsafe.reflection.method.typed.resolved;
+package tools.unsafe.reflection.method.genericresult.resolved;
 
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
 import tools.unsafe.reflection.method.AbstractMethodRef;
-import tools.unsafe.reflection.method.typed.GenericDynamicTypedMethodRef;
+import tools.unsafe.reflection.method.genericresult.GenericMethodRef;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class ResolvedDynamicTypedMethodRef<C, T> extends AbstractMethodRef<C> implements GenericDynamicTypedMethodRef<C, T> {
+public class AbstractResolvedMethodRef<C> extends AbstractMethodRef<C> implements GenericMethodRef<C> {
 
-    public ResolvedDynamicTypedMethodRef(@Nonnull ClassRef<C> declaringClassRef, @Nonnull Method method) {
+    @Nullable
+    private final C instance;
+
+    public AbstractResolvedMethodRef(@Nonnull ClassRef<C> declaringClassRef, @Nonnull Method method, @Nullable C instance) {
         super(declaringClassRef, method);
+        this.instance = instance;
     }
 
-    public T invoke(C instance, Object... parameters) throws UnsafeInvocationException, InvocationTargetException {
+    public <T> T invoke(Object... parameters) throws UnsafeInvocationException, InvocationTargetException {
         try {
             //noinspection unchecked
             return (T) getAccessibleMethod().invoke(instance, parameters);

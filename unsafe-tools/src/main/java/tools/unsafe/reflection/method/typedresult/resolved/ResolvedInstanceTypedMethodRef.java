@@ -1,4 +1,4 @@
-package tools.unsafe.reflection.method.typed.resolved;
+package tools.unsafe.reflection.method.typedresult.resolved;
 
 import tools.unsafe.reflection.clazz.ClassRef;
 

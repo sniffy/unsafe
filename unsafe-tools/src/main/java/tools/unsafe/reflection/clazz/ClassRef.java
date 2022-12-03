@@ -15,11 +15,11 @@ import tools.unsafe.reflection.field.objects.unresolved.UnresolvedDynamicObjectF
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedStaticObjectFieldRef;
 import tools.unsafe.reflection.method.MethodFilter;
 import tools.unsafe.reflection.method.MethodKey;
-import tools.unsafe.reflection.method.generic.resolved.ResolvedDynamicMethodRef;
-import tools.unsafe.reflection.method.typed.resolved.ResolvedDynamicTypedMethodRef;
-import tools.unsafe.reflection.method.typed.resolved.ResolvedStaticTypedMethodRef;
-import tools.unsafe.reflection.method.typed.unresolved.UnresolvedDynamicTypedMethodRef;
-import tools.unsafe.reflection.method.typed.unresolved.UnresolvedStaticTypedMethodRef;
+import tools.unsafe.reflection.method.genericresult.resolved.ResolvedDynamicMethodRef;
+import tools.unsafe.reflection.method.typedresult.resolved.ResolvedDynamicTypedMethodRef;
+import tools.unsafe.reflection.method.typedresult.resolved.ResolvedStaticTypedMethodRef;
+import tools.unsafe.reflection.method.typedresult.unresolved.UnresolvedDynamicTypedMethodRef;
+import tools.unsafe.reflection.method.typedresult.unresolved.UnresolvedStaticTypedMethodRef;
 import tools.unsafe.reflection.method.voidresult.oneparam.resolved.ResolvedVoidDynamicOneParamMethodRef;
 import tools.unsafe.reflection.method.voidresult.oneparam.unresolved.UnresolvedVoidDynamicOneParamMethodRef;
 import tools.unsafe.reflection.method.voidresult.resolved.ResolvedStaticVoidMethodRef;
@@ -60,10 +60,9 @@ public class ClassRef<C> {
 
     public @Nonnull UnresolvedModuleRef getModuleRef() {
         try {
-            Class<?> moduleClass = Class.forName("java.lang.Module");
             //noinspection rawtypes
             ClassRef<Class> classClassRef = Unsafe.$(Class.class);
-            Object module = classClassRef.method(Object.class, "getModule").invoke(clazz);
+            Object module = classClassRef.method(Unsafe.$("java.lang.Module"), "getModule").invoke(clazz);
             return new UnresolvedModuleRef(new ModuleRef(module), null);
         } catch (Throwable e) {
             return new UnresolvedModuleRef(null, e);
@@ -227,6 +226,30 @@ public class ClassRef<C> {
     }
 
     public @Nonnull <T> UnresolvedDynamicTypedMethodRef<C, T> method(@Nonnull Class<T> returnType, @Nonnull String methodName, @Nonnull Class<?>... parameters) {
+        ResolvedDynamicTypedMethodRef<C, T> resolvedDynamicTypedMethodRef = null;
+        Exception exception = null;
+        try {
+            // TODO: validate it is static
+            resolvedDynamicTypedMethodRef = new ResolvedDynamicTypedMethodRef<C, T>(this, getDeclaredMethod(methodName, parameters));
+        } catch (NoSuchMethodException e) {
+            exception = e;
+        }
+        return new UnresolvedDynamicTypedMethodRef<C, T>(resolvedDynamicTypedMethodRef, exception);
+    }
+
+    public @Nonnull <T> UnresolvedDynamicTypedMethodRef<C, T> method(@Nonnull ClassRef<T> returnType, @Nonnull String methodName, @Nonnull Class<?>... parameters) {
+        ResolvedDynamicTypedMethodRef<C, T> resolvedDynamicTypedMethodRef = null;
+        Exception exception = null;
+        try {
+            // TODO: validate it is static
+            resolvedDynamicTypedMethodRef = new ResolvedDynamicTypedMethodRef<C, T>(this, getDeclaredMethod(methodName, parameters));
+        } catch (NoSuchMethodException e) {
+            exception = e;
+        }
+        return new UnresolvedDynamicTypedMethodRef<C, T>(resolvedDynamicTypedMethodRef, exception);
+    }
+
+    public @Nonnull <T> UnresolvedDynamicTypedMethodRef<C, T> method(@Nonnull UnresolvedClassRef<T> returnType, @Nonnull String methodName, @Nonnull Class<?>... parameters) {
         ResolvedDynamicTypedMethodRef<C, T> resolvedDynamicTypedMethodRef = null;
         Exception exception = null;
         try {
