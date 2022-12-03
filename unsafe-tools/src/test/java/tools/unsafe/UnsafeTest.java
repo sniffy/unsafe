@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static tools.unsafe.fluent.Fluent.$;
 
-class UnsafeTest {
+public class UnsafeTest {
 
     private static AtomicInteger counter = new AtomicInteger();
 
