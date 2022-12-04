@@ -63,15 +63,13 @@ public class UnsafeVirtualMachine {
         if (getJavaVersion() <= 8) {
             if (!$("com.sun.tools.attach.VirtualMachine").isResolved()) {
                 try {
-                    String binPath = System.getProperty("sun.boot.library.path");
-                    String libPath = binPath.substring(0, binPath.length() - 7) + "lib";
-
-                    File toolsJar = new File(libPath + "/tools.jar");
+                    // TODO: should it be ${java.home}/../Classes/classes.jar on Mac ?
+                    File toolsJar = new File(System.getProperty("java.home") + "/../lib/tools.jar");
                     if (!toolsJar.exists()) throw new RuntimeException(toolsJar.getAbsolutePath() + " does not exist");
 
                     $(URLClassLoader.class).method("addURL", URL.class).invoke(
                             (URLClassLoader) ClassLoader.getSystemClassLoader(),
-                            new File(libPath + "/tools.jar").toURI().toURL()
+                            toolsJar.toURI().toURL()
                     );
 
                 } catch (MalformedURLException e) {
