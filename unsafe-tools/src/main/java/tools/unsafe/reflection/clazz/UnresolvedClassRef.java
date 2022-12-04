@@ -199,7 +199,7 @@ public class UnresolvedClassRef<C> extends UnresolvedRef<ClassRef<C>> {
     // one param methods
 
 
-    public <P1> @Nonnull UnresolvedVoidDynamicOneParamMethodRef<C, P1> method(@Nonnull String methodName, @Nonnull Class<P1> C1) {
+    public @Nonnull <P1> UnresolvedVoidDynamicOneParamMethodRef<C, P1> method(@Nonnull String methodName, @Nonnull Class<P1> C1) {
         try {
             return resolve().method(methodName, C1);
         } catch (UnresolvedRefException e) {

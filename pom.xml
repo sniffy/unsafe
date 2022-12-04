@@ -11,6 +11,7 @@
 
     <modules>
         <module>unsafe-agent</module>
+        <module>unsafe-poet</module>
         <module>unsafe-tools</module>
     </modules>
 

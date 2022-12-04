@@ -58,7 +58,7 @@ public final class Unsafe {
     }
 
     public static @Nonnull RuntimeException throwException(@Nonnull Throwable e) {
-        Unsafe.throwAny(e);
+        Unsafe.<RuntimeException>throwAny(e);
         return new RuntimeException(e);
     }
 

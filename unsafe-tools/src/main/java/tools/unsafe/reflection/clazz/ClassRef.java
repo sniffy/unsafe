@@ -274,7 +274,7 @@ public class ClassRef<C> {
 
     // one param methods
 
-    public <P1> @Nonnull UnresolvedVoidDynamicOneParamMethodRef<C, P1> method(@Nonnull String methodName, @Nonnull Class<P1> C1) {
+    public @Nonnull <P1> UnresolvedVoidDynamicOneParamMethodRef<C, P1> method(@Nonnull String methodName, @Nonnull Class<P1> C1) {
         ResolvedVoidDynamicOneParamMethodRef<C, P1> resolvedVoidDynamicMethodRef = null;
         Exception exception = null;
         try {
