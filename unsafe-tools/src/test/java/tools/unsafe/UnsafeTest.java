@@ -1,5 +1,6 @@
 package tools.unsafe;
 
+import org.junit.jupiter.api.BeforeEach;
 import sun.security.jca.ProviderList;
 import sun.security.jca.Providers;
 import tools.unsafe.reflection.UnresolvedRefException;
@@ -10,6 +11,7 @@ import tools.unsafe.reflection.constructor.ConstructorMethodHandleBuilder;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedStaticObjectFieldRef;
 
 import javax.net.ssl.SSLContext;
+import java.io.PrintStream;
 import java.lang.instrument.Instrumentation;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.InvocationTargetException;

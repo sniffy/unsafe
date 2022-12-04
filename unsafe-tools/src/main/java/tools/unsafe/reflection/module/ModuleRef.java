@@ -1,9 +1,9 @@
 package tools.unsafe.reflection.module;
 
-import tools.unsafe.Unsafe;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.UnresolvedClassRef;
 import tools.unsafe.reflection.method.voidresult.oneparam.unresolved.UnresolvedVoidDynamicOneParamMethodRef;
+import tools.unsafe.vm.UnsafeVirtualMachine;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
@@ -15,7 +15,7 @@ public class ModuleRef {
             UnresolvedClassRef.of(JAVA_LANG_MODULE).method("implAddOpens", String.class);
 
     static {
-        assert Unsafe.getJavaVersion() < 9 || IMPL_ADD_OPENS_METHOD.isResolved();
+        assert UnsafeVirtualMachine.getJavaVersion() < 9 || IMPL_ADD_OPENS_METHOD.isResolved();
     }
 
     // Do not link statically to java.land.Module since it's not available before Java 9

@@ -1,12 +1,10 @@
 package tools.unsafe.reflection.constructor;
 
-import tools.unsafe.Unsafe;
-import tools.unsafe.reflection.UnresolvedRefException;
-import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
 import tools.unsafe.reflection.clazz.UnresolvedClassRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedDynamicObjectFieldRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedStaticObjectFieldRef;
+import tools.unsafe.vm.UnsafeVirtualMachine;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -55,7 +53,7 @@ public class ConstructorMethodHandleBuilder {
 
         MethodHandle handle = null;
 
-            if (Unsafe.getJavaVersion() > 8) {
+            if (UnsafeVirtualMachine.getJavaVersion() > 8) {
                 //noinspection unchecked
                 handle = $(MethodHandles.Lookup.class).method(MethodHandle.class, "getDirectMethod",
                                 Byte.TYPE, Class.class, (Class<Object>) Class.forName("java.lang.invoke.MemberName"), MethodHandles.Lookup.class).

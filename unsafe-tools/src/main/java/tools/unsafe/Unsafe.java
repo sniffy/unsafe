@@ -3,7 +3,7 @@ package tools.unsafe;
 import tools.unsafe.reflection.UnsafeException;
 import tools.unsafe.reflection.clazz.ClassRef;
 import tools.unsafe.reflection.clazz.UnresolvedClassRef;
-import tools.unsafe.reflection.object.ObjectRef;
+import tools.unsafe.vm.UnsafeVirtualMachine;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -11,8 +11,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.instrument.Instrumentation;
-import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
@@ -53,27 +51,10 @@ public final class Unsafe {
 
     public static int tryGetJavaVersion(int fallbackJavaVersion) {
         try {
-            return getJavaVersion();
+            return UnsafeVirtualMachine.getJavaVersion();
         } catch (Exception e) {
             return fallbackJavaVersion;
         }
-    }
-
-    public static int getJavaVersion() {
-        String version = System.getProperty("java.version");
-
-        if (version.startsWith("1.")) {
-            version = version.substring(2, 3);
-        } else {
-            int dot = version.indexOf(".");
-            if (dot != -1) {
-                version = version.substring(0, dot);
-            }
-        }
-        if (version.contains("-")) {
-            version = version.substring(0, version.indexOf("-"));
-        }
-        return Integer.parseInt(version);
     }
 
     public static @Nonnull RuntimeException throwException(@Nonnull Throwable e) {
@@ -110,23 +91,6 @@ public final class Unsafe {
         return SunMiscUnsafeHolder.UNSAFE;
     }
 
-    public static int getPid() {
-        try {
-
-            if (Unsafe.getJavaVersion() >= 9) {
-                return UnresolvedClassRef.of("java.lang.ProcessHandle").method(Long.TYPE, "pid").invoke(
-                        UnresolvedClassRef.of("java.lang.ProcessHandle").staticMethod(Integer.TYPE, "current").invoke()
-                ).intValue();
-                //return (int) ProcessHandle.current().pid();
-            } else {
-                return ObjectRef.<RuntimeMXBean>of(ManagementFactory.getRuntimeMXBean()).field("jvm").objectRef().invoke(Integer.TYPE, "getProcessId", new Class<?>[0], new Object[0]);
-            }
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private static volatile Future<Instrumentation> instrumentationFuture;
 
     private static final ExecutorService attachAgentExecutor = new ThreadPoolExecutor(1, 1,
@@ -148,12 +112,15 @@ public final class Unsafe {
                     instrumentationFuture = attachAgentExecutor.submit(new Callable<Instrumentation>() {
                         //@Override
                         public Instrumentation call() throws Exception {
+
+                            UnsafeVirtualMachine.attachToSelf();
+
                             UnresolvedClassRef.of("sun.tools.attach.HotSpotVirtualMachine").staticBooleanField("ALLOW_ATTACH_SELF").trySet(true);
 
 
                             System.out.println("Hello world!");
                             UnresolvedClassRef<Object> vmClassRef = UnresolvedClassRef.of("com.sun.tools.attach.VirtualMachine");
-                            Object vm = vmClassRef.staticMethod(Object.class, "attach", String.class).invoke(String.valueOf(getPid()));
+                            Object vm = vmClassRef.staticMethod(Object.class, "attach", String.class).invoke(String.valueOf(UnsafeVirtualMachine.getPid()));
                             System.out.println("Attached to " + vm);
 
                             Manifest manifest = new Manifest();
