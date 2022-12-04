@@ -16,4 +16,5 @@ class UnsafeVirtualMachineTest {
             assertNotNull(unsafeVirtualMachine);
         });
     }
+
 }

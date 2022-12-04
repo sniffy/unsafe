@@ -1,7 +1,5 @@
 package tools.unsafe.vm;
 
-import com.sun.tools.attach.VirtualMachine;
-import com.sun.tools.attach.spi.AttachProvider;
 import tools.unsafe.reflection.UnsafeException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.UnresolvedClassRef;
@@ -53,13 +51,7 @@ public class UnsafeVirtualMachine {
         }
     }
 
-    public static void cleanupAttachProviders() {
-        //AttachProvider.providers();
-    }
-
     public static UnsafeVirtualMachine attachToSelf() throws UnsafeException {
-
-        cleanupAttachProviders();
 
         UnresolvedClassRef.of("sun.tools.attach.HotSpotVirtualMachine").staticBooleanField("ALLOW_ATTACH_SELF").trySet(true);
         UnresolvedClassRef<Object> vmClassRef = UnresolvedClassRef.of("com.sun.tools.attach.VirtualMachine");

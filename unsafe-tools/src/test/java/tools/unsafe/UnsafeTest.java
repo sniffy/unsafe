@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import tools.unsafe.reflection.clazz.ClassRef;
 import tools.unsafe.reflection.constructor.ConstructorMethodHandleBuilder;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedStaticObjectFieldRef;
+import tools.unsafe.vm.UnsafeVirtualMachine;
 
 import javax.net.ssl.SSLContext;
 import java.io.PrintStream;
@@ -18,7 +19,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.github.stefanbirkner.systemlambda.SystemLambda.assertNothingWrittenToSystemErr;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static tools.unsafe.fluent.Fluent.$;
 
 public class UnsafeTest {
@@ -30,14 +33,29 @@ public class UnsafeTest {
     }
 
     @Test
+    void testGetUnsafe() throws Exception {
+        assertNothingWrittenToSystemErr(() -> {
+            sun.misc.Unsafe sunMiscUnsafe = Unsafe.getSunMiscUnsafe();
+            assertNotNull(sunMiscUnsafe);
+        });
+    }
+
+    @Test
     public void testInvokeConstructor() throws Throwable {
-        UnsafeTest ut = new UnsafeTest();
-        counter.set(0);
-        MethodHandle methodHandle = ConstructorMethodHandleBuilder.constructorMethodHandle(UnsafeTest.class);
-        methodHandle.invoke(ut);
-        methodHandle.invoke(ut);
-        methodHandle.invoke(ut);
-        assertEquals(3, counter.get());
+        // TODO: it should actually fail
+        assertNothingWrittenToSystemErr(() -> {
+            try {
+                UnsafeTest ut = new UnsafeTest();
+                counter.set(0);
+                MethodHandle methodHandle = ConstructorMethodHandleBuilder.constructorMethodHandle(UnsafeTest.class);
+                methodHandle.invoke(ut);
+                methodHandle.invoke(ut);
+                methodHandle.invoke(ut);
+                assertEquals(3, counter.get());
+            } catch (Throwable t) {
+                throw new RuntimeException(t);
+            }
+        });
     }
 
     @Test
