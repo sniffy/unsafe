@@ -5,9 +5,14 @@ import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.UnresolvedClassRef;
 import tools.unsafe.reflection.object.ObjectRef;
 
+import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 public class UnsafeVirtualMachine {
 
@@ -52,6 +57,30 @@ public class UnsafeVirtualMachine {
     }
 
     public static UnsafeVirtualMachine attachToSelf() throws UnsafeException {
+
+        if (getJavaVersion() <= 8) {
+            try {
+                String binPath = System.getProperty("sun.boot.library.path");
+                // remove jre/bin, replace with lib
+                String libPath = binPath.substring(0, binPath.length() - 7) + "lib";
+                //URLClassLoader loader = (URLClassLoader) UnsafeVirtualMachine.class.getClassLoader();
+                URLClassLoader loader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+                Method addURLMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+                addURLMethod.setAccessible(true);
+                File toolsJar = new File(libPath + "/tools.jar");
+                if (!toolsJar.exists()) throw new RuntimeException(toolsJar.getAbsolutePath() + " does not exist");
+                addURLMethod.invoke(loader, new File(libPath + "/tools.jar").toURI().toURL());
+            } catch (MalformedURLException e) {
+                throw new UnsafeException(e);
+            } catch (InvocationTargetException e) {
+                throw new UnsafeException(e);
+            } catch (NoSuchMethodException e) {
+                throw new UnsafeException(e);
+            } catch (IllegalAccessException e) {
+                throw new UnsafeException(e);
+            }
+        }
+
 
         UnresolvedClassRef.of("sun.tools.attach.HotSpotVirtualMachine").staticBooleanField("ALLOW_ATTACH_SELF").trySet(true);
         UnresolvedClassRef<Object> vmClassRef = UnresolvedClassRef.of("com.sun.tools.attach.VirtualMachine");
