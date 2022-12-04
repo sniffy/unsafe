@@ -14,6 +14,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import static tools.unsafe.fluent.Fluent.$;
+
 public class UnsafeVirtualMachine {
 
     private final /*com.sun.tools.attach.VirtualMachine*/ Object virtualMachine;
@@ -61,24 +63,22 @@ public class UnsafeVirtualMachine {
         if (getJavaVersion() <= 8) {
             try {
                 String binPath = System.getProperty("sun.boot.library.path");
-                // remove jre/bin, replace with lib
                 String libPath = binPath.substring(0, binPath.length() - 7) + "lib";
-                //URLClassLoader loader = (URLClassLoader) UnsafeVirtualMachine.class.getClassLoader();
-                URLClassLoader loader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-                Method addURLMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-                addURLMethod.setAccessible(true);
+
                 File toolsJar = new File(libPath + "/tools.jar");
                 if (!toolsJar.exists()) throw new RuntimeException(toolsJar.getAbsolutePath() + " does not exist");
-                addURLMethod.invoke(loader, new File(libPath + "/tools.jar").toURI().toURL());
+
+                $(URLClassLoader.class).method("addURL", URL.class).invoke(
+                        (URLClassLoader) ClassLoader.getSystemClassLoader(),
+                        new File(libPath + "/tools.jar").toURI().toURL()
+                );
+
             } catch (MalformedURLException e) {
                 throw new UnsafeException(e);
             } catch (InvocationTargetException e) {
                 throw new UnsafeException(e);
-            } catch (NoSuchMethodException e) {
-                throw new UnsafeException(e);
-            } catch (IllegalAccessException e) {
-                throw new UnsafeException(e);
-            }
+            } catch (UnsafeInvocationException e) {
+                throw new UnsafeException(e);           }
         }
 
 
