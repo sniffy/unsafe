@@ -28,7 +28,7 @@ jobs:
         tag: "jdk-1_5_0_22-linux-i586.bin"
         fileName: "jdk-1_5_0_22-linux-i586.bin"
     - name: install JDK
-      run: ./jdk-1_5_0_22-linux-i586.bin
+      run: chmod +x ./jdk-1_5_0_22-linux-i586.bin && ./jdk-1_5_0_22-linux-i586.bin
     - name: list files
       run: ls -la
 
