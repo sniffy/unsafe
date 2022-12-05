@@ -27,8 +27,10 @@ jobs:
         repository: "sniffy/archived-jdks"
         tag: "jdk-1_5_0_22-linux-i586.bin"
         fileName: "jdk-1_5_0_22-linux-i586.bin"
+    - name: install lib32z1
+      run: sudo apt-get install -y lib32z1
     - name: install JDK
-      run: chmod +x ./jdk-1_5_0_22-linux-i586.bin && ./jdk-1_5_0_22-linux-i586.bin
+      run: chmod +x ./jdk-1_5_0_22-linux-i586.bin && yes | ./jdk-1_5_0_22-linux-i586.bin
     - name: list files
       run: ls -la
 
