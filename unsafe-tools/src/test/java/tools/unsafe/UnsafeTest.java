@@ -6,12 +6,13 @@ import sun.security.jca.Providers;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
-import tools.unsafe.reflection.constructor.ConstructorMethodHandleBuilder;
+import tools.unsafe.reflection.clazz.UnresolvedClassRef;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedStaticObjectFieldRef;
+import tools.unsafe.reflection.method.voidresult.unresolved.UnresolvedVoidDynamicMethodRef;
+import tools.unsafe.vm.UnsafeVirtualMachine;
 
 import javax.net.ssl.SSLContext;
 import java.lang.instrument.Instrumentation;
-import java.lang.invoke.MethodHandle;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -42,11 +43,20 @@ public class UnsafeTest {
         try {
             UnsafeTest ut = new UnsafeTest();
             counter.set(0);
-            MethodHandle methodHandle = ConstructorMethodHandleBuilder.constructorMethodHandle(UnsafeTest.class);
-            methodHandle.invoke(ut);
-            methodHandle.invoke(ut);
-            methodHandle.invoke(ut);
-            assertEquals(3, counter.get());
+            if (UnsafeVirtualMachine.getJavaVersion() >= 7) {
+                UnresolvedClassRef<Object> classRef = $("io.sniffy.unsafe.ConstructorMethodHandleSPI");
+                Object object = classRef.getConstructor().newInstance();
+                UnresolvedVoidDynamicMethodRef<Object> methodRef = classRef.method("invokeConstructor", new Class<?>[]{
+                        Class.class, Object.class, Class[].class, Object[].class
+                });
+                methodRef.invoke(object, new Object[]{UnsafeTest.class, ut, new Class[0], new Object[0]});
+                methodRef.invoke(object, new Object[]{UnsafeTest.class, ut, new Class[0], new Object[0]});
+                methodRef.invoke(object, new Object[]{UnsafeTest.class, ut, new Class[0], new Object[0]});
+                assertEquals(3, counter.get());
+            } else {
+                assertEquals(0, counter.get());
+
+            }
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }
