@@ -32,11 +32,9 @@ import tools.unsafe.reflection.object.ObjectRef;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -346,8 +344,14 @@ public class ClassRef<C> {
 
 
     @SuppressWarnings("SpellCheckingInspection")
-    public void retransform() throws UnmodifiableClassException, ExecutionException, InterruptedException {
-        Unsafe.getInstrumentationFuture().get().retransformClasses(clazz);
+    public void retransform() throws ExecutionException, InterruptedException, UnresolvedRefException, UnsafeInvocationException, InvocationTargetException {
+        Instrumentation instrumentation = Unsafe.getInstrumentationFuture().get();
+        // invoke Instrumentation.retransformClasses via reflection since it's now available on Java 1.5
+        ObjectRef.of(instrumentation).invoke(Void.class, "retransformClasses",
+                new Class<?>[]{Class[].class},
+                new Object[]{new Class[]{clazz}}
+        );
+        // TODO: use redefine method on Java 1.5
     }
 
     public void ensureClassInitialized() {

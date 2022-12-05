@@ -22,6 +22,8 @@
         <maven.compiler.source>5</maven.compiler.source>
         <maven.compiler.target>5</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven-enforcer-plugin.version>3.1.0</maven-enforcer-plugin.version>
+        <animal-sniffer-enforcer-rule.version>1.22</animal-sniffer-enforcer-rule.version>
     </properties>
 
     <dependencies>
@@ -37,5 +39,26 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>${maven-enforcer-plugin.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>animal-sniffer-enforcer-rule</artifactId>
+                            <version>${animal-sniffer-enforcer-rule.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+    </build>
 
 </project>

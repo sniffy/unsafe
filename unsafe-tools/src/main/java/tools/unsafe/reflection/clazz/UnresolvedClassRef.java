@@ -2,6 +2,7 @@ package tools.unsafe.reflection.clazz;
 
 import tools.unsafe.reflection.UnresolvedRef;
 import tools.unsafe.reflection.UnresolvedRefException;
+import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.constructor.UnresolvedZeroArgsClassConstructorRef;
 import tools.unsafe.reflection.field.FieldFilter;
 import tools.unsafe.reflection.field.booleans.unresolved.UnresolvedDynamicBooleanFieldRef;
@@ -20,6 +21,7 @@ import tools.unsafe.reflection.module.UnresolvedModuleRef;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.instrument.UnmodifiableClassException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -210,7 +212,7 @@ public class UnresolvedClassRef<C> extends UnresolvedRef<ClassRef<C>> {
     // other methods
 
     @SuppressWarnings("unused")
-    public void retransform() throws UnmodifiableClassException, UnresolvedRefException, ExecutionException, InterruptedException {
+    public void retransform() throws ExecutionException, InterruptedException, UnresolvedRefException, UnsafeInvocationException, InvocationTargetException {
         resolve().retransform();
     }
 
