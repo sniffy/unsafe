@@ -64,6 +64,8 @@ public class UnsafeVirtualMachine {
             if (!$("com.sun.tools.attach.VirtualMachine").isResolved()) {
                 try {
                     // TODO: should it be ${java.home}/../Classes/classes.jar on Mac ?
+                    // TODO: it doesn't work on JRE
+                    // TODO: it doesn't work on JDK 1.5
                     File toolsJar = new File(System.getProperty("java.home") + "/../lib/tools.jar");
                     if (!toolsJar.exists()) throw new RuntimeException(toolsJar.getAbsolutePath() + " does not exist");
 

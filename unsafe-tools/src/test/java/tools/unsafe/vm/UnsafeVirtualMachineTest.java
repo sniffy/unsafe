@@ -1,13 +1,14 @@
 package tools.unsafe.vm;
 
-import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.Test;
 
-class UnsafeVirtualMachineTest {
+import static org.junit.Assert.assertNotNull;
+
+public class UnsafeVirtualMachineTest {
 
     @Test
-    void attachToSelf() throws Exception {
+    public void attachToSelf() throws Exception {
         //assertNothingWrittenToSystemErr(() -> {
             UnsafeVirtualMachine unsafeVirtualMachine = UnsafeVirtualMachine.attachToSelf();
             assertNotNull(unsafeVirtualMachine);

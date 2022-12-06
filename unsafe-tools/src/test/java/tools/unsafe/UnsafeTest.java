@@ -1,6 +1,6 @@
 package tools.unsafe;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import sun.security.jca.ProviderList;
 import sun.security.jca.Providers;
 import tools.unsafe.reflection.UnresolvedRefException;
@@ -17,8 +17,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static tools.unsafe.fluent.Fluent.$;
 
 public class UnsafeTest {
@@ -30,7 +30,7 @@ public class UnsafeTest {
     }
 
     @Test
-    void testGetUnsafe() throws Exception {
+    public void testGetUnsafe() throws Exception {
         // assertNothingWrittenToSystemErr(() -> {
         sun.misc.Unsafe sunMiscUnsafe = Unsafe.getSunMiscUnsafe();
         assertNotNull(sunMiscUnsafe);
@@ -65,7 +65,7 @@ public class UnsafeTest {
     @Test
     public void testObjectRef() throws UnresolvedRefException, UnsafeInvocationException, InvocationTargetException {
         Object object = new Object();
-        assertEquals(object.hashCode(), $(object).invoke(Integer.TYPE, "hashCode", new Class<?>[0], new Object[0]));
+        assertEquals(object.hashCode(), $(object).invoke(Integer.TYPE, "hashCode", new Class<?>[0], new Object[0]).intValue());
     }
 
     @Test
