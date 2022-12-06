@@ -44,7 +44,7 @@ public final class Unsafe {
 
     static {
         if (tryGetJavaVersion() >= 7) {
-            UnresolvedClassRef<Object> classRef = UnresolvedClassRef.of("tools.unsafe.UnsafeToolsJDK7SPIProvider");
+            UnresolvedClassRef<Object> classRef = ClassRef.of(Unsafe.class).siblingClass("UnsafeToolsJDK7SPIProvider");
             assert classRef.isResolved();
         }
     }

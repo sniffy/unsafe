@@ -366,4 +366,21 @@ public class ClassRef<C> {
         return new ObjectRef<C>(this, object);
     }
 
+    /**
+     * Usefull to survive shade plugin
+     * @param className
+     * @return
+     * @param <S>
+     */
+    public @Nonnull <S> UnresolvedClassRef<S> siblingClass(@Nonnull String className) {
+        try {
+            // TODO: introduce PackageRef
+            //noinspection unchecked
+            Class<S> clazz = (Class<S>) Class.forName(this.clazz.getPackage().getName() + "." + className);
+            return new UnresolvedClassRef<S>(new ClassRef<S>(clazz), null);
+        } catch (Throwable e) {
+            return new UnresolvedClassRef<S>(null, e);
+        }
+    }
+
 }
