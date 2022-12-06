@@ -36,32 +36,20 @@ import java.util.jar.Manifest;
  * - Esoteric stuff (invoke constructor again, invoke static constructors, etc.)
  * - Whatever is required by other tools like caches (sizeof), mocks (power reflection), etc.
  */
-@SuppressWarnings({"Convert2Diamond"})
 public final class Unsafe {
 
     private Unsafe() {
     }
 
     static {
-        if (tryGetJavaVersion() >= 7) {
+        if (tryGetJavaVersion(8) >= 7) {
             UnresolvedClassRef<Object> classRef = ClassRef.of(Unsafe.class).siblingClass("UnsafeToolsJDK7SPIProvider");
             assert classRef.isResolved();
         }
     }
 
-    @Deprecated
-    public static final int FALLBACK_JAVA_VERSION = 8;
-
-    public static int tryGetJavaVersion() {
-        return tryGetJavaVersion(FALLBACK_JAVA_VERSION);
-    }
-
     public static int tryGetJavaVersion(int fallbackJavaVersion) {
-        try {
-            return UnsafeVirtualMachine.getJavaVersion();
-        } catch (Exception e) {
-            return fallbackJavaVersion;
-        }
+        return InternalUnsafe.tryGetJavaVersion(fallbackJavaVersion);
     }
 
     public static @Nonnull RuntimeException throwException(@Nonnull Throwable e) {
@@ -105,7 +93,7 @@ public final class Unsafe {
             new SynchronousQueue<Runnable>(),
             new ThreadFactory() {
                 //@Override
-                public Thread newThread(Runnable r) {
+                public Thread newThread(@Nonnull Runnable r) {
                     Thread thread = new Thread(r);
                     thread.setDaemon(true);
                     return thread;
@@ -142,6 +130,7 @@ public final class Unsafe {
                             jarOutputStream.putNextEntry(jarEntry);
 
                             InputStream resourceAsStream = Unsafe.class.getClassLoader().getResourceAsStream("tools/unsafe/agent/UnsafeAgent.class");
+                            // TODO: do not build JAR manually
                             byte[] buffer = new byte[1024];
                             while (true) {
                                 int count = resourceAsStream.read(buffer);
@@ -194,12 +183,15 @@ public final class Unsafe {
 
     public static boolean setAccessible(@Nonnull AccessibleObject ao) throws UnsafeException {
 
-        //noinspection deprecation
-        if (ao.isAccessible()) {
-            return true;
+        //noinspection RedundantSuppression
+        {
+            //noinspection deprecation
+            if (ao.isAccessible()) {
+                return true;
+            }
         }
 
-        if (tryGetJavaVersion() >= 16) {
+        if (tryGetJavaVersion(8) >= 16) {
 
             try {
                 long overrideOffset = getSunMiscUnsafe().objectFieldOffset(FakeAccessibleObject.class.getDeclaredField("override"));
@@ -208,8 +200,11 @@ public final class Unsafe {
                 throw new UnsafeException(e);
             }
 
-            //noinspection deprecation
-            return ao.isAccessible();
+            //noinspection RedundantSuppression
+            {
+                //noinspection deprecation
+                return ao.isAccessible();
+            }
         }
 
         ao.setAccessible(true);

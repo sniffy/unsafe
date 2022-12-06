@@ -57,7 +57,7 @@ public class MethodHandleConstructorInvokerFactoryImpl implements ConstructorInv
 
             MethodHandle handle;
 
-            if (InternalUnsafe.tryGetJavaVersion() > 8) {
+            if (InternalUnsafe.tryGetJavaVersion(8) > 8) {
                 //noinspection JavaLangInvokeHandleSignature
                 MethodHandle getDirectMethodHandle = implLookup.findVirtual(
                         MethodHandles.Lookup.class,
