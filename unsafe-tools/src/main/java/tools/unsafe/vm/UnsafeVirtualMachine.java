@@ -24,6 +24,7 @@ public class UnsafeVirtualMachine {
         this.virtualMachine = virtualMachine;
     }
 
+    // TODO: move to InternalUnsafe
     public static int getJavaVersion() {
         String version = System.getProperty("java.version");
 

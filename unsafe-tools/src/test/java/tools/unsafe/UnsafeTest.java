@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static tools.unsafe.fluent.Fluent.$;
+import static tools.unsafe.vm.UnsafeVirtualMachine.getJavaVersion;
 
 public class UnsafeTest {
 
@@ -43,7 +44,7 @@ public class UnsafeTest {
         try {
             UnsafeTest ut = new UnsafeTest();
             counter.set(0);
-            if (UnsafeVirtualMachine.getJavaVersion() >= 7) {
+            if (getJavaVersion() >= 7) {
                 UnresolvedClassRef<Object> classRef = $("io.sniffy.unsafe.ConstructorMethodHandleSPI");
                 Object object = classRef.getConstructor().newInstance();
                 UnresolvedVoidDynamicMethodRef<Object> methodRef = classRef.method("invokeConstructor", new Class<?>[]{
@@ -70,6 +71,9 @@ public class UnsafeTest {
 
     @Test
     public void testProviderList() throws Exception {
+
+        if (getJavaVersion() <= 5) return;
+
         SSLContext.getInstance("Default");
 
         long start = System.currentTimeMillis();
