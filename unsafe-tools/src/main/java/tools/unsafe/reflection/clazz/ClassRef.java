@@ -50,6 +50,9 @@ import java.util.concurrent.ExecutionException;
 @SuppressWarnings({"Convert2Diamond"})
 public class ClassRef<C> {
 
+    // TODO: add functionality to create new instance without invoking constructor
+    // TODO: add functionality to invoke static initializer
+
     private final @Nonnull Class<C> clazz;
 
     public ClassRef(@Nonnull Class<C> clazz) {
@@ -287,6 +290,7 @@ public class ClassRef<C> {
     // TODO: add "field" and "method" method which would return generic ref working with both static and non static members
 
     // TODO: add helper methods for getting constructors with arguments
+
 
     public @Nonnull UnresolvedZeroArgsClassConstructorRef<C> getConstructor() {
         try {

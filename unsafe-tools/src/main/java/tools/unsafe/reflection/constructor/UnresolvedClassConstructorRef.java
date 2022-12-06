@@ -4,6 +4,8 @@ import tools.unsafe.reflection.UnresolvedRef;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 
+import javax.annotation.Nonnull;
+
 public class UnresolvedClassConstructorRef<C> extends UnresolvedRef<ClassConstructorRef<C>> {
 
     public UnresolvedClassConstructorRef(ClassConstructorRef<C> ref, Throwable throwable) {
@@ -20,6 +22,10 @@ public class UnresolvedClassConstructorRef<C> extends UnresolvedRef<ClassConstru
 
     public C newInstance(Object... parameters) throws UnsafeInvocationException, UnresolvedRefException {
         return resolve().newInstance();
+    }
+
+    public void invokeOnInstance(@Nonnull C instance, Object... parameters) throws UnsafeInvocationException, UnresolvedRefException {
+        resolve().invokeOnInstance(instance, parameters);
     }
 
 }

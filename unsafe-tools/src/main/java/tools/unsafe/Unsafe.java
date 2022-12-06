@@ -42,6 +42,13 @@ public final class Unsafe {
     private Unsafe() {
     }
 
+    static {
+        if (tryGetJavaVersion() >= 7) {
+            UnresolvedClassRef<Object> classRef = UnresolvedClassRef.of("io.sniffy.unsafe.UnsafeToolsJDK7SPIProvider");
+            assert classRef.isResolved();
+        }
+    }
+
     @Deprecated
     public static final int FALLBACK_JAVA_VERSION = 8;
 

@@ -6,10 +6,8 @@ import sun.security.jca.Providers;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
-import tools.unsafe.reflection.clazz.UnresolvedClassRef;
+import tools.unsafe.reflection.constructor.UnresolvedZeroArgsClassConstructorRef;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedStaticObjectFieldRef;
-import tools.unsafe.reflection.method.voidresult.unresolved.UnresolvedVoidDynamicMethodRef;
-import tools.unsafe.vm.UnsafeVirtualMachine;
 
 import javax.net.ssl.SSLContext;
 import java.lang.instrument.Instrumentation;
@@ -45,18 +43,13 @@ public class UnsafeTest {
             UnsafeTest ut = new UnsafeTest();
             counter.set(0);
             if (getJavaVersion() >= 7) {
-                UnresolvedClassRef<Object> classRef = $("io.sniffy.unsafe.ConstructorMethodHandleSPI");
-                Object object = classRef.getConstructor().newInstance();
-                UnresolvedVoidDynamicMethodRef<Object> methodRef = classRef.method("invokeConstructor", new Class<?>[]{
-                        Class.class, Object.class, Class[].class, Object[].class
-                });
-                methodRef.invoke(object, new Object[]{UnsafeTest.class, ut, new Class[0], new Object[0]});
-                methodRef.invoke(object, new Object[]{UnsafeTest.class, ut, new Class[0], new Object[0]});
-                methodRef.invoke(object, new Object[]{UnsafeTest.class, ut, new Class[0], new Object[0]});
+                UnresolvedZeroArgsClassConstructorRef<UnsafeTest> constructor = $(UnsafeTest.class).getConstructor();
+                constructor.invokeOnInstance(ut);
+                constructor.invokeOnInstance(ut);
+                constructor.invokeOnInstance(ut);
                 assertEquals(3, counter.get());
             } else {
                 assertEquals(0, counter.get());
-
             }
         } catch (Throwable t) {
             throw new RuntimeException(t);
@@ -91,8 +84,8 @@ public class UnsafeTest {
         ClassRef<Object> classRef = $("sun.security.jca.Providers").resolve();
         classRef.getModuleRef().tryAddOpens("sun.security.jca");
 
-        ResolvedStaticObjectFieldRef<Object,ThreadLocal<ProviderList>> threadLists = classRef.<ThreadLocal<ProviderList>>staticField("threadLists").resolve();
-        ResolvedStaticObjectFieldRef<Object,Integer> threadListsUsed = classRef.<Integer>staticField("threadListsUsed").resolve();
+        ResolvedStaticObjectFieldRef<Object, ThreadLocal<ProviderList>> threadLists = classRef.<ThreadLocal<ProviderList>>staticField("threadLists").resolve();
+        ResolvedStaticObjectFieldRef<Object, Integer> threadListsUsed = classRef.<Integer>staticField("threadListsUsed").resolve();
 
         final ProviderList IT = ProviderList.newList();
 

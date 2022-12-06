@@ -1,8 +1,12 @@
 package tools.unsafe.reflection.constructor;
 
+import io.sniffy.unsafe.ConstructorInvoker;
+import io.sniffy.unsafe.InternalUnsafeException;
+import io.sniffy.unsafe.UnsafeToolsSPIs;
 import tools.unsafe.Unsafe;
 import tools.unsafe.reflection.UnsafeInvocationException;
 
+import javax.annotation.Nonnull;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -10,6 +14,7 @@ public class ZeroArgsClassConstructorRef<C> {
 
     private final Constructor<C> constructor;
 
+    // TODO: pass ClassRef here
     public ZeroArgsClassConstructorRef(Constructor<C> constructor) {
         this.constructor = constructor;
         // TODO: should we make it accessible here ?
@@ -29,6 +34,16 @@ public class ZeroArgsClassConstructorRef<C> {
         } catch (InvocationTargetException e) {
             throw Unsafe.throwException(e.getTargetException());
         } catch (Throwable e) {
+            throw new UnsafeInvocationException(e);
+        }
+    }
+
+    public void invokeOnInstance(@Nonnull C instance) throws UnsafeInvocationException {
+        try {
+            ConstructorInvoker<C> constructorInvoker = UnsafeToolsSPIs.getConstructorInvokerFactory().
+                    createConstructorInvoker(constructor.getDeclaringClass());
+            constructorInvoker.invoke(instance);
+        } catch (InternalUnsafeException e) {
             throw new UnsafeInvocationException(e);
         }
     }
