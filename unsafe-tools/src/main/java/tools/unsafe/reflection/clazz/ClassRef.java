@@ -33,7 +33,6 @@ import tools.unsafe.reflection.object.ObjectRef;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.instrument.Instrumentation;
-import java.lang.instrument.UnmodifiableClassException;
 import java.lang.reflect.*;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -368,9 +367,10 @@ public class ClassRef<C> {
 
     /**
      * Usefull to survive shade plugin
+     *
      * @param className
-     * @return
      * @param <S>
+     * @return
      */
     public @Nonnull <S> UnresolvedClassRef<S> siblingClass(@Nonnull String className) {
         try {

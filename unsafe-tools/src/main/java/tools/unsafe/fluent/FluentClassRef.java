@@ -2,7 +2,6 @@ package tools.unsafe.fluent;
 
 import tools.unsafe.reflection.clazz.ClassRef;
 import tools.unsafe.reflection.field.objects.unresolved.UnresolvedStaticObjectFieldRef;
-import tools.unsafe.reflection.method.voidresult.unresolved.UnresolvedStaticVoidMethodRef;
 import tools.unsafe.reflection.object.ObjectRef;
 
 import javax.annotation.Nonnull;

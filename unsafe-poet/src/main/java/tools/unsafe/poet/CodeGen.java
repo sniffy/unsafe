@@ -1,7 +1,6 @@
 package tools.unsafe.poet;
 
 import com.squareup.javapoet.*;
-import jdk.nashorn.internal.codegen.types.Type;
 
 import javax.lang.model.element.Modifier;
 import java.io.IOException;

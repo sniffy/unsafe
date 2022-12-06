@@ -10,8 +10,8 @@ public class UnsafeVirtualMachineTest {
     @Test
     public void attachToSelf() throws Exception {
         //assertNothingWrittenToSystemErr(() -> {
-            UnsafeVirtualMachine unsafeVirtualMachine = UnsafeVirtualMachine.attachToSelf();
-            assertNotNull(unsafeVirtualMachine);
+        UnsafeVirtualMachine unsafeVirtualMachine = UnsafeVirtualMachine.attachToSelf();
+        assertNotNull(unsafeVirtualMachine);
         //});
     }
 

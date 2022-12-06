@@ -84,7 +84,8 @@
                         <phase>verify</phase>
                         <configuration>
                             <rules>
-                                <checkSignatureRule implementation="org.codehaus.mojo.animal_sniffer.enforcer.CheckSignatureRule">
+                                <checkSignatureRule
+                                        implementation="org.codehaus.mojo.animal_sniffer.enforcer.CheckSignatureRule">
                                     <signature>
                                         <groupId>org.codehaus.mojo.signature</groupId>
                                         <artifactId>java15</artifactId>

@@ -31,7 +31,7 @@ public class Fluent {
     @SuppressWarnings("unchecked")
     @Nonnull
     public static <C, C1 extends C> ClassRef<C> $(@Nonnull Class<C1> clazz, @SuppressWarnings("unused") @Nullable Class<C> cast) {
-        return ClassRef.<C,C1>of(clazz, cast);
+        return ClassRef.<C, C1>of(clazz, cast);
     }
 
     // ObjectRef factory methods
