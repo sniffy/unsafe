@@ -1,4 +1,4 @@
-package io.sniffy.unsafe;
+package tools.unsafe;
 
 public class UnsafeToolsSPIs {
 

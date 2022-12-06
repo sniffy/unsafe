@@ -1,8 +1,8 @@
 package tools.unsafe.reflection.constructor;
 
-import io.sniffy.unsafe.ConstructorInvoker;
-import io.sniffy.unsafe.InternalUnsafeException;
-import io.sniffy.unsafe.UnsafeToolsSPIs;
+import tools.unsafe.ConstructorInvoker;
+import tools.unsafe.InternalUnsafeException;
+import tools.unsafe.UnsafeToolsSPIs;
 import tools.unsafe.Unsafe;
 import tools.unsafe.reflection.UnsafeInvocationException;
 

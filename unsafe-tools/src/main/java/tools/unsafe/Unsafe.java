@@ -44,7 +44,7 @@ public final class Unsafe {
 
     static {
         if (tryGetJavaVersion() >= 7) {
-            UnresolvedClassRef<Object> classRef = UnresolvedClassRef.of("io.sniffy.unsafe.UnsafeToolsJDK7SPIProvider");
+            UnresolvedClassRef<Object> classRef = UnresolvedClassRef.of("tools.unsafe.UnsafeToolsJDK7SPIProvider");
             assert classRef.isResolved();
         }
     }
@@ -131,7 +131,6 @@ public final class Unsafe {
                             System.out.println("Attached to " + vm);
 
                             Manifest manifest = new Manifest();
-                            //manifest.getMainAttributes().putValue("Premain-Class", "io.sniffy.unsafe.agent.UnsafeAgent");
                             manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
                             manifest.getMainAttributes().put(new Attributes.Name("Agent-Class"), "tools.unsafe.agent.UnsafeAgent");
                             manifest.getMainAttributes().put(new Attributes.Name("Can-Retransform-Classes"), "true");

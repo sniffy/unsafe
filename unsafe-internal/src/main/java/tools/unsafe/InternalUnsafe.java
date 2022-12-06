@@ -1,4 +1,4 @@
-package io.sniffy.unsafe;
+package tools.unsafe;
 
 import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
