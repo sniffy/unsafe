@@ -5,13 +5,14 @@ import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedInstanceObjectFieldRef;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.Callable;
 
 public class UnresolvedObjectRef<C> extends UnresolvedRef<ObjectRef<C>> {
 
-    public UnresolvedObjectRef(@Nullable ObjectRef<C> ref, @Nullable Throwable throwable) {
-        super(ref, throwable);
+    public UnresolvedObjectRef(@Nonnull Callable<ObjectRef<C>> refSupplier) {
+        super(refSupplier);
     }
 
     public <T> T getField(String fieldName) throws UnresolvedRefException, UnsafeInvocationException {

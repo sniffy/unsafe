@@ -153,7 +153,7 @@ public final class Unsafe {
                                 UnresolvedClassRef<Object> classRef = UnresolvedClassRef.of("tools.unsafe.agent.UnsafeAgent");
                                 if (classRef.isResolved()) {
                                     attachAgentExecutor.shutdown();
-                                    return classRef.<Instrumentation>tryGetStaticField("instrumentation").getOrDefault(null);
+                                    return classRef.<Instrumentation>staticField("instrumentation").getOrDefault(null);
                                 } else {
                                     Thread.sleep(1);
                                 }

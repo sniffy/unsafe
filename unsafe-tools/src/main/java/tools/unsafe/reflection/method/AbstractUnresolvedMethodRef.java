@@ -6,13 +6,13 @@ import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
 
-public class AbstractUnresolvedMethodRef<T extends AbstractMethodRef<C>, C> extends UnresolvedRef<T> implements UnresolvedMethodRef<C> {
+public abstract class AbstractUnresolvedMethodRef<T extends AbstractMethodRef<C>, C> extends UnresolvedRef<T> implements UnresolvedMethodRef<C> {
 
-    public AbstractUnresolvedMethodRef(@Nullable T ref, @Nullable Throwable throwable) {
-        super(ref, throwable);
+    public AbstractUnresolvedMethodRef(@Nonnull Callable<T> refSupplier) {
+        super(refSupplier);
     }
 
     @Override

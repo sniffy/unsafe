@@ -8,11 +8,12 @@ import tools.unsafe.reflection.field.booleans.resolved.AbstractDynamicBooleanFie
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.concurrent.Callable;
 
-public class AbstractUnresolvedDynamicBooleanFieldRef<R extends AbstractDynamicBooleanFieldRef<C>, C> extends AbstractUnresolvedFieldRef<R, C> implements DynamicBooleanFieldRef<C> {
+public abstract class AbstractUnresolvedDynamicBooleanFieldRef<R extends AbstractDynamicBooleanFieldRef<C>, C> extends AbstractUnresolvedFieldRef<R, C> implements DynamicBooleanFieldRef<C> {
 
-    public AbstractUnresolvedDynamicBooleanFieldRef(@Nullable R ref, @Nullable Throwable throwable) {
-        super(ref, throwable);
+    public AbstractUnresolvedDynamicBooleanFieldRef(@Nonnull Callable<R> refSupplier) {
+        super(refSupplier);
     }
 
     @Override
@@ -45,7 +46,7 @@ public class AbstractUnresolvedDynamicBooleanFieldRef<R extends AbstractDynamicB
         try {
             set(instance, value);
             return true;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             return false;
         }
     }

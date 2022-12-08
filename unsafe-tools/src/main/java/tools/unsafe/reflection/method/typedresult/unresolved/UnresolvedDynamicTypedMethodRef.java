@@ -6,13 +6,14 @@ import tools.unsafe.reflection.method.AbstractUnresolvedMethodRef;
 import tools.unsafe.reflection.method.typedresult.GenericDynamicTypedMethodRef;
 import tools.unsafe.reflection.method.typedresult.resolved.ResolvedDynamicTypedMethodRef;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.Callable;
 
 public class UnresolvedDynamicTypedMethodRef<C, T> extends AbstractUnresolvedMethodRef<ResolvedDynamicTypedMethodRef<C, T>, C> implements GenericDynamicTypedMethodRef<C, T> {
 
-    public UnresolvedDynamicTypedMethodRef(@Nullable ResolvedDynamicTypedMethodRef<C, T> ref, @Nullable Throwable throwable) {
-        super(ref, throwable);
+    public UnresolvedDynamicTypedMethodRef(@Nonnull Callable<ResolvedDynamicTypedMethodRef<C, T>> refSupplier) {
+        super(refSupplier);
     }
 
     @Override

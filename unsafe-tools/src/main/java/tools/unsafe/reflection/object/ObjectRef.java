@@ -10,6 +10,7 @@ import tools.unsafe.reflection.method.typedresult.resolved.ResolvedInstanceTyped
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.Callable;
 
 public class ObjectRef<C> {
 
@@ -34,22 +35,26 @@ public class ObjectRef<C> {
         return this.<T>field(fieldName).get();
     }
 
-    public <T> UnresolvedObjectRef<T> fieldObjectRef(String fieldName) {
-        UnresolvedDynamicObjectFieldRef<C, T> nonStaticField = classRef.field(fieldName);
-        T fieldValue = null;
-        Exception exception = null;
-        Class<T> fieldType = null;
-        try {
-            fieldValue = nonStaticField.get(object);
-            //noinspection unchecked
-            fieldType = (Class<T>) fieldValue.getClass();
-        } catch (Exception e) {
-            exception = e;
-        }
-        return new UnresolvedObjectRef<T>(
-                new ObjectRef<T>(new ClassRef<T>(fieldType), fieldValue),
-                exception
-        );
+    public <T> UnresolvedObjectRef<T> fieldObjectRef(@Nonnull final String fieldName) {
+        return new UnresolvedObjectRef<T>(new Callable<ObjectRef<T>>() {
+            @Override
+            public ObjectRef<T> call() throws Exception {
+                UnresolvedDynamicObjectFieldRef<C, T> nonStaticField = classRef.field(fieldName);
+                T fieldValue = nonStaticField.get(object);
+                Class<T> fieldClass;
+                if (null == fieldValue) {
+                    //noinspection unchecked
+                    fieldClass = (Class<T>) nonStaticField.getField().getType();
+                } else {
+                    //noinspection unchecked
+                    fieldClass = (Class<T>) fieldValue.getClass();
+                }
+                return new ObjectRef<T>(
+                        new ClassRef<T>(fieldClass),
+                        fieldValue
+                );
+            }
+        });
     }
 
     public <T> void setField(String fieldName, T value) throws UnresolvedRefException, UnsafeInvocationException {

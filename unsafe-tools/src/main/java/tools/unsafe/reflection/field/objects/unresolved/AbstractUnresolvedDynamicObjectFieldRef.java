@@ -9,11 +9,12 @@ import tools.unsafe.reflection.object.ObjectRef;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.concurrent.Callable;
 
-public class AbstractUnresolvedDynamicObjectFieldRef<R extends AbstractDynamicObjectFieldRef<C, T>, C, T> extends AbstractUnresolvedFieldRef<R, C> implements DynamicObjectFieldRef<C, T> {
+public abstract class AbstractUnresolvedDynamicObjectFieldRef<R extends AbstractDynamicObjectFieldRef<C, T>, C, T> extends AbstractUnresolvedFieldRef<R, C> implements DynamicObjectFieldRef<C, T> {
 
-    public AbstractUnresolvedDynamicObjectFieldRef(@Nullable R ref, @Nullable Throwable throwable) {
-        super(ref, throwable);
+    public AbstractUnresolvedDynamicObjectFieldRef(@Nonnull Callable<R> refSupplier) {
+        super(refSupplier);
     }
 
     @Nullable
@@ -57,7 +58,7 @@ public class AbstractUnresolvedDynamicObjectFieldRef<R extends AbstractDynamicOb
         try {
             set(instance, value);
             return true;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             return false;
         }
     }
@@ -65,7 +66,7 @@ public class AbstractUnresolvedDynamicObjectFieldRef<R extends AbstractDynamicOb
     public T getOrDefault(C instance, T defaultValue) {
         try {
             return get(instance);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             return defaultValue;
         }
     }
@@ -73,7 +74,7 @@ public class AbstractUnresolvedDynamicObjectFieldRef<R extends AbstractDynamicOb
     public T getNotNullOrDefault(C instance, T defaultValue) {
         try {
             return getNotNull(instance, defaultValue);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             return defaultValue;
         }
     }

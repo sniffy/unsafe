@@ -6,13 +6,14 @@ import tools.unsafe.reflection.method.AbstractUnresolvedMethodRef;
 import tools.unsafe.reflection.method.typedresult.GenericTypedMethodRef;
 import tools.unsafe.reflection.method.typedresult.resolved.ResolvedInstanceTypedMethodRef;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.Callable;
 
 public class UnresolvedInstanceTypedMethodRef<C, T> extends AbstractUnresolvedMethodRef<ResolvedInstanceTypedMethodRef<C, T>, C> implements GenericTypedMethodRef<C, T> {
 
-    public UnresolvedInstanceTypedMethodRef(@Nullable ResolvedInstanceTypedMethodRef<C, T> ref, @Nullable Throwable throwable) {
-        super(ref, throwable);
+    public UnresolvedInstanceTypedMethodRef(@Nonnull Callable<ResolvedInstanceTypedMethodRef<C, T>> refSupplier) {
+        super(refSupplier);
     }
 
     @Override

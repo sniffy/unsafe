@@ -37,6 +37,7 @@ import java.lang.reflect.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
 // TODO: use declaredFields0 and declaredMethods0 to also cover super system methods
@@ -46,7 +47,6 @@ import java.util.concurrent.ExecutionException;
  *
  * @param <C>
  */
-@SuppressWarnings({"Convert2Diamond"})
 public class ClassRef<C> {
 
     // TODO: add functionality to create new instance without invoking constructor
@@ -70,36 +70,38 @@ public class ClassRef<C> {
     }
 
     public @Nonnull UnresolvedModuleRef getModuleRef() {
-        try {
-            //noinspection rawtypes
-            ClassRef<Class> classClassRef = of(Class.class);
-            Object module = classClassRef.method(UnresolvedClassRef.of("java.lang.Module"), "getModule").invoke(clazz);
-            return new UnresolvedModuleRef(new ModuleRef(module), null);
-        } catch (Throwable e) {
-            return new UnresolvedModuleRef(null, e);
-        }
+        return new UnresolvedModuleRef(new Callable<ModuleRef>() {
+            @Override
+            public ModuleRef call() throws Exception {
+                //noinspection rawtypes
+                ClassRef<Class> classClassRef = of(Class.class);
+                Object module = classClassRef.method(UnresolvedClassRef.of("java.lang.Module"), "getModule").invoke(clazz);
+                return new ModuleRef(module);
+            }
+        });
     }
 
-    public @Nonnull <T> UnresolvedDynamicObjectFieldRef<C, T> findFirstNonStaticField(@Nullable FieldFilter fieldFilter, boolean recursive) {
-        try {
-            Class<? super C> clazz = this.clazz;
-            while (clazz != Object.class) {
-                Field[] declaredFields = clazz.getDeclaredFields();
-                for (Field declaredField : declaredFields) {
-                    if (!Modifier.isStatic(declaredField.getModifiers()) && (null == fieldFilter || fieldFilter.include(declaredField.getName(), declaredField))) {
-                        return new UnresolvedDynamicObjectFieldRef<C, T>(new ResolvedDynamicObjectFieldRef<C, T>(this, declaredField), null);
+    public @Nonnull <T> UnresolvedDynamicObjectFieldRef<C, T> findFirstNonStaticField(@Nullable final FieldFilter fieldFilter, final boolean recursive) {
+        return new UnresolvedDynamicObjectFieldRef<C, T>(new Callable<ResolvedDynamicObjectFieldRef<C, T>>() {
+            @Override
+            public ResolvedDynamicObjectFieldRef<C, T> call() {
+                Class<? super C> clazz = getClazz();
+                while (clazz != Object.class) {
+                    Field[] declaredFields = clazz.getDeclaredFields();
+                    for (final Field declaredField : declaredFields) {
+                        if (!Modifier.isStatic(declaredField.getModifiers()) && (null == fieldFilter || fieldFilter.include(declaredField.getName(), declaredField))) {
+                            return new ResolvedDynamicObjectFieldRef<C, T>(ClassRef.this, declaredField);
+                        }
+                    }
+                    if (recursive) {
+                        clazz = clazz.getSuperclass();
+                    } else {
+                        break;
                     }
                 }
-                if (recursive) {
-                    clazz = clazz.getSuperclass();
-                } else {
-                    break;
-                }
+                throw new NoSuchFieldError();
             }
-            return new UnresolvedDynamicObjectFieldRef<C, T>(null, new NoSuchFieldError());
-        } catch (Throwable e) {
-            return new UnresolvedDynamicObjectFieldRef<C, T>(null, e);
-        }
+        });
     }
 
     public @Nonnull Map<String, ResolvedDynamicObjectFieldRef<C, Object>> findNonStaticFields(@Nullable FieldFilter fieldFilter, boolean recursive) {
@@ -121,26 +123,27 @@ public class ClassRef<C> {
         return fields;
     }
 
-    public @Nonnull <T> UnresolvedStaticObjectFieldRef<C, T> findFirstStaticField(@Nullable FieldFilter fieldFilter, boolean recursive) {
-        try {
-            Class<? super C> clazz = this.clazz;
-            while (clazz != Object.class) {
-                Field[] declaredFields = clazz.getDeclaredFields();
-                for (Field declaredField : declaredFields) {
-                    if (Modifier.isStatic(declaredField.getModifiers()) && (null == fieldFilter || fieldFilter.include(declaredField.getName(), declaredField))) {
-                        return new UnresolvedStaticObjectFieldRef<C, T>(new ResolvedStaticObjectFieldRef<C, T>(this, declaredField), null);
+    public @Nonnull <T> UnresolvedStaticObjectFieldRef<C, T> findFirstStaticField(@Nullable final FieldFilter fieldFilter, final boolean recursive) {
+        return new UnresolvedStaticObjectFieldRef<C, T>(new Callable<ResolvedStaticObjectFieldRef<C, T>>() {
+            @Override
+            public ResolvedStaticObjectFieldRef<C, T> call() {
+                Class<? super C> clazz = getClazz();
+                while (clazz != Object.class) {
+                    Field[] declaredFields = clazz.getDeclaredFields();
+                    for (final Field declaredField : declaredFields) {
+                        if (Modifier.isStatic(declaredField.getModifiers()) && (null == fieldFilter || fieldFilter.include(declaredField.getName(), declaredField))) {
+                            return new ResolvedStaticObjectFieldRef<C, T>(ClassRef.this, declaredField);
+                        }
+                    }
+                    if (recursive) {
+                        clazz = clazz.getSuperclass();
+                    } else {
+                        break;
                     }
                 }
-                if (recursive) {
-                    clazz = clazz.getSuperclass();
-                } else {
-                    break;
-                }
+                throw new NoSuchFieldError();
             }
-            return new UnresolvedStaticObjectFieldRef<C, T>(null, new NoSuchFieldError());
-        } catch (Throwable e) {
-            return new UnresolvedStaticObjectFieldRef<C, T>(null, e);
-        }
+        });
     }
 
     public @Nonnull Map<String, ResolvedStaticObjectFieldRef<C, Object>> findStaticFields(@Nullable FieldFilter fieldFilter, boolean recursive) {
@@ -199,91 +202,71 @@ public class ClassRef<C> {
     }
 
     // TODO: should parameters be nullable ?
-    public @Nonnull UnresolvedStaticVoidMethodRef<C> staticMethod(@Nonnull String methodName, @Nonnull Class<?>... parameters) {
-        ResolvedStaticVoidMethodRef<C> resolvedStaticMethodRef = null;
-        Exception exception = null;
-        try {
-            // TODO: validate it is static
-            resolvedStaticMethodRef = new ResolvedStaticVoidMethodRef<C>(this, getDeclaredMethod(methodName, parameters));
-        } catch (NoSuchMethodException e) {
-            exception = e;
-        }
-        return new UnresolvedStaticVoidMethodRef<C>(resolvedStaticMethodRef, exception);
+    public @Nonnull UnresolvedStaticVoidMethodRef<C> staticMethod(@Nonnull final String methodName, @Nonnull final Class<?>... parameters) {
+        return new UnresolvedStaticVoidMethodRef<C>(new Callable<ResolvedStaticVoidMethodRef<C>>() {
+            @Override
+            public ResolvedStaticVoidMethodRef<C> call() throws Exception {
+                return new ResolvedStaticVoidMethodRef<C>(ClassRef.this, getDeclaredMethod(methodName, parameters));
+            }
+        });
     }
 
     // TODO: should parameters be nullable ?
-    public @Nonnull <T> UnresolvedStaticTypedMethodRef<C, T> staticMethod(@Nonnull Class<T> returnType, @Nonnull String methodName, @Nonnull Class<?>... parameters) {
-        ResolvedStaticTypedMethodRef<C, T> resolvedStaticMethodRef = null;
-        Exception exception = null;
-        try {
-            // TODO: validate it is static
-            resolvedStaticMethodRef = new ResolvedStaticTypedMethodRef<C, T>(this, getDeclaredMethod(methodName, parameters));
-        } catch (NoSuchMethodException e) {
-            exception = e;
-        }
-        return new UnresolvedStaticTypedMethodRef<C, T>(resolvedStaticMethodRef, exception);
+    public @Nonnull <T> UnresolvedStaticTypedMethodRef<C, T> staticMethod(@SuppressWarnings("unused") @Nonnull Class<T> returnType, @Nonnull final String methodName, @Nonnull final Class<?>... parameters) {
+        return new UnresolvedStaticTypedMethodRef<C, T>(new Callable<ResolvedStaticTypedMethodRef<C, T>>() {
+            @Override
+            public ResolvedStaticTypedMethodRef<C, T> call() throws Exception {
+                // TODO: validate it is static
+                return new ResolvedStaticTypedMethodRef<C, T>(ClassRef.this, getDeclaredMethod(methodName, parameters));
+            }
+        });
     }
 
-    public @Nonnull UnresolvedVoidDynamicMethodRef<C> method(@Nonnull String methodName, @Nonnull Class<?>... parameters) {
-        ResolvedVoidDynamicMethodRef<C> resolvedVoidDynamicMethodRef = null;
-        Exception exception = null;
-        try {
-            // TODO: validate it is static
-            resolvedVoidDynamicMethodRef = new ResolvedVoidDynamicMethodRef<C>(this, getDeclaredMethod(methodName, parameters));
-        } catch (NoSuchMethodException e) {
-            exception = e;
-        }
-        return new UnresolvedVoidDynamicMethodRef<C>(resolvedVoidDynamicMethodRef, exception);
+    public @Nonnull UnresolvedVoidDynamicMethodRef<C> method(@Nonnull final String methodName, @Nonnull final Class<?>... parameters) {
+        return new UnresolvedVoidDynamicMethodRef<C>(new Callable<ResolvedVoidDynamicMethodRef<C>>() {
+            @Override
+            public ResolvedVoidDynamicMethodRef<C> call() throws Exception {
+                return new ResolvedVoidDynamicMethodRef<C>(ClassRef.this, getDeclaredMethod(methodName, parameters));
+            }
+        });
     }
 
-    public @Nonnull <T> UnresolvedDynamicTypedMethodRef<C, T> method(@Nonnull Class<T> returnType, @Nonnull String methodName, @Nonnull Class<?>... parameters) {
-        ResolvedDynamicTypedMethodRef<C, T> resolvedDynamicTypedMethodRef = null;
-        Exception exception = null;
-        try {
-            // TODO: validate it is static
-            resolvedDynamicTypedMethodRef = new ResolvedDynamicTypedMethodRef<C, T>(this, getDeclaredMethod(methodName, parameters));
-        } catch (NoSuchMethodException e) {
-            exception = e;
-        }
-        return new UnresolvedDynamicTypedMethodRef<C, T>(resolvedDynamicTypedMethodRef, exception);
+    public @Nonnull <T> UnresolvedDynamicTypedMethodRef<C, T> method(@SuppressWarnings("unused") @Nonnull Class<T> returnType, @Nonnull final String methodName, @Nonnull final Class<?>... parameters) {
+        return new UnresolvedDynamicTypedMethodRef<C, T>(new Callable<ResolvedDynamicTypedMethodRef<C, T>>() {
+            @Override
+            public ResolvedDynamicTypedMethodRef<C, T> call() throws Exception {
+                return new ResolvedDynamicTypedMethodRef<C, T>(ClassRef.this, getDeclaredMethod(methodName, parameters));
+            }
+        });
     }
 
-    public @Nonnull <T> UnresolvedDynamicTypedMethodRef<C, T> method(@Nonnull ClassRef<T> returnType, @Nonnull String methodName, @Nonnull Class<?>... parameters) {
-        ResolvedDynamicTypedMethodRef<C, T> resolvedDynamicTypedMethodRef = null;
-        Exception exception = null;
-        try {
-            // TODO: validate it is static
-            resolvedDynamicTypedMethodRef = new ResolvedDynamicTypedMethodRef<C, T>(this, getDeclaredMethod(methodName, parameters));
-        } catch (NoSuchMethodException e) {
-            exception = e;
-        }
-        return new UnresolvedDynamicTypedMethodRef<C, T>(resolvedDynamicTypedMethodRef, exception);
+    public @Nonnull <T> UnresolvedDynamicTypedMethodRef<C, T> method(@SuppressWarnings("unused") @Nonnull ClassRef<T> returnType, @Nonnull final String methodName, @Nonnull final Class<?>... parameters) {
+        return new UnresolvedDynamicTypedMethodRef<C, T>(new Callable<ResolvedDynamicTypedMethodRef<C, T>>() {
+            @Override
+            public ResolvedDynamicTypedMethodRef<C, T> call() throws Exception {
+                return new ResolvedDynamicTypedMethodRef<C, T>(ClassRef.this, getDeclaredMethod(methodName, parameters));
+            }
+        });
     }
 
-    public @Nonnull <T> UnresolvedDynamicTypedMethodRef<C, T> method(@Nonnull UnresolvedClassRef<T> returnType, @Nonnull String methodName, @Nonnull Class<?>... parameters) {
-        ResolvedDynamicTypedMethodRef<C, T> resolvedDynamicTypedMethodRef = null;
-        Exception exception = null;
-        try {
-            // TODO: validate it is static
-            resolvedDynamicTypedMethodRef = new ResolvedDynamicTypedMethodRef<C, T>(this, getDeclaredMethod(methodName, parameters));
-        } catch (NoSuchMethodException e) {
-            exception = e;
-        }
-        return new UnresolvedDynamicTypedMethodRef<C, T>(resolvedDynamicTypedMethodRef, exception);
+    public @Nonnull <T> UnresolvedDynamicTypedMethodRef<C, T> method(@SuppressWarnings("unused") @Nonnull UnresolvedClassRef<T> returnType, @Nonnull final String methodName, @Nonnull final Class<?>... parameters) {
+        return new UnresolvedDynamicTypedMethodRef<C, T>(new Callable<ResolvedDynamicTypedMethodRef<C, T>>() {
+            @Override
+            public ResolvedDynamicTypedMethodRef<C, T> call() throws Exception {
+                return new ResolvedDynamicTypedMethodRef<C, T>(ClassRef.this, getDeclaredMethod(methodName, parameters));
+            }
+        });
     }
 
     // one param methods
 
-    public @Nonnull <P1> UnresolvedVoidDynamicOneParamMethodRef<C, P1> method(@Nonnull String methodName, @Nonnull Class<P1> C1) {
-        ResolvedVoidDynamicOneParamMethodRef<C, P1> resolvedVoidDynamicMethodRef = null;
-        Exception exception = null;
-        try {
-            // TODO: validate it is static
-            resolvedVoidDynamicMethodRef = new ResolvedVoidDynamicOneParamMethodRef<C, P1>(this, getDeclaredMethod(methodName, C1));
-        } catch (NoSuchMethodException e) {
-            exception = e;
-        }
-        return new UnresolvedVoidDynamicOneParamMethodRef<C, P1>(resolvedVoidDynamicMethodRef, exception);
+    public @Nonnull <P1> UnresolvedVoidDynamicOneParamMethodRef<C, P1> method(@Nonnull final String methodName, @Nonnull final Class<P1> C1) {
+        return new UnresolvedVoidDynamicOneParamMethodRef<C, P1>(new Callable<ResolvedVoidDynamicOneParamMethodRef<C, P1>>() {
+            @Override
+            public ResolvedVoidDynamicOneParamMethodRef<C, P1> call() throws Exception {
+                return new ResolvedVoidDynamicOneParamMethodRef<C, P1>(ClassRef.this, getDeclaredMethod(methodName, C1));
+            }
+        });
     }
 
     // TODO: add "field" and "method" method which would return generic ref working with both static and non static members
@@ -292,19 +275,17 @@ public class ClassRef<C> {
 
 
     public @Nonnull UnresolvedZeroArgsClassConstructorRef<C> getConstructor() {
-        try {
-            Constructor<C> declaredConstructor = clazz.getDeclaredConstructor();
-            if (Unsafe.setAccessible(declaredConstructor)) {
-                return new UnresolvedZeroArgsClassConstructorRef<C>(
-                        new ZeroArgsClassConstructorRef<C>(declaredConstructor),
-                        null
-                );
-            } else {
-                return new UnresolvedZeroArgsClassConstructorRef<C>(null, new UnresolvedRefException("Constructor " + clazz.getName() + "." + declaredConstructor.getName() + "() is not accessible"));
+        return new UnresolvedZeroArgsClassConstructorRef<C>(new Callable<ZeroArgsClassConstructorRef<C>>() {
+            @Override
+            public ZeroArgsClassConstructorRef<C> call() throws Exception {
+                Constructor<C> declaredConstructor = clazz.getDeclaredConstructor();
+                if (Unsafe.setAccessible(declaredConstructor)) {
+                    return new ZeroArgsClassConstructorRef<C>(declaredConstructor);
+                } else {
+                    throw new UnresolvedRefException("Constructor " + clazz.getName() + "." + declaredConstructor.getName() + "() is not accessible");
+                }
             }
-        } catch (Throwable e) {
-            return new UnresolvedZeroArgsClassConstructorRef<C>(null, e);
-        }
+        });
     }
 
     // methods
@@ -373,14 +354,12 @@ public class ClassRef<C> {
      * @return
      */
     public @Nonnull <S> UnresolvedClassRef<S> siblingClass(@Nonnull String className) {
-        try {
-            // TODO: introduce PackageRef
-            //noinspection unchecked
-            Class<S> clazz = (Class<S>) Class.forName(this.clazz.getPackage().getName() + "." + className);
-            return new UnresolvedClassRef<S>(new ClassRef<S>(clazz), null);
-        } catch (Throwable e) {
-            return new UnresolvedClassRef<S>(null, e);
-        }
+        // TODO: introduce PackageRef
+        return UnresolvedClassRef.of(this.clazz.getPackage().getName() + "." + className);
     }
 
+    @Nonnull
+    public Class<C> getClazz() {
+        return clazz;
+    }
 }

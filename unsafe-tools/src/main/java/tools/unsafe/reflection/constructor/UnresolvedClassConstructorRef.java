@@ -5,11 +5,12 @@ import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 
 import javax.annotation.Nonnull;
+import java.util.concurrent.Callable;
 
 public class UnresolvedClassConstructorRef<C> extends UnresolvedRef<ClassConstructorRef<C>> {
 
-    public UnresolvedClassConstructorRef(ClassConstructorRef<C> ref, Throwable throwable) {
-        super(ref, throwable);
+    public UnresolvedClassConstructorRef(@Nonnull Callable<ClassConstructorRef<C>> refSupplier) {
+        super(refSupplier);
     }
 
     public C newInstanceOrNull(Object... parameters) {

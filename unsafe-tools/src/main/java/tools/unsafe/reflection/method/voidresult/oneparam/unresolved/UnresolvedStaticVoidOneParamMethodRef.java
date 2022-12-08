@@ -6,13 +6,14 @@ import tools.unsafe.reflection.method.AbstractUnresolvedMethodRef;
 import tools.unsafe.reflection.method.voidresult.oneparam.GenericVoidOneParamMethodRef;
 import tools.unsafe.reflection.method.voidresult.oneparam.resolved.ResolvedStaticVoidOneParamMethodRef;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.Callable;
 
 public class UnresolvedStaticVoidOneParamMethodRef<C, P1> extends AbstractUnresolvedMethodRef<ResolvedStaticVoidOneParamMethodRef<C, P1>, C> implements GenericVoidOneParamMethodRef<C, P1> {
 
-    public UnresolvedStaticVoidOneParamMethodRef(@Nullable ResolvedStaticVoidOneParamMethodRef<C, P1> ref, @Nullable Throwable throwable) {
-        super(ref, throwable);
+    public UnresolvedStaticVoidOneParamMethodRef(@Nonnull Callable<ResolvedStaticVoidOneParamMethodRef<C, P1>> refSupplier) {
+        super(refSupplier);
     }
 
     @Override

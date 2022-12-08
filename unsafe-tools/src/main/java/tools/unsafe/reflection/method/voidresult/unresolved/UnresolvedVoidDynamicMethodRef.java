@@ -6,13 +6,14 @@ import tools.unsafe.reflection.method.AbstractUnresolvedMethodRef;
 import tools.unsafe.reflection.method.voidresult.GenericVoidDynamicMethodRef;
 import tools.unsafe.reflection.method.voidresult.resolved.ResolvedVoidDynamicMethodRef;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.Callable;
 
 public class UnresolvedVoidDynamicMethodRef<C> extends AbstractUnresolvedMethodRef<ResolvedVoidDynamicMethodRef<C>, C> implements GenericVoidDynamicMethodRef<C> {
 
-    public UnresolvedVoidDynamicMethodRef(@Nullable ResolvedVoidDynamicMethodRef<C> ref, @Nullable Throwable throwable) {
-        super(ref, throwable);
+    public UnresolvedVoidDynamicMethodRef(@Nonnull Callable<ResolvedVoidDynamicMethodRef<C>> refSupplier) {
+        super(refSupplier);
     }
 
     @Override

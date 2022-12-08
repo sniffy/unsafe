@@ -9,11 +9,12 @@ import tools.unsafe.reflection.object.ObjectRef;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.concurrent.Callable;
 
-public class AbstractUnresolvedObjectFieldRef<R extends AbstractObjectFieldRef<C, T>, C, T> extends AbstractUnresolvedFieldRef<R, C> implements ObjectFieldRef<T> {
+public abstract class AbstractUnresolvedObjectFieldRef<R extends AbstractObjectFieldRef<C, T>, C, T> extends AbstractUnresolvedFieldRef<R, C> implements ObjectFieldRef<T> {
 
-    public AbstractUnresolvedObjectFieldRef(@Nullable R ref, @Nullable Throwable throwable) {
-        super(ref, throwable);
+    public AbstractUnresolvedObjectFieldRef(@Nonnull Callable<R> refSupplier) {
+        super(refSupplier);
     }
 
     @Nullable
@@ -66,7 +67,7 @@ public class AbstractUnresolvedObjectFieldRef<R extends AbstractObjectFieldRef<C
         try {
             set(value);
             return true;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             return false;
         }
     }
@@ -74,7 +75,7 @@ public class AbstractUnresolvedObjectFieldRef<R extends AbstractObjectFieldRef<C
     public T getOrDefault(T defaultValue) {
         try {
             return get();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             return defaultValue;
         }
     }

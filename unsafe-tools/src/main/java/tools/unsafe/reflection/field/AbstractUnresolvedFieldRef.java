@@ -5,13 +5,13 @@ import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.clazz.ClassRef;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.lang.reflect.Field;
+import java.util.concurrent.Callable;
 
-public class AbstractUnresolvedFieldRef<T extends AbstractFieldRef<C>, C> extends UnresolvedRef<T> implements UnresolvedFieldRef<C> {
+public abstract class AbstractUnresolvedFieldRef<T extends AbstractFieldRef<C>, C> extends UnresolvedRef<T> implements UnresolvedFieldRef<C> {
 
-    public AbstractUnresolvedFieldRef(@Nullable T ref, @Nullable Throwable throwable) {
-        super(ref, throwable);
+    public AbstractUnresolvedFieldRef(@Nonnull Callable<T> refSupplier) {
+        super(refSupplier);
     }
 
     @Override

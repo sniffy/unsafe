@@ -6,13 +6,14 @@ import tools.unsafe.reflection.method.AbstractUnresolvedMethodRef;
 import tools.unsafe.reflection.method.voidresult.oneparam.GenericVoidDynamicOneParamMethodRef;
 import tools.unsafe.reflection.method.voidresult.oneparam.resolved.ResolvedVoidDynamicOneParamMethodRef;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.Callable;
 
 public class UnresolvedVoidDynamicOneParamMethodRef<C, P1> extends AbstractUnresolvedMethodRef<ResolvedVoidDynamicOneParamMethodRef<C, P1>, C> implements GenericVoidDynamicOneParamMethodRef<C, P1> {
 
-    public UnresolvedVoidDynamicOneParamMethodRef(@Nullable ResolvedVoidDynamicOneParamMethodRef<C, P1> ref, @Nullable Throwable throwable) {
-        super(ref, throwable);
+    public UnresolvedVoidDynamicOneParamMethodRef(@Nonnull Callable<ResolvedVoidDynamicOneParamMethodRef<C, P1>> refSupplier) {
+        super(refSupplier);
     }
 
     @Override

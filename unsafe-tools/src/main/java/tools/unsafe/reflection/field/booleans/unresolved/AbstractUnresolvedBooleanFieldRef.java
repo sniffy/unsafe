@@ -6,12 +6,13 @@ import tools.unsafe.reflection.field.AbstractUnresolvedFieldRef;
 import tools.unsafe.reflection.field.booleans.BooleanFieldRef;
 import tools.unsafe.reflection.field.booleans.resolved.AbstractBooleanFieldRef;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
+import java.util.concurrent.Callable;
 
-public class AbstractUnresolvedBooleanFieldRef<R extends AbstractBooleanFieldRef<C>, C> extends AbstractUnresolvedFieldRef<R, C> implements BooleanFieldRef {
+public abstract class AbstractUnresolvedBooleanFieldRef<R extends AbstractBooleanFieldRef<C>, C> extends AbstractUnresolvedFieldRef<R, C> implements BooleanFieldRef {
 
-    public AbstractUnresolvedBooleanFieldRef(@Nullable R ref, @Nullable Throwable throwable) {
-        super(ref, throwable);
+    public AbstractUnresolvedBooleanFieldRef(@Nonnull Callable<R> refSupplier) {
+        super(refSupplier);
     }
 
     @Override
@@ -44,7 +45,7 @@ public class AbstractUnresolvedBooleanFieldRef<R extends AbstractBooleanFieldRef
         try {
             set(value);
             return true;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             return false;
         }
     }

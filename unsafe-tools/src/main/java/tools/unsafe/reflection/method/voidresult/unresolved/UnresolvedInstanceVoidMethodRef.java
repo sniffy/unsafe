@@ -6,13 +6,14 @@ import tools.unsafe.reflection.method.AbstractUnresolvedMethodRef;
 import tools.unsafe.reflection.method.voidresult.GenericVoidMethodRef;
 import tools.unsafe.reflection.method.voidresult.resolved.ResolvedInstanceVoidMethodRef;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.Callable;
 
 public class UnresolvedInstanceVoidMethodRef<C> extends AbstractUnresolvedMethodRef<ResolvedInstanceVoidMethodRef<C>, C> implements GenericVoidMethodRef<C> {
 
-    public UnresolvedInstanceVoidMethodRef(@Nullable ResolvedInstanceVoidMethodRef<C> ref, @Nullable Throwable throwable) {
-        super(ref, throwable);
+    public UnresolvedInstanceVoidMethodRef(@Nonnull Callable<ResolvedInstanceVoidMethodRef<C>> refSupplier) {
+        super(refSupplier);
     }
 
     @Override

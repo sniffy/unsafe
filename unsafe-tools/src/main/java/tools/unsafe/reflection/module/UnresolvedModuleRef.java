@@ -4,12 +4,14 @@ import tools.unsafe.reflection.UnresolvedRef;
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;
 
+import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.Callable;
 
 public class UnresolvedModuleRef extends UnresolvedRef<ModuleRef> {
 
-    public UnresolvedModuleRef(ModuleRef ref, Throwable throwable) {
-        super(ref, throwable);
+    public UnresolvedModuleRef(@Nonnull Callable<ModuleRef> refSupplier) {
+        super(refSupplier);
     }
 
     public void addOpens(String packageName) throws UnresolvedRefException, UnsafeInvocationException, InvocationTargetException {
