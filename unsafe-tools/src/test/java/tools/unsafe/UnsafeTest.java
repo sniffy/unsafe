@@ -37,6 +37,9 @@ public class UnsafeTest {
 
     @Test
     public void testInvokeConstructor() throws Throwable {
+
+        System.out.println(System.getProperty("java.vendor"));
+
         // TODO: it should actually fail
         //assertNothingWrittenToSystemErr(() -> {
         try {
