@@ -60,7 +60,7 @@ public class UnsafeVirtualMachine {
             } else {
                 switch (getFamily()) {
                     case HOTSPOT:
-                        return ObjectRef.of(ManagementFactory.getRuntimeMXBean()).field("jvm").objectRef().invoke(Long.TYPE, "getProcessId", new Class<?>[0], new Object[0]);
+                        return ObjectRef.of(ManagementFactory.getRuntimeMXBean()).field("jvm").objectRef().invoke(Integer.TYPE, "getProcessId", new Class<?>[0], new Object[0]);
                     case J9:
                         return ObjectRef.of(ManagementFactory.getRuntimeMXBean()).invoke(Long.TYPE, "getProcessID", new Class<?>[0], new Object[0]);
                     default:
