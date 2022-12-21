@@ -8,6 +8,7 @@ import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
 import tools.unsafe.reflection.constructor.UnresolvedZeroArgsClassConstructorRef;
 import tools.unsafe.reflection.field.objects.resolved.ResolvedStaticObjectFieldRef;
+import tools.unsafe.vm.UnsafeVirtualMachine;
 
 import javax.net.ssl.SSLContext;
 import java.lang.instrument.Instrumentation;
@@ -19,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static tools.unsafe.fluent.Fluent.$;
 import static tools.unsafe.vm.UnsafeVirtualMachine.getJavaVersion;
+import static tools.unsafe.vm.VirtualMachineFamily.J9;
 
 public class UnsafeTest {
 
@@ -38,7 +40,7 @@ public class UnsafeTest {
     @Test
     public void testInvokeConstructor() throws Throwable {
 
-        if (System.getProperty("java.vendor").toLowerCase().contains("ibm")) return;
+        if (UnsafeVirtualMachine.getFamily() == J9) return; // TODO: remove this statement
 
         // TODO: it should actually fail
         //assertNothingWrittenToSystemErr(() -> {

@@ -7,13 +7,14 @@ import tools.unsafe.reflection.object.ObjectRef;
 
 import java.io.File;
 import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
 import static tools.unsafe.fluent.Fluent.$;
+import static tools.unsafe.vm.VirtualMachineFamily.HOTSPOT;
+import static tools.unsafe.vm.VirtualMachineFamily.J9;
 
 public class UnsafeVirtualMachine {
 
@@ -41,16 +42,31 @@ public class UnsafeVirtualMachine {
         return Integer.parseInt(version);
     }
 
-    public static int getPid() {
+    public static VirtualMachineFamily getFamily() {
+        if (System.getProperty("java.vendor").toLowerCase().contains("ibm")) {
+            return J9;
+        } else {
+            return HOTSPOT;
+        }
+    }
+
+    public static long getPid() {
         try {
 
             if (getJavaVersion() >= 9) {
                 return UnresolvedClassRef.of("java.lang.ProcessHandle").method(Long.TYPE, "pid").invoke(
                         UnresolvedClassRef.of("java.lang.ProcessHandle").staticMethod(Integer.TYPE, "current").invoke()
-                ).intValue();
-                //return (int) ProcessHandle.current().pid();
+                );
             } else {
-                return ObjectRef.<RuntimeMXBean>of(ManagementFactory.getRuntimeMXBean()).field("jvm").objectRef().invoke(Integer.TYPE, "getProcessId", new Class<?>[0], new Object[0]);
+                switch (getFamily()) {
+                    case HOTSPOT:
+                        return ObjectRef.of(ManagementFactory.getRuntimeMXBean()).field("jvm").objectRef().invoke(Long.TYPE, "getProcessId", new Class<?>[0], new Object[0]);
+                    case J9:
+                        return ObjectRef.of(ManagementFactory.getRuntimeMXBean()).invoke(Long.TYPE, "getProcessID", new Class<?>[0], new Object[0]);
+                    default:
+                        throw new UnsupportedOperationException();
+                }
+
             }
 
         } catch (Exception e) {
