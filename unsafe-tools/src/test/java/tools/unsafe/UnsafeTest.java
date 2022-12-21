@@ -127,6 +127,9 @@ public class UnsafeTest {
         System.out.println(providerList);
 
         assertEquals(0, providerList.size());
+
+        threadListsUsed.set(0);
+        threadLists.set(new InheritableThreadLocal<ProviderList>());
     }
 
 }
