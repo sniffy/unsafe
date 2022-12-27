@@ -70,8 +70,12 @@ public class ObjectRef<C> {
     }
 
     public <T> T invoke(Class<T> returnType, String methodName, Class<?>[] parameterTypes, Object[] parameters) throws UnresolvedRefException, UnsafeInvocationException, InvocationTargetException {
-        ResolvedInstanceTypedMethodRef<C, T> method = new ResolvedInstanceTypedMethodRef<C, T>(classRef, classRef.method(returnType, methodName, parameterTypes).resolve().getMethod(), object);
-        return method.invoke(parameters);
+        return method(returnType, methodName, parameterTypes).invoke(parameters);
+    }
+
+    @Nonnull
+    public <T> ResolvedInstanceTypedMethodRef<C, T> method(Class<T> returnType, String methodName, Class<?>[] parameterTypes) throws UnresolvedRefException {
+        return new ResolvedInstanceTypedMethodRef<C, T>(classRef, classRef.method(returnType, methodName, parameterTypes).resolve().getMethod(), object);
     }
 
 }

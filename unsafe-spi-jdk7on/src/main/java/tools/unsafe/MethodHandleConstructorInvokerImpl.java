@@ -4,6 +4,8 @@ import java.lang.invoke.MethodHandle;
 
 /**
  * <a href="https://stackoverflow.com/questions/48616630/is-it-possible-to-call-constructor-on-existing-instance">See stackoverflow discussion</a>
+ * <p>
+ * TODO: doesn't work on J9
  */
 public class MethodHandleConstructorInvokerImpl<C> implements ConstructorInvoker<C> {
 

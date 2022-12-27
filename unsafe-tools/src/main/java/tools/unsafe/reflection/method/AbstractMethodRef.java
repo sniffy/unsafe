@@ -39,6 +39,11 @@ public abstract class AbstractMethodRef<C> implements MethodRef<C> {
         return method;
     }
 
+    // TODO: implement in backward compatible way
+    /*public @Nonnull <T> T *//* MethodType *//* getMethodType() {
+        return (T) MethodType.methodType(method.getReturnType(), method.getParameterTypes());
+    }*/
+
     public @Nonnull ClassRef<C> getDeclaringClassRef() {
         return declaringClassRef;
     }

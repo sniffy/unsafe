@@ -40,7 +40,9 @@ public class UnsafeTest {
     @Test
     public void testInvokeConstructor() throws Throwable {
 
-        if (UnsafeVirtualMachine.getFamily() == J9) return; // TODO: remove this statement
+        if (UnsafeVirtualMachine.getFamily() == J9) {
+            return;
+        }
 
         // TODO: it should actually fail
         //assertNothingWrittenToSystemErr(() -> {
