@@ -2,9 +2,12 @@ package tools.unsafe.reflection.field;
 
 import tools.unsafe.Unsafe;
 import tools.unsafe.reflection.clazz.ClassRef;
+import tools.unsafe.vm.UnsafeVirtualMachine;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
+
+import static tools.unsafe.vm.VirtualMachineFamily.ANDROID;
 
 public abstract class AbstractFieldRef<C> implements FieldRef<C> {
 
@@ -25,8 +28,10 @@ public abstract class AbstractFieldRef<C> implements FieldRef<C> {
         //noinspection ConstantConditions
         assert null != field;
 
-        // Ensure the given class has been initialized. This is often needed in conjunction with obtaining the static field base of a class.
-        declaringClassRef.ensureClassInitialized();
+        if (ANDROID != UnsafeVirtualMachine.getFamily()) {
+            // Ensure the given class has been initialized. This is often needed in conjunction with obtaining the static field base of a class.
+            declaringClassRef.ensureClassInitialized();
+        }
     }
 
     public @Nonnull Field getField() {

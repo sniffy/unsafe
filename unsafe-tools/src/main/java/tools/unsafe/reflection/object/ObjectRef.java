@@ -61,6 +61,7 @@ public class ObjectRef<C> {
         field(fieldName).set(value);
     }
 
+    // TODO: it should return unresolved instance
     public <T> ResolvedInstanceObjectFieldRef<C, T> field(String fieldName) throws UnresolvedRefException {
         return new ResolvedInstanceObjectFieldRef<C, T>(classRef, classRef.<T>field(fieldName).resolve(), object);
     }

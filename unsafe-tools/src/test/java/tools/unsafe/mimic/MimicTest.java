@@ -1,4 +1,4 @@
-package tools.unsafe.reflection.mimic;
+package tools.unsafe.mimic;
 
 import org.junit.Test;
 
@@ -18,7 +18,7 @@ public class MimicTest {
 
     }
 
-    public static interface Measurable {
+    public interface Measurable {
 
         int length();
 

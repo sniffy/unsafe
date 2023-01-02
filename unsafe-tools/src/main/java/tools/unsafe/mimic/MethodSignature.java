@@ -1,4 +1,4 @@
-package tools.unsafe.reflection.mimic;
+package tools.unsafe.mimic;
 
 import tools.unsafe.reflection.UnresolvedRefException;
 import tools.unsafe.reflection.UnsafeInvocationException;

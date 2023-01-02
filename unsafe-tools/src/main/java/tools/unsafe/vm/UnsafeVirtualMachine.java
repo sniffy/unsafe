@@ -13,8 +13,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 import static tools.unsafe.fluent.Fluent.$;
-import static tools.unsafe.vm.VirtualMachineFamily.HOTSPOT;
-import static tools.unsafe.vm.VirtualMachineFamily.J9;
+import static tools.unsafe.vm.VirtualMachineFamily.*;
 
 public class UnsafeVirtualMachine {
 
@@ -43,10 +42,15 @@ public class UnsafeVirtualMachine {
     }
 
     public static VirtualMachineFamily getFamily() {
-        if (System.getProperty("java.vendor").toLowerCase().contains("ibm")) {
-            return J9;
-        } else {
-            return HOTSPOT;
+        try {
+            Class.forName("android.app.Activity");
+            return ANDROID;
+        } catch (Exception e) {
+            if (System.getProperty("java.vendor").toLowerCase().contains("ibm")) {
+                return J9;
+            } else {
+                return HOTSPOT;
+            }
         }
     }
 

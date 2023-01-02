@@ -16,6 +16,7 @@
         <module>unsafe-spi</module>
         <module>unsafe-spi-jdk7on</module>
         <module>unsafe-internal</module>
+        <!--<module>unsafe-android-integration-tests</module>-->
     </modules>
 
     <properties>
