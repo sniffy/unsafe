@@ -34,11 +34,11 @@ jobs:
           java-version: '11'
           distribution: 'adopt-hotspot'
           cache: maven
-      - name: Go to unsafe-android-integration-tests
-        run: cd unsafe-android-integration-tests
       - name: Make gradlew executable
         run: chmod +x ./gradlew
+        working-directory: ./unsafe-android-integration-tests
       - name: run tests
+        working-directory: ./unsafe-android-integration-tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
