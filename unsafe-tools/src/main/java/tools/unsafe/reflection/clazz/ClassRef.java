@@ -131,9 +131,9 @@ public class ClassRef<C> {
                 while (clazz != Object.class) {
                     Field[] declaredFields = clazz.getDeclaredFields();
                     for (final Field declaredField : declaredFields) {
-                        if (Modifier.isStatic(declaredField.getModifiers()) && (null == fieldFilter || fieldFilter.include(declaredField.getName(), declaredField))) {
-                            return new ResolvedStaticObjectFieldRef<C, T>(ClassRef.this, declaredField);
-                        }
+                         if (Modifier.isStatic(declaredField.getModifiers()) && (null == fieldFilter || fieldFilter.include(declaredField.getName(), declaredField))) {
+                             return new ResolvedStaticObjectFieldRef<C, T>(ClassRef.this, declaredField);
+                         }
                     }
                     if (recursive) {
                         clazz = clazz.getSuperclass();

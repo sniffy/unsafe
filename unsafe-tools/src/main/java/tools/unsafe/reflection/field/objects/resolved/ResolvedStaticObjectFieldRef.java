@@ -1,5 +1,6 @@
 package tools.unsafe.reflection.field.objects.resolved;
 
+import tools.unsafe.Unsafe;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
 import tools.unsafe.reflection.field.booleans.resolved.ResolvedStaticBooleanFieldRef;
@@ -13,10 +14,21 @@ public class ResolvedStaticObjectFieldRef<C, T> extends AbstractObjectFieldRef<C
 
     public ResolvedStaticObjectFieldRef(ClassRef<C> classRef, Field field) {
         super(classRef, field, UNSAFE.staticFieldOffset(field));
+
+        System.out.println("static fielf oddset is " + offset);
+
     }
 
     public ResolvedStaticBooleanFieldRef<C> asBooleanFieldRef() {
         return new ResolvedStaticBooleanFieldRef<C>(declaringClassRef, field);
+    }
+
+    public Object getObject() {
+        return object;
+    }
+
+    public long getOffset() {
+        return offset;
     }
 
     public boolean compareAndSet(T oldValue, T newValue) throws UnsafeInvocationException {
@@ -59,6 +71,16 @@ public class ResolvedStaticObjectFieldRef<C, T> extends AbstractObjectFieldRef<C
     }
 
     public void set(T value) throws UnsafeInvocationException {
+        System.out.println("Field type is " + field.getType());
+        System.out.println("ïsVolatile=" + Modifier.isVolatile(field.getModifiers()));
+        System.out.println("ïsFinal=" + Modifier.isFinal(field.getModifiers()));
+        System.out.println("UNSAFE=" + UNSAFE);
+        System.out.println("object=" + object);
+
+        // Unsafe works only with constant values
+        Unsafe.getSunMiscUnsafe().putObjectVolatile(object, UNSAFE.staticFieldOffset(field), new Object());
+        if (true) return;
+
         try {
             if (field.getType() == Boolean.TYPE && value instanceof Boolean) {
                 if (Modifier.isVolatile(field.getModifiers())) {
@@ -111,8 +133,10 @@ public class ResolvedStaticObjectFieldRef<C, T> extends AbstractObjectFieldRef<C
             } else {
                 if (Modifier.isVolatile(field.getModifiers()) || Modifier.isFinal(field.getModifiers())) { // TODO: use *volatile for other final fields as well
                     // TODO: switch to putReferenceVolatile from jdk.internal.reflect.Unsafe since it provdies better object visibility
+                    System.out.println("UNSAFE.putObjectVolatile(object, offset, value);");
                     UNSAFE.putObjectVolatile(object, offset, value);
                 } else {
+                    System.out.println("UNSAFE.putObject(object, offset, value);");
                     UNSAFE.putObject(object, offset, value);
                 }
             }

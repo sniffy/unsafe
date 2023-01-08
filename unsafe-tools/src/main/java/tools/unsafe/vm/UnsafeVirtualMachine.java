@@ -42,6 +42,9 @@ public class UnsafeVirtualMachine {
     }
 
     public static VirtualMachineFamily getFamily() {
+        if ("executable".equals(System.getProperty("org.graalvm.nativeimage.kind"))) {
+            return GRAALVM_NATIVE;
+        }
         try {
             Class.forName("android.app.Activity");
             return ANDROID;

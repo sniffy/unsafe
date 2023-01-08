@@ -1,0 +1,13 @@
+[
+  {
+    "name":"tools.unsafe.SampleClass",
+    "allDeclaredFields" : true,
+    "fields":[
+      {
+        "name":"foo",
+        "allowWrite": true,
+        "allowUnsafeAccess" : true
+      }
+    ]
+  }
+]

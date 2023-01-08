@@ -4,6 +4,10 @@
 
 Duck Typing and mimicking
 
+### GraalVM
+
+https://docs.oracle.com/en/graalvm/enterprise/20/docs/reference-manual/native-image/Reflection/
+
 ### Structure
 
 ### Naming conventions
