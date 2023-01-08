@@ -1,15 +1,17 @@
 package tools.unsafe;
 
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import sun.misc.Unsafe;
 import tools.unsafe.vm.UnsafeVirtualMachine;
 import tools.unsafe.vm.VirtualMachineFamily;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.Assert.*;
 
 public class SampleClassTest {
 
@@ -24,6 +26,69 @@ public class SampleClassTest {
         System.out.println("Location is = " + Unsafe.class.getProtectionDomain().getCodeSource().getLocation());
     }*/
 
+    private static <T> T privateLookup(Class clazz) throws IllegalAccessException, NoSuchMethodException {
+        return (T) MethodHandles.privateLookupIn(
+                SampleClass.class,
+                MethodHandles.lookup()
+        );
+    }
+
+    @Test
+    public void testPrivateMethod() throws Exception {
+
+        Method privateMethod = SampleClass.class.getDeclaredMethod("privateMethod", String.class);
+
+        tools.unsafe.Unsafe.setAccessible(privateMethod);
+
+        privateMethod.invoke(null, "argument");
+
+    }
+
+    @Test
+    public void testMethodHandle() throws Throwable {
+
+        Method privateMethod = SampleClass.class.getDeclaredMethod("privateMethod", String.class);
+        tools.unsafe.Unsafe.setAccessible(privateMethod);
+
+        MethodHandle unreflect = MethodHandles.lookup().unreflect(privateMethod);
+        unreflect.invoke("argument");
+
+    }
+
+    @Test
+    public void testMethosLookup() throws Throwable {
+
+        /*try {
+            MethodHandle privateMethod = MethodHandles.lookup().findStatic(SampleClass.class, "privateMethod", MethodType.methodType(void.class, String.class));
+            privateMethod.invoke("argument it should have not received");
+            fail("Should have failed");
+        } catch (Throwable e) {
+            assertNotNull(e);
+        }
+
+        StaticObjectFieldRef<MethodHandles.Lookup> implLookupField = new StaticObjectFieldRef<>(MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP"));
+        MethodHandles.Lookup implLookup = implLookupField.get();
+
+        MethodHandle privateMethod = implLookup.findStatic(SampleClass.class, "privateMethod", MethodType.methodType(void.class, String.class));
+
+        privateMethod.invoke("argument");*/
+
+        MethodHandle privateMethod = MethodHandles.privateLookupIn(
+                SampleClass.class,
+                MethodHandles.lookup()
+        ).findStatic(
+                SampleClass.class, "privateMethod", MethodType.methodType(void.class, String.class)
+        );
+
+        privateMethod.invoke("argument");
+
+        SampleClassTest.<MethodHandles.Lookup>privateLookup(SampleClass.class).findStatic(
+                SampleClass.class, "privateMethod", MethodType.methodType(void.class, String.class)
+        ).invoke("argument");
+
+
+    }
+
     @Test
     public void testStaticObjectFieldRef() throws Exception {
 
@@ -31,29 +96,29 @@ public class SampleClassTest {
 
         StaticObjectFieldRef<Object> foo = new StaticObjectFieldRef<>(SampleClass.class.getDeclaredField("foo"));
 
-        Assertions.assertEquals(object, foo.get());
+        assertEquals(object, foo.get());
 
         if (UnsafeVirtualMachine.getFamily() == VirtualMachineFamily.GRAALVM_NATIVE) {
             if (UnsafeVirtualMachine.getJavaVersion() < 16) {
                 Object newObject = new Object();
                 foo.set(newObject);
-                Assertions.assertEquals(newObject, foo.get());
+                assertEquals(newObject, foo.get());
             } else {
-                //noinspection CatchMayIgnoreException
                 try {
                     foo.set(new Object());
                     fail("Should have failed");
                 } catch (Throwable e) {
-                    Assertions.assertNotNull(e);
+                    assertNotNull(e);
 
 
                     Field declaredField = SampleClass.class.getDeclaredField("foo");
                     long fieldOffset = tools.unsafe.Unsafe.getSunMiscUnsafe().staticFieldOffset(declaredField);
 
-                    StaticFinalObjectFieldRef<Object> finalFoo = new StaticFinalObjectFieldRef<>(declaredField) {
+                    StaticFinalObjectFieldRef<Object> finalFoo = new StaticFinalObjectFieldRef<>(declaredField, SampleClass.class, fieldOffset) {
 
                         @Override
                         public void set(Unsafe unsafe, Object value) throws NoSuchFieldException {
+                            //unsafe.putObject(clazzField, offsetField, value);
                             unsafe.putObject(SampleClass.class, fieldOffset, value);
                         }
 
@@ -61,14 +126,14 @@ public class SampleClassTest {
 
                     Object newObject = new Object();
                     finalFoo.set(newObject);
-                    Assertions.assertEquals(newObject, foo.get());
+                    assertEquals(newObject, foo.get());
 
                 }
             }
         } else {
             Object newObject = new Object();
             foo.set(newObject);
-            Assertions.assertEquals(newObject, foo.get());
+            assertEquals(newObject, foo.get());
         }
 
     }

@@ -4,8 +4,19 @@ import java.lang.reflect.Field;
 
 abstract public class StaticFinalObjectFieldRef<T> extends StaticObjectFieldRef<T> {
 
-    public StaticFinalObjectFieldRef(Field field) {
+    @Deprecated
+    protected final Class clazzField;
+    @Deprecated
+    protected final long offsetField;
+
+    /*public StaticFinalObjectFieldRef(Field field) {
         super(field);
+    }*/
+
+    public StaticFinalObjectFieldRef(Field field, Class clazzField, long offsetField) {
+        super(field);
+        this.clazzField = clazzField;
+        this.offsetField = offsetField;
     }
 
     @Override
