@@ -14,8 +14,15 @@ public class StaticObjectFieldRef<T> {
 
     private final Field field;
 
+    private UnsafeObjectSetter<T> unsafeObjectSetter;
+
     public StaticObjectFieldRef(Field field) {
         this.field = field;
+    }
+
+    public StaticObjectFieldRef(Field field, UnsafeObjectSetter<T> unsafeObjectSetter) {
+        this(field);
+        this.unsafeObjectSetter = unsafeObjectSetter;
     }
 
     private void ensureAccessible() {
@@ -40,6 +47,16 @@ public class StaticObjectFieldRef<T> {
     }
 
     public void set(T value) {
+
+        if (null != unsafeObjectSetter) {
+            try {
+                unsafeObjectSetter.set(Unsafe.getSunMiscUnsafe(), value);
+                return;
+            } catch (NoSuchFieldException e) {
+                throw Unsafe.throwException(e);
+            }
+        }
+
         ensureAccessible();
 
         if (Modifier.isFinal(field.getModifiers()) && tryGetJavaVersion(8) >= 16) { // TODO: print warning here

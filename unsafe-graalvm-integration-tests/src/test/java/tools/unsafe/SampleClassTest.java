@@ -89,6 +89,26 @@ public class SampleClassTest {
 
     }
 
+
+    @Test
+    public void testUnsafeObjectSetter() throws Exception {
+
+        Object object = SampleClass.getFoo();
+
+        StaticObjectFieldRef<Object> foo = new StaticObjectFieldRef<>(SampleClass.class.getDeclaredField("foo"), new UnsafeObjectSetter<Object>() {
+            @Override
+            public void set(Unsafe unsafe, Object value) throws NoSuchFieldException {
+                unsafe.putObject(SampleClass.class, unsafe.staticFieldOffset(SampleClass.class.getDeclaredField("foo")), value);
+            }
+        });
+
+        Object value = new Object();
+        foo.set(value);
+
+        assertEquals(value, SampleClass.getFoo());
+
+    }
+
     @Test
     public void testStaticObjectFieldRef() throws Exception {
 
