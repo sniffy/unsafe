@@ -8,7 +8,7 @@ public class SampleClass {
 
     private static final Object bar = new Object();
 
-    private static void privateMethod(String argument) {
+    private static final void privateMethod(String argument) {
         System.out.println("I'm called via reflection with argument " + argument);
     }
 

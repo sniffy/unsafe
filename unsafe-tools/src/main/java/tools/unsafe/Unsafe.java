@@ -196,6 +196,7 @@ public final class Unsafe {
             try {
                 long overrideOffset = getSunMiscUnsafe().objectFieldOffset(FakeAccessibleObject.class.getDeclaredField("override"));
                 getSunMiscUnsafe().putBoolean(ao, overrideOffset, true);
+                System.out.println("Making " + ao + " accessible via Unsafe and FakeAccessibleObject");
             } catch (NoSuchFieldException e) {
                 throw new UnsafeException(e);
             }

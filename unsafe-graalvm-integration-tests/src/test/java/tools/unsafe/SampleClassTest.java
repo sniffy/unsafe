@@ -2,6 +2,8 @@ package tools.unsafe;
 
 import org.junit.Test;
 import sun.misc.Unsafe;
+import tools.unsafe.ng.Methods;
+import tools.unsafe.ng.StaticMethodRef;
 import tools.unsafe.vm.UnsafeVirtualMachine;
 import tools.unsafe.vm.VirtualMachineFamily;
 
@@ -89,6 +91,48 @@ public class SampleClassTest {
 
     }
 
+    private final static Field fooField;
+    private final static long fooOffset;
+
+    static {
+        Field f;
+        try {
+            f = SampleClass.class.getDeclaredField("foo");
+        } catch (Exception e) {
+            f = null;
+        }
+        fooField = f;
+        fooOffset = tools.unsafe.Unsafe.getSunMiscUnsafe().staticFieldOffset(fooField);
+    }
+
+    @Test
+    public void testNG() throws Throwable {
+        StaticMethodRef.VoidOneParam<String> privateMethod =
+                Methods.staticMethodRef(SampleClass.class.getDeclaredMethod("privateMethod", String.class)).
+                        asVoidMethod(String.class);
+        privateMethod.invoke("abracadabra");
+    }
+
+    @Test
+    public void testMethosLookupViaImpl() throws Throwable {
+
+        /*try {
+            MethodHandle privateMethod = MethodHandles.lookup().findStatic(SampleClass.class, "privateMethod", MethodType.methodType(void.class, String.class));
+            privateMethod.invoke("argument it should have not received");
+            fail("Should have failed");
+        } catch (Throwable e) {
+            assertNotNull(e);
+        }*/
+
+        StaticObjectFieldRef<MethodHandles.Lookup> implLookupField = new StaticObjectFieldRef<>(MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP"));
+        MethodHandles.Lookup implLookup = implLookupField.get();
+
+        MethodHandle privateMethod = implLookup.findStatic(SampleClass.class, "privateMethod", MethodType.methodType(void.class, String.class));
+
+        privateMethod.invoke("argument");
+
+
+    }
 
     @Test
     public void testUnsafeObjectSetter() throws Exception {
@@ -99,6 +143,25 @@ public class SampleClassTest {
             @Override
             public void set(Unsafe unsafe, Object value) throws NoSuchFieldException {
                 unsafe.putObject(SampleClass.class, unsafe.staticFieldOffset(SampleClass.class.getDeclaredField("foo")), value);
+            }
+        });
+
+        Object value = new Object();
+        foo.set(value);
+
+        assertEquals(value, SampleClass.getFoo());
+
+    }
+
+    @Test
+    public void testUnsafeObjectSetterUsingLambda() throws Exception {
+
+        Object object = SampleClass.getFoo();
+
+        StaticObjectFieldRef<Object> foo = new StaticObjectFieldRef<>(fooField, new UnsafeObjectSetter<Object>() {
+            @Override
+            public void set(Unsafe unsafe, Object value) throws NoSuchFieldException {
+                unsafe.putObject(SampleClass.class, tools.unsafe.Unsafe.getSunMiscUnsafe().staticFieldOffset(SampleClass.class.getDeclaredField("foo")), value);
             }
         });
 
