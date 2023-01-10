@@ -9,6 +9,7 @@ import java.util.concurrent.Callable;
 
 import static tools.unsafe.Unsafe.getSunMiscUnsafe;
 import static tools.unsafe.Unsafe.tryGetJavaVersion;
+import static tools.unsafe.vm.VirtualMachineFamily.ANDROID;
 import static tools.unsafe.vm.VirtualMachineFamily.GRAALVM_NATIVE;
 
 public class StaticObjectFieldRef<T> {
@@ -88,7 +89,7 @@ public class StaticObjectFieldRef<T> {
 
         ensureAccessible();
 
-        if (Modifier.isFinal(field.getModifiers()) && tryGetJavaVersion(8) >= 16) { // TODO: print warning here
+        if (Modifier.isFinal(field.getModifiers()) && (tryGetJavaVersion(8) >= 16 || ANDROID == UnsafeVirtualMachine.getFamily())) { // TODO: print warning here
             if (GRAALVM_NATIVE == UnsafeVirtualMachine.getFamily()) { // TODO: add version check (or not?)
                 throw new RuntimeException("Please extend from StaticFinalObjectFieldRef"); // TODO: come with a proper exception here
             } else {

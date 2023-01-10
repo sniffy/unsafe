@@ -70,7 +70,8 @@ public class Methods {
             @SuppressWarnings("BlockedPrivateApi") Field declaredField = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");
             Unsafe.setAccessible(declaredField);
             MethodHandles.Lookup implLookup = (MethodHandles.Lookup) declaredField.get(null);
-            return implLookup.in(context);
+            return implLookup;
+            //return implLookup.in(context);
         } catch (Exception e) {
             throw Unsafe.throwException(e);
         }
