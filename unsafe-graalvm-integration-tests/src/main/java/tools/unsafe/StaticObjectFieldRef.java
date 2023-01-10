@@ -5,6 +5,7 @@ import tools.unsafe.vm.UnsafeVirtualMachine;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.concurrent.Callable;
 
 import static tools.unsafe.Unsafe.getSunMiscUnsafe;
 import static tools.unsafe.Unsafe.tryGetJavaVersion;
@@ -23,6 +24,34 @@ public class StaticObjectFieldRef<T> {
     public StaticObjectFieldRef(Field field, UnsafeObjectSetter<T> unsafeObjectSetter) {
         this(field);
         this.unsafeObjectSetter = unsafeObjectSetter;
+    }
+
+    public StaticObjectFieldRef(Callable<Field> fieldSupplier, UnsafeObjectSetter<T> unsafeObjectSetter) {
+        this(getDeclaredField(fieldSupplier));
+        this.unsafeObjectSetter = unsafeObjectSetter;
+        System.out.println(unsafeObjectSetter.getClass().getProtectionDomain().getCodeSource());
+    }
+
+    public StaticObjectFieldRef(Class clazz, String fieldName, UnsafeObjectSetter<T> unsafeObjectSetter) {
+        this(getDeclaredField(clazz, fieldName));
+        this.unsafeObjectSetter = unsafeObjectSetter;
+        System.out.println(unsafeObjectSetter.getClass().getProtectionDomain().getCodeSource());
+    }
+
+    private final static Field getDeclaredField(Callable<Field> fieldSupplier) {
+        try {
+            return fieldSupplier.call();
+        } catch (Exception e) {
+            throw Unsafe.throwException(e);
+        }
+    }
+
+    private final static Field getDeclaredField(Class clazz, String fieldName) {
+        try {
+            return clazz.getDeclaredField(fieldName);
+        } catch (NoSuchFieldException e) {
+            throw Unsafe.throwException(e);
+        }
     }
 
     private void ensureAccessible() {

@@ -113,6 +113,14 @@ public class SampleClassTest {
         privateMethod.invoke("abracadabra");
     }
 
+    private final static StaticMethodRef.VoidOneParam<String> privateMethodField =
+            Methods.staticMethodRef(() -> SampleClass.class.getDeclaredMethod("privateMethod", String.class)).
+                    asVoidMethod(String.class);
+    private static final StaticObjectFieldRef<Object> fooFieldRef = new StaticObjectFieldRef<Object>(
+            () -> SampleClass.class.getDeclaredField("foo"),
+            (unsafe, value) -> unsafe.putObject(SampleClass.class, unsafe.staticFieldOffset(SampleClass.class.getDeclaredField("foo")), value)
+    );
+
     @Test
     public void testMethosLookupViaImpl() throws Throwable {
 
@@ -132,6 +140,19 @@ public class SampleClassTest {
         privateMethod.invoke("argument");
 
 
+    }
+
+    @Test
+    public void testNGViaField() throws Throwable {
+        privateMethodField.invoke("abracadabra");
+    }
+
+    @Test
+    public void testFooFieldRef() {
+        Object object = SampleClass.getFoo();
+        Object value = new Object();
+        fooFieldRef.set(value);
+        assertEquals(value, SampleClass.getFoo());
     }
 
     @Test

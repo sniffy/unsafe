@@ -10,8 +10,31 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
 
 public class Methods {
+
+    private final static Method foo;
+    private final static MethodHandle MH;
+
+    static {
+        Method a;
+        try {
+            a = Methods.class.getDeclaredMethod("foo", String.class);
+        } catch (Throwable e) {
+            a = null;
+        }
+        foo = a;
+
+        MethodHandle b;
+        try {
+            b = MethodHandles.lookup().findStatic(Methods.class, "foo", MethodType.methodType(int.class, String.class));
+        } catch (Throwable e) {
+            b = null;
+        }
+        MH = b;
+    }
+
 
     public static int foo(String a) {
         System.out.println(a);
@@ -19,6 +42,9 @@ public class Methods {
     }
 
     public static void main(String... args) throws Throwable {
+
+        MH.invoke(123, 4564564, "dfgdfgdf", new Object()); // IntelliJ fails to highlight issues here
+        foo.invoke(null, 34); // IntelliJ fails to highlight issues here
 
         MethodHandle mh = MethodHandles.lookup().
                 findStatic(Methods.class, "foo", MethodType.methodType(int.class, String.class));
@@ -77,6 +103,19 @@ public class Methods {
 
     public static MethodRef methodRef(Class<?> clazz, Method method) {
         return new MethodRef(method);
+    }
+
+    public static StaticMethodRef staticMethodRef(Callable<Method> methodCallable) {
+        // TODO: validate static flag
+        return new StaticMethodRef(getMethod(methodCallable));
+    }
+
+    private static Method getMethod(Callable<Method> methodCallable) {
+        try {
+            return methodCallable.call();
+        } catch (Exception e) {
+            throw Unsafe.throwException(e);
+        }
     }
 
     public static StaticMethodRef staticMethodRef(Method method) {

@@ -1,6 +1,5 @@
 package tools.unsafe.reflection.field.objects.resolved;
 
-import tools.unsafe.Unsafe;
 import tools.unsafe.reflection.UnsafeInvocationException;
 import tools.unsafe.reflection.clazz.ClassRef;
 import tools.unsafe.reflection.field.booleans.resolved.ResolvedStaticBooleanFieldRef;
@@ -77,9 +76,6 @@ public class ResolvedStaticObjectFieldRef<C, T> extends AbstractObjectFieldRef<C
         System.out.println("UNSAFE=" + UNSAFE);
         System.out.println("object=" + object);
 
-        // Unsafe works only with constant values
-        Unsafe.getSunMiscUnsafe().putObjectVolatile(object, UNSAFE.staticFieldOffset(field), new Object());
-        if (true) return;
 
         try {
             if (field.getType() == Boolean.TYPE && value instanceof Boolean) {
