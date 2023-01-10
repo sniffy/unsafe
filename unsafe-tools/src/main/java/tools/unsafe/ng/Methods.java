@@ -66,12 +66,15 @@ public class Methods {
     // TODO: move to separate Java 7+ only class
     public static MethodHandles.Lookup privateLookupIn(Class<?> context) {
         //return null;
+
         try {
+            if (true) //noinspection Since15
+                return MethodHandles.privateLookupIn(context, MethodHandles.lookup());
+
             @SuppressWarnings("BlockedPrivateApi") Field declaredField = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");
             Unsafe.setAccessible(declaredField);
             MethodHandles.Lookup implLookup = (MethodHandles.Lookup) declaredField.get(null);
-            return implLookup;
-            //return implLookup.in(context);
+            return implLookup.in(context);
         } catch (Exception e) {
             throw Unsafe.throwException(e);
         }

@@ -132,13 +132,13 @@ public class SampleClassTest {
     @Test
     public void testMethosLookupViaImpl() throws Throwable {
 
-        /*try {
+        try {
             MethodHandle privateMethod = MethodHandles.lookup().findStatic(SampleClass.class, "privateMethod", MethodType.methodType(void.class, String.class));
             privateMethod.invoke("argument it should have not received");
             fail("Should have failed");
         } catch (Throwable e) {
             assertNotNull(e);
-        }*/
+        }
 
         StaticObjectFieldRef<MethodHandles.Lookup> implLookupField = new StaticObjectFieldRef<MethodHandles.Lookup>(MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP"));
         MethodHandles.Lookup implLookup = implLookupField.get();
