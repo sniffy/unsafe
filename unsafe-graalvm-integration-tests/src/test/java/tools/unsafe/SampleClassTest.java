@@ -132,7 +132,7 @@ public class SampleClassTest {
             assertNotNull(e);
         }*/
 
-        StaticObjectFieldRef<MethodHandles.Lookup> implLookupField = new StaticObjectFieldRef<>(MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP"));
+        StaticObjectFieldRef<MethodHandles.Lookup> implLookupField = new StaticObjectFieldRef<MethodHandles.Lookup>(MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP"));
         MethodHandles.Lookup implLookup = implLookupField.get();
 
         MethodHandle privateMethod = implLookup.findStatic(SampleClass.class, "privateMethod", MethodType.methodType(void.class, String.class));
@@ -160,7 +160,7 @@ public class SampleClassTest {
 
         Object object = SampleClass.getFoo();
 
-        StaticObjectFieldRef<Object> foo = new StaticObjectFieldRef<>(SampleClass.class.getDeclaredField("foo"), new UnsafeObjectSetter<Object>() {
+        StaticObjectFieldRef<Object> foo = new StaticObjectFieldRef<Object>(SampleClass.class.getDeclaredField("foo"), new UnsafeObjectSetter<Object>() {
             @Override
             public void set(Unsafe unsafe, Object value) throws NoSuchFieldException {
                 unsafe.putObject(SampleClass.class, unsafe.staticFieldOffset(SampleClass.class.getDeclaredField("foo")), value);
@@ -179,7 +179,7 @@ public class SampleClassTest {
 
         Object object = SampleClass.getFoo();
 
-        StaticObjectFieldRef<Object> foo = new StaticObjectFieldRef<>(fooField, new UnsafeObjectSetter<Object>() {
+        StaticObjectFieldRef<Object> foo = new StaticObjectFieldRef<Object>(fooField, new UnsafeObjectSetter<Object>() {
             @Override
             public void set(Unsafe unsafe, Object value) throws NoSuchFieldException {
                 unsafe.putObject(SampleClass.class, tools.unsafe.Unsafe.getSunMiscUnsafe().staticFieldOffset(SampleClass.class.getDeclaredField("foo")), value);
