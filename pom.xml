@@ -22,6 +22,7 @@
 
     <properties>
         <java.5>5</java.5>
+        <java.8>8</java.8>
         <maven.compiler.source>${java.5}</maven.compiler.source>
         <maven.compiler.target>${java.5}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -94,6 +95,16 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>jdk9plus</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <jdk>[1.9,)</jdk>
+            </activation>
+            <properties>
+                <java.5>7</java.5>
+            </properties>
+        </profile>
         <profile>
             <!-- https://stackoverflow.com/questions/63541942/why-is-javac-source-1-5-allowing-override-on-interface-methods -->
             <!-- https://youtrack.jetbrains.com/issue/IDEA-85478 -->
