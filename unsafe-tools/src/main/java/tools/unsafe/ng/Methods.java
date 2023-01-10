@@ -50,7 +50,8 @@ public class Methods {
         MethodHandle mh = MethodHandles.lookup().
                 findStatic(Methods.class, "foo", MethodType.methodType(int.class, String.class));
 
-        int r = (int) mh.invoke("fg");
+        //int r = (int) mh.invoke("fg"); // this works only on new Javas
+        Integer r = (Integer) mh.invoke("fg");
 
         MethodRef.NonVoidOneParam<Integer, Methods, String> method =
                 Methods.methodRef(Methods.class.getDeclaredMethod("foo", String.class)).asNonVoidMethod(
@@ -58,7 +59,7 @@ public class Methods {
                         Methods.class,
                         String.class
                 );
-        int res = method.invoke(new Methods(), "fdgsdfgs");
+        Integer res = method.invoke(new Methods(), "fdgsdfgs");
     }
 
     // TODO: return Lookup using multi-release jars
