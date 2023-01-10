@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
+// TODO: create a way to create wrappers which throw certain Exceptions
 public class Methods {
 
     private final static Method foo;
@@ -63,7 +64,15 @@ public class Methods {
     // TODO: return Lookup using multi-release jars
     // TODO: move to separate Java 7+ only class
     public static MethodHandles.Lookup privateLookupIn(Class<?> context) {
-        return null;
+        //return null;
+        try {
+            @SuppressWarnings("BlockedPrivateApi") Field declaredField = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");
+            Unsafe.setAccessible(declaredField);
+            MethodHandles.Lookup implLookup = (MethodHandles.Lookup) declaredField.get(null);
+            return implLookup.in(context);
+        } catch (Exception e) {
+            throw Unsafe.throwException(e);
+        }
     }
 
     public static AccessibleObject accessibleObject(AccessibleObject accessibleObject) {

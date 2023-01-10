@@ -21,7 +21,7 @@
     </modules>
 
     <properties>
-        <java.5>7</java.5>
+        <java.5>5</java.5>
         <maven.compiler.source>${java.5}</maven.compiler.source>
         <maven.compiler.target>${java.5}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -105,7 +105,7 @@
                 </property>
             </activation>
             <properties>
-                <java.5>7</java.5>
+                <java.5>6</java.5>
             </properties>
         </profile>
     </profiles>

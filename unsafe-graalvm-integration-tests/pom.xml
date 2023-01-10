@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>unsafe-graalvm-integration-tests</artifactId>
-    <build>
+    <!--<build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -21,7 +21,7 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+    </build>-->
 
     <properties>
         <native-image-maven-plugin.version>21.2.0</native-image-maven-plugin.version>
@@ -42,7 +42,7 @@
             <id>native</id>
 
             <properties>
-                <java.5>7</java.5>
+                <java.5>8</java.5>
             </properties>
             <dependencies>
                 <dependency>

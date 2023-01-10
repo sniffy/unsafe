@@ -1,6 +1,7 @@
 package tools.unsafe.ng;
 
-import java.lang.reflect.InvocationTargetException;
+import tools.unsafe.ng.impl.MethodHandleMethodInvoker;
+
 import java.lang.reflect.Method;
 
 public class StaticMethodRef extends AbstractMethodRef {
@@ -13,9 +14,11 @@ public class StaticMethodRef extends AbstractMethodRef {
     // or may be not if filosophy is to keep MethodHandles =-like API
     public Object invoke(Object... args) throws Throwable {
         try {
-            return method.invoke(null, args);
-        } catch (InvocationTargetException e) {
-            throw e.getCause();
+            //return method.invoke(null, args);
+            return new MethodHandleMethodInvoker(method).invoke(null, args);
+        } catch (/*InvocationTargetException*/ Throwable e) {
+            //throw e.getCause();
+            throw e;
         }
     }
 
