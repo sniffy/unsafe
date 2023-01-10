@@ -37,14 +37,14 @@ public class Methods {
     }
 
 
-    public static int foo(String a) {
+    /*public static int foo(String a) {
         System.out.println(a);
         return a.length();
     }
 
     public static void main(String... args) throws Throwable {
 
-        MH.invoke(123, 4564564, "dfgdfgdf", new Object()); // IntelliJ fails to highlight issues here
+        MH.invoke(123, 4564564, "dfgdfgdf", new Object()); // IntelliJ fails to highlight issues here, but compilation (with java 8 will actually fail - TODO: investigate
         foo.invoke(null, 34); // IntelliJ fails to highlight issues here
 
         MethodHandle mh = MethodHandles.lookup().
@@ -60,7 +60,7 @@ public class Methods {
                         String.class
                 );
         Integer res = method.invoke(new Methods(), "fdgsdfgs");
-    }
+    }*/
 
     // TODO: return Lookup using multi-release jars
     // TODO: move to separate Java 7+ only class
