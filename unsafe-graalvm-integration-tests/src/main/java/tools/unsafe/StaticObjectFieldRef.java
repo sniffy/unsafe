@@ -97,6 +97,18 @@ public class StaticObjectFieldRef<T> {
                 getSunMiscUnsafe().putObject(field.getDeclaringClass(), getSunMiscUnsafe().staticFieldOffset(field), value);
             }
         } else {
+
+            if (Modifier.isFinal(field.getModifiers())) {
+                // remove final
+                try {
+                    Field modifiersField = Field.class.getDeclaredField("modifiers");
+                    Unsafe.setAccessible(modifiersField);
+                    modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+                } catch (Exception e) {
+                    throw Unsafe.throwException(e);
+                }
+            }
+
             // set via reflection
             try {
                 field.set(null, value);
