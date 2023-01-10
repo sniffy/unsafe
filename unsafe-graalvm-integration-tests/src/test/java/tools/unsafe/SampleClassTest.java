@@ -29,10 +29,12 @@ public class SampleClassTest {
     }*/
 
     private static <T> T privateLookup(Class clazz) throws IllegalAccessException, NoSuchMethodException {
-        return (T) MethodHandles.privateLookupIn(
+        return (T) Methods.privateLookupIn(SampleClass.class);
+        // code below works on JAva 9+ only
+        /*return (T) MethodHandles.privateLookupIn(
                 SampleClass.class,
                 MethodHandles.lookup()
-        );
+        );*/
     }
 
     @Test
@@ -75,9 +77,15 @@ public class SampleClassTest {
 
         privateMethod.invoke("argument");*/
 
-        MethodHandle privateMethod = MethodHandles.privateLookupIn(
+        /*MethodHandle privateMethod = MethodHandles.privateLookupIn(
                 SampleClass.class,
                 MethodHandles.lookup()
+        ).findStatic(
+                SampleClass.class, "privateMethod", MethodType.methodType(void.class, String.class)
+        );*/
+
+        MethodHandle privateMethod = Methods.privateLookupIn(
+                SampleClass.class
         ).findStatic(
                 SampleClass.class, "privateMethod", MethodType.methodType(void.class, String.class)
         );
@@ -218,7 +226,7 @@ public class SampleClassTest {
                     Field declaredField = SampleClass.class.getDeclaredField("foo");
                     long fieldOffset = tools.unsafe.Unsafe.getSunMiscUnsafe().staticFieldOffset(declaredField);
 
-                    StaticFinalObjectFieldRef<Object> finalFoo = new StaticFinalObjectFieldRef<>(declaredField, SampleClass.class, fieldOffset) {
+                    StaticFinalObjectFieldRef<Object> finalFoo = new StaticFinalObjectFieldRef<Object>(declaredField, SampleClass.class, fieldOffset) {
 
                         @Override
                         public void set(Unsafe unsafe, Object value) throws NoSuchFieldException {
