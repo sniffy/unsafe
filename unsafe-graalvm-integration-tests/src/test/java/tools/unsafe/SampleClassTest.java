@@ -62,6 +62,9 @@ public class SampleClassTest {
     @Test
     public void testMethosLookup() throws Throwable {
 
+        if (VirtualMachineFamily.GRAALVM_NATIVE == UnsafeVirtualMachine.getFamily() && UnsafeVirtualMachine.getJavaVersion() < 9)
+            return;
+
         /*try {
             MethodHandle privateMethod = MethodHandles.lookup().findStatic(SampleClass.class, "privateMethod", MethodType.methodType(void.class, String.class));
             privateMethod.invoke("argument it should have not received");
@@ -131,6 +134,9 @@ public class SampleClassTest {
 
     @Test
     public void testMethosLookupViaImpl() throws Throwable {
+
+        if (VirtualMachineFamily.GRAALVM_NATIVE == UnsafeVirtualMachine.getFamily() && UnsafeVirtualMachine.getJavaVersion() < 9)
+            return;
 
         try {
             MethodHandle privateMethod = MethodHandles.lookup().findStatic(SampleClass.class, "privateMethod", MethodType.methodType(void.class, String.class));

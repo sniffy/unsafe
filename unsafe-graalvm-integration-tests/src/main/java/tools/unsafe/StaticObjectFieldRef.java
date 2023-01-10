@@ -63,6 +63,17 @@ public class StaticObjectFieldRef<T> {
                 assert false : e;
             }
         }
+
+        if (Modifier.isFinal(field.getModifiers()) && tryGetJavaVersion(8) < 16 && ANDROID != UnsafeVirtualMachine.getFamily() && null == unsafeObjectSetter) {
+            // remove final
+            try {
+                Field modifiersField = Field.class.getDeclaredField("modifiers");
+                Unsafe.setAccessible(modifiersField);
+                modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+            } catch (Exception e) {
+                throw Unsafe.throwException(e);
+            }
+        }
     }
 
     public T get() {
@@ -98,18 +109,6 @@ public class StaticObjectFieldRef<T> {
                 getSunMiscUnsafe().putObject(field.getDeclaringClass(), getSunMiscUnsafe().staticFieldOffset(field), value);
             }
         } else {
-
-            if (Modifier.isFinal(field.getModifiers())) {
-                // remove final
-                try {
-                    Field modifiersField = Field.class.getDeclaredField("modifiers");
-                    Unsafe.setAccessible(modifiersField);
-                    modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-                } catch (Exception e) {
-                    throw Unsafe.throwException(e);
-                }
-            }
-
             // set via reflection
             try {
                 field.set(null, value);

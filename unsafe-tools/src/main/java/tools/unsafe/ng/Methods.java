@@ -68,8 +68,10 @@ public class Methods {
         //return null;
 
         try {
-            if (true) //noinspection Since15
-                return MethodHandles.privateLookupIn(context, MethodHandles.lookup());
+
+            // TODO: two lines below are Java9+ only
+            /*if (true) //noinspection Since15
+                return MethodHandles.privateLookupIn(context, MethodHandles.lookup());*/
 
             @SuppressWarnings("BlockedPrivateApi") Field declaredField = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");
             Unsafe.setAccessible(declaredField);
