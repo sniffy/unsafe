@@ -10,18 +10,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>unsafe-graalvm-integration-tests</artifactId>
-    <!--<build>
+
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>9</source>
-                    <target>9</target>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
         </plugins>
-    </build>-->
+    </build>
 
     <properties>
         <native-image-maven-plugin.version>21.2.0</native-image-maven-plugin.version>
