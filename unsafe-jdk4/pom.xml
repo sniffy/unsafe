@@ -41,9 +41,10 @@
                                 <checkSignatureRule
                                         implementation="org.codehaus.mojo.animal_sniffer.enforcer.CheckSignatureRule">
                                     <signature>
-                                        <groupId>org.jvnet.animal-sniffer</groupId>
-                                        <artifactId>java1.4</artifactId>
+                                        <groupId>org.codehaus.mojo.signature</groupId>
+                                        <artifactId>java14</artifactId>
                                         <version>1.0</version>
+
                                     </signature>
                                     <!--<ignores>
                                         <ignore>sun.misc.Unsafe</ignore>
