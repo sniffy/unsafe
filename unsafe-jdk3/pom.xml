@@ -35,7 +35,8 @@
                                     <!-- https://mvnrepository.com/artifact/org.codehaus.mojo.signature/java13 -->
                                     <signature>
                                         <groupId>org.codehaus.mojo.signature</groupId>
-                                        <artifactId>java13</artifactId>
+                                        <!--<artifactId>java13</artifactId>--> <!-- fix it -->
+                                        <artifactId>java14</artifactId>
                                         <version>1.0</version>
                                     </signature>
 
