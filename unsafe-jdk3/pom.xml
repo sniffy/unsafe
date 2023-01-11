@@ -33,11 +33,11 @@
                                 <checkSignatureRule
                                         implementation="org.codehaus.mojo.animal_sniffer.enforcer.CheckSignatureRule">
                                     <!-- https://mvnrepository.com/artifact/org.codehaus.mojo.signature/java13 -->
-                                    <dependency>
+                                    <signature>
                                         <groupId>org.codehaus.mojo.signature</groupId>
                                         <artifactId>java13</artifactId>
                                         <version>1.0</version>
-                                    </dependency>
+                                    </signature>
 
                                     <!--<ignores>
                                         <ignore>sun.misc.Unsafe</ignore>
