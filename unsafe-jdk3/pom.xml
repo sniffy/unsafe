@@ -20,6 +20,35 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.4.0</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.codehaus.mojo.signature</groupId>
+                                    <artifactId>java13</artifactId>
+                                    <version>1.0</version>
+                                    <classifier>java13</classifier>
+                                    <type>signature</type>
+                                    <outputDirectory>
+                                        ${settings.localRepository}/org/codehaus/mojo/signature/java13/1.0
+                                    </outputDirectory>
+                                    <destFileName>java13-1.0.signature</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
                 <executions>
                     <execution>
@@ -35,8 +64,8 @@
                                     <!-- https://mvnrepository.com/artifact/org.codehaus.mojo.signature/java13 -->
                                     <signature>
                                         <groupId>org.codehaus.mojo.signature</groupId>
-                                        <!--<artifactId>java13</artifactId>--> <!-- fix it -->
-                                        <artifactId>java14</artifactId>
+                                        <artifactId>java13</artifactId>
+                                        <!--<artifactId>java14</artifactId>-->
                                         <version>1.0</version>
                                     </signature>
                                     <ignores>
