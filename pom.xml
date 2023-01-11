@@ -10,6 +10,9 @@
     <version>1.0-SNAPSHOT</version>
 
     <modules>
+        <module>unsafe-jdk3</module>
+        <module>unsafe-jdk4</module>
+        <module>unsafe-jdk5</module>
         <module>unsafe-agent</module>
         <module>unsafe-poet</module>
         <module>unsafe-tools</module>
@@ -21,10 +24,12 @@
     </modules>
 
     <properties>
+        <java.3>1.3</java.3>
+        <java.4>1.4</java.4>
         <java.5>5</java.5>
         <java.8>8</java.8>
-        <maven.compiler.source>${java.5}</maven.compiler.source>
-        <maven.compiler.target>${java.5}</maven.compiler.target>
+        <maven.compiler.source>${java.4}</maven.compiler.source>
+        <maven.compiler.target>${java.4}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-enforcer-plugin.version>3.1.0</maven-enforcer-plugin.version>
         <animal-sniffer-enforcer-rule.version>1.22</animal-sniffer-enforcer-rule.version>
@@ -102,6 +107,8 @@
                 <jdk>[1.9,)</jdk>
             </activation>
             <properties>
+                <java.3>7</java.3>
+                <java.4>7</java.4>
                 <java.5>7</java.5>
             </properties>
         </profile>

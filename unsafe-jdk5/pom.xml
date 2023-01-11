@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>unsafe</artifactId>
@@ -9,23 +9,17 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>unsafe-tools</artifactId>
+    <artifactId>unsafe-jdk5</artifactId>
 
     <properties>
         <maven.compiler.source>${java.5}</maven.compiler.source>
         <maven.compiler.target>${java.5}</maven.compiler.target>
     </properties>
 
-
     <dependencies>
         <dependency>
             <groupId>io.sniffy.unsafe</groupId>
-            <artifactId>unsafe-agent</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>io.sniffy.unsafe</groupId>
-            <artifactId>unsafe-spi-jdk7on</artifactId>
+            <artifactId>unsafe-jdk4</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
@@ -63,44 +57,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>jdk5-test</id>
-            <activation>
-                <property>
-                    <name>jdk5.home</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>3.1.0</version>
-                        <configuration>
-                            <executable>${jdk5.home}/bin/java</executable>
-                            <classpathScope>test</classpathScope>
-                            <arguments>
-                                <argument>-classpath</argument>
-                                <classpath/>
-                                <argument>org.junit.runner.JUnitCore</argument>
-                                <argument>tools.unsafe.UnsafeTest</argument>
-                            </arguments>
-                            <toolchain>test</toolchain>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <phase>test</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
 </project>
