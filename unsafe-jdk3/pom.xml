@@ -39,10 +39,9 @@
                                         <artifactId>java14</artifactId>
                                         <version>1.0</version>
                                     </signature>
-
-                                    <!--<ignores>
+                                    <ignores>
                                         <ignore>sun.misc.Unsafe</ignore>
-                                    </ignores>-->
+                                    </ignores>
                                 </checkSignatureRule>
                             </rules>
                             <fail>true</fail>
