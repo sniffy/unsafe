@@ -73,6 +73,8 @@ jobs:
         run: sed -i 's/ia32/ia32 | ia64 | i?86/g' ./jdk1.2.2/jre/bin/.java_wrapper
       - name: Patch 3
         run: sed -i 's/ia32/ia32 | ia64 | i?86/g' ./jdk1.2.2/jre/bin/realpath
+      - name: DEBUG
+        run: cat ./jdk1.2.2/jre/bin/realpath
       - name: Java 2 version
         run: ./jdk1.2.2/bin/java -version
         env:
