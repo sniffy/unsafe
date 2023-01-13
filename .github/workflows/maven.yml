@@ -79,9 +79,9 @@ jobs:
       - name: Java 2 version
         run: ./jdk1.2.2/bin/java -version
 
-      - name: ls -la
+      - name: tree ./jdk1.2.2
         if: always()
-        run: ls -la
+        run: tree ./jdk1.2.2
 
 
       - name: Set up JDK 8
