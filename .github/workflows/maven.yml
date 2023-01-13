@@ -79,6 +79,11 @@ jobs:
       - name: Java 2 version
         run: ./jdk1.2.2/bin/java -version
 
+      - name: ls -la
+        if: always()
+        run: ls -la
+
+
       - name: Set up JDK 8
         uses: actions/setup-java@v3
         with:
