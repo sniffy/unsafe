@@ -69,6 +69,8 @@ jobs:
         run: tar -xzvf jdk-1_2_2_017-linux-i586.tar.gz
       - name: Patch 1
         run: sed -i 's/ia32/ia32 | ia64 | i?86/g' ./jdk1.2.2/bin/.java_wrapper
+      - name: Patch 1
+        run: sed -i 's/unset jre/echo ${JREHOME}/lib/${proc}/libjava.so/g' ./jdk1.2.2/bin/.java_wrapper
       - name: Patch 2
         run: sed -i 's/ia32/ia32 | ia64 | i?86/g' ./jdk1.2.2/jre/bin/.java_wrapper
       - name: Patch 3
