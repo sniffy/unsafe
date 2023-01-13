@@ -73,6 +73,8 @@ jobs:
         run: sed -i 's/ia32/ia32 | ia64 | i?86/g' ./jdk1.2.2/jre/bin/.java_wrapper
       - name: Patch 3
         run: sed -i 's/ia32/ia32 | ia64 | i?86/g' ./jdk1.2.2/jre/bin/realpath
+      - name: install lib32z1
+        run: sudo apt-get install gcc-multilib
       - name: DEBUG
         run: ldd ./jdk1.2.2/bin/java
       - name: Java 2 version
