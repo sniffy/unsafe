@@ -67,14 +67,16 @@ jobs:
           fileName: "jdk-1_2_2_017-linux-i586.tar.gz"
       - name: install JDK
         run: tar -xzvf jdk-1_2_2_017-linux-i586.tar.gz
-      - name: list files
-        run: ls -la
-      - name: debug
-        run: echo $LD_LIBRARY_PATH
+      - name: Patch 1
+        run: sed -i 's/ia32/ia32 | ia64 | i?86/g' ./jdk1.2.2/bin/.java_wrapper
+      - name: Patch 2
+        run: sed -i 's/ia32/ia32 | ia64 | i?86/g' ./jdk1.2.2/jre/bin/.java_wrapper
+      - name: Patch 3
+        run: sed -i 's/ia32/ia32 | ia64 | i?86/g' ./jdk1.2.2/jre/bin/realpath
       - name: Java 2 version
         run: ./jdk1.2.2/bin/java -version
         env:
-          LD_LIBRARY_PATH: $LD_LIBRARY_PATH:./jdk1.2.2/jre/lib/i386
+          LD_LIBRARY_PATH: ./jdk1.2.2/jre/lib/i386
 
       - name: Set up JDK 8
         uses: actions/setup-java@v3
