@@ -26,6 +26,15 @@ public class ProvidersBootstrap {
 
             for (int i = 1; i <= version; i++) {
                 switch (i) {
+                    case 9:
+                        try {
+                            Java9Providers.registerProviders();
+                        } catch (Throwable e) {
+                            if (UnsafeToolsLogging.stdErrEnabled()) {
+                                e.printStackTrace();
+                            }
+                        }
+                        break;
                     case 8:
                         try {
                             Java8Providers.registerProviders();
