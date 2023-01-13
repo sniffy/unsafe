@@ -9,24 +9,24 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>unsafe-jdk3</artifactId>
+    <artifactId>unsafe-jdk1</artifactId>
 
     <properties>
-        <maven.compiler.source>${java.3}</maven.compiler.source>
-        <maven.compiler.target>${java.3}</maven.compiler.target>
+        <maven.compiler.source>${java.1}</maven.compiler.source>
+        <maven.compiler.target>${java.1}</maven.compiler.target>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>io.sniffy.unsafe</groupId>
-            <artifactId>unsafe-jdk2</artifactId>
+            <artifactId>unsafe-jdk0</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>3.4.0</version>
@@ -54,7 +54,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
@@ -69,11 +69,10 @@
                             <rules>
                                 <checkSignatureRule
                                         implementation="org.codehaus.mojo.animal_sniffer.enforcer.CheckSignatureRule">
-                                    <!-- https://mvnrepository.com/artifact/org.codehaus.mojo.signature/java13 -->
+                                    <!-- TODO: find proper signature for Java 1.0 -->
                                     <signature>
                                         <groupId>org.codehaus.mojo.signature</groupId>
-                                        <artifactId>java13</artifactId>
-                                        <!--<artifactId>java14</artifactId>-->
+                                        <artifactId>java12</artifactId>
                                         <version>1.0</version>
                                     </signature>
                                 </checkSignatureRule>

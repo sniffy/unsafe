@@ -1,10 +1,9 @@
 package tools.unsafe.reflection.constructor;
 
-import tools.unsafe.ConstructorInvoker;
-import tools.unsafe.InternalUnsafeException;
 import tools.unsafe.Unsafe;
-import tools.unsafe.UnsafeToolsSPIs;
 import tools.unsafe.reflection.UnsafeInvocationException;
+import tools.unsafe.spi.ServiceProviders;
+import tools.unsafe.spi.constructor.ConstructorInvoker;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Constructor;
@@ -38,14 +37,10 @@ public class ZeroArgsClassConstructorRef<C> {
         }
     }
 
-    public void invokeOnInstance(@Nonnull C instance) throws UnsafeInvocationException {
-        try {
-            ConstructorInvoker<C> constructorInvoker = UnsafeToolsSPIs.getConstructorInvokerFactory().
-                    createConstructorInvoker(constructor.getDeclaringClass());
-            constructorInvoker.invoke(instance);
-        } catch (InternalUnsafeException e) {
-            throw new UnsafeInvocationException(e);
-        }
+    public void invokeOnInstance(@Nonnull C instance) {
+        ConstructorInvoker<C> constructorInvoker = ServiceProviders.getInstance().getConstructorInvokerServiceProvider().
+                createConstructorInvoker(constructor.getDeclaringClass(), constructor.getParameterTypes());
+        constructorInvoker.invoke(instance);
     }
 
 }

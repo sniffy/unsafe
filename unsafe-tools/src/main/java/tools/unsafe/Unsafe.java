@@ -3,6 +3,7 @@ package tools.unsafe;
 import tools.unsafe.reflection.UnsafeException;
 import tools.unsafe.reflection.clazz.ClassRef;
 import tools.unsafe.reflection.clazz.UnresolvedClassRef;
+import tools.unsafe.spi.ProvidersBootstrap;
 import tools.unsafe.vm.UnsafeVirtualMachine;
 
 import javax.annotation.Nonnull;
@@ -42,14 +43,16 @@ public final class Unsafe {
     }
 
     static {
-        if (tryGetJavaVersion(8) >= 7) {
-            UnresolvedClassRef<Object> classRef = ClassRef.of(Unsafe.class).siblingClass("UnsafeToolsJDK7SPIProvider");
+        // siblingClass wouldn't work on GraalVM properly - maybe move it to separate "fluent reflection" class
+        /*if (tryGetJavaVersion(8) >= 7) {
+            UnresolvedClassRef<Object> classRef = UnresolvedClassRef.of("io.sniffy.unsafe.JDK7Providers");
             assert classRef.isResolved();
-        }
+        }*/
+        ProvidersBootstrap.registerProviders();
     }
 
     public static int tryGetJavaVersion(int fallbackJavaVersion) {
-        return InternalUnsafe.tryGetJavaVersion(fallbackJavaVersion);
+        return Java.versionWithFallback(fallbackJavaVersion);
     }
 
     public static @Nonnull RuntimeException throwException(@Nonnull Throwable e) {
