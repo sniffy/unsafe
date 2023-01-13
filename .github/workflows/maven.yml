@@ -79,9 +79,9 @@ jobs:
       - name: Java 2 version
         run: ./jdk1.2.2/bin/java -version
 
-      - name: tree ./jdk1.2.2
+      - name: ls /var/crash/
         if: always()
-        run: tree ./jdk1.2.2
+        run: ls /var/crash/
 
 
       - name: Set up JDK 8
