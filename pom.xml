@@ -113,6 +113,20 @@
 
     <profiles>
         <profile>
+            <id>jdk8plus</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <jdk>[1.9,)</jdk>
+            </activation>
+            <properties>
+                <java.0>1.4</java.0>
+                <java.1>1.4</java.1>
+                <java.2>1.4</java.2>
+                <java.3>1.4</java.3>
+                <java.4>1.4</java.4>
+            </properties>
+        </profile>
+        <profile>
             <id>jdk9plus</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
