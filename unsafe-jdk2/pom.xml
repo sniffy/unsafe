@@ -74,6 +74,9 @@
                                         <artifactId>java12</artifactId>
                                         <version>1.0</version>
                                     </signature>
+                                    <ignores>
+                                        <ignore>java.lang.NoClassDefFoundError</ignore>
+                                    </ignores>
                                 </checkSignatureRule>
                             </rules>
                             <fail>true</fail>
