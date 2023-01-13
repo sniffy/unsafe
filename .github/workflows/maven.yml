@@ -68,15 +68,14 @@ jobs:
       - name: install JDK
         run: tar -xzvf jdk-1_2_2_017-linux-i586.tar.gz
       - name: Patch 1
-        run: sed -i 's/ia32/ia32 | ia64 | i?86/g' ./jdk1.2.2/bin/.java_wrapper
-      - name: Patch 1
-        run: sed -i 's/unset jre/echo $JREHOME $proc /g' ./jdk1.2.2/bin/.java_wrapper
+        run: sed -i 's/ia32/ia32 | ia64 | x86_64 | i?86/g' ./jdk1.2.2/bin/.java_wrapper
       - name: Patch 2
-        run: sed -i 's/ia32/ia32 | ia64 | i?86/g' ./jdk1.2.2/jre/bin/.java_wrapper
+        run: sed -i 's/ia32/ia32 | ia64 | x86_64 | i?86/g' ./jdk1.2.2/jre/bin/.java_wrapper
       - name: Patch 3
-        run: sed -i 's/ia32/ia32 | ia64 | i?86/g' ./jdk1.2.2/jre/bin/realpath
+        run: sed -i 's/ia32/ia32 | ia64 | x86_64 | i?86/g' ./jdk1.2.2/jre/bin/realpath
       - name: install lib32z1
         run: sudo apt-get install gcc-multilib
+        # check that we actually need it
       - name: Java 2 version
         run: ./jdk1.2.2/bin/java -version
 
