@@ -3,6 +3,7 @@
 ### TODO
 
 Duck Typing and mimicking
+get parameter names
 
 ### GraalVM
 
