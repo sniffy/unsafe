@@ -124,6 +124,7 @@
                 <java.2>1.4</java.2>
                 <java.3>1.4</java.3>
                 <java.4>1.4</java.4>
+                <java.9>8</java.9> <!-- INSTEAD SKIP MODULE ON JAVA 8-->
             </properties>
         </profile>
         <profile>
