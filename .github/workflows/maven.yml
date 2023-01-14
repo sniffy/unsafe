@@ -79,9 +79,12 @@ jobs:
       - name: Java 2 version
         run: ./jdk1.2.2/bin/java -version
 
-      - name: ls /var/crash/
+      - name: tree /var
         if: always()
-        run: find / -name core.dump
+        run: tree /var
+      - name: pwd
+        if: always()
+        run: pwd
 
 
       - name: Set up JDK 8
