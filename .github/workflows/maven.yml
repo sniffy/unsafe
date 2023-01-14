@@ -81,7 +81,7 @@ jobs:
 
       - name: ls /var/crash/
         if: always()
-        run: ls /var/crash/
+        run: find / -name core.dump
 
 
       - name: Set up JDK 8
