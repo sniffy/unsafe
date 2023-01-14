@@ -79,12 +79,17 @@ jobs:
       - name: Java 2 version
         run: ./jdk1.2.2/bin/java -version
 
-      - name: tree /var
+      - name: cat /var/lib/apport/coredump
         if: always()
-        run: tree /var
-      - name: pwd
+        run: cat /var/lib/apport/coredump
+
+      - name: cat /var/lib/systemd/coredump
         if: always()
-        run: pwd
+        run: cat /var/lib/systemd/coredump
+
+      - name: tree /home/runner/work/unsafe/unsafe
+        if: always()
+        run: tree /home/runner/work/unsafe/unsafe
 
 
       - name: Set up JDK 8
