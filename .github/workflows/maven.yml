@@ -67,26 +67,6 @@ jobs:
           fileName: "j2sdk-1_4_2_19-linux-i586.bin"
       - name: install JDK
         run: chmod +x ./j2sdk-1_4_2_19-linux-i586.bin && yes | ./j2sdk-1_4_2_19-linux-i586.bin
-      - name: ls -la
-        run: ls -la
-      - name: tree ./j2sdk1.4.2_19
-        run: tree ./j2sdk1.4.2_19
-
-      - name: Java 4 version
-        run: ./j2sdk1.4.2_19/bin/java -version
-
-      - name: target 1.1
-        run: ./j2sdk1.4.2_19/bin/javac -target 1.1
-        if: always()
-      - name: target 1.2
-        run: ./j2sdk1.4.2_19/bin/javac -target 1.2
-        if: always()
-      - name: target 1.3
-        run: ./j2sdk1.4.2_19/bin/javac -target 1.3
-        if: always()
-      - name: target 1.0
-        run: ./j2sdk1.4.2_19/bin/javac -target 1.0
-        if: always()
 
       - name: Set up JDK 8
         uses: actions/setup-java@v3
