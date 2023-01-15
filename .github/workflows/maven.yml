@@ -66,7 +66,7 @@ jobs:
           tag: "j2sdk-1_3_1_20-linux-i586.bin"
           fileName: "j2sdk-1_3_1_20-linux-i586.bin"
       - name: install JDK
-        run: chmod +x ./j2sdk-1_3_1_20-linux-i586.bin && yes | ./j2sdk-1_3_1_20-linux-i586.bin.bin
+        run: chmod +x ./j2sdk-1_3_1_20-linux-i586.bin && yes | ./j2sdk-1_3_1_20-linux-i586.bin
       - name: list files
         run: ls -la
       - name: Java 3 version
