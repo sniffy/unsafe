@@ -67,6 +67,9 @@
                     <name>jdk4.home</name>
                 </property>
             </activation>
+            <properties>
+                <java.4>1.4</java.4>
+            </properties>
             <build>
                 <plugins>
                     <plugin>

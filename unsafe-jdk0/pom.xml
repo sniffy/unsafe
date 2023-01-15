@@ -86,4 +86,33 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>jdk4-compile</id>
+            <activation>
+                <property>
+                    <name>jdk4.home</name>
+                </property>
+            </activation>
+            <properties>
+                <java.0>1.1</java.0>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.10.1</version>
+                        <configuration>
+                            <verbose>true</verbose>
+                            <fork>true</fork>
+                            <executable>${jdk4.home}/bin/javac</executable>
+                            <compilerVersion>1.4</compilerVersion>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 </project>
