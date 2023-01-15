@@ -12,8 +12,8 @@
     <artifactId>unsafe-tools</artifactId>
 
     <properties>
-        <maven.compiler.source>${java.5}</maven.compiler.source>
-        <maven.compiler.target>${java.5}</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
 
@@ -65,6 +65,26 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>jdk9plus</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <jdk>[1.9,)</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <compilerArgs>
+                                <arg>--add-exports=java.base/sun.security.jca=ALL-UNNAMED</arg>
+                            </compilerArgs>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>jdk5-test</id>
             <activation>

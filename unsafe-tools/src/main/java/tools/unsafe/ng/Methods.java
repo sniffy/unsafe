@@ -2,15 +2,17 @@ package tools.unsafe.ng;
 
 import tools.unsafe.Unsafe;
 import tools.unsafe.reflection.UnsafeException;
+import tools.unsafe.vm.UnsafeVirtualMachine;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
-import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.lang.invoke.VarHandle;
+import java.lang.reflect.*;
 import java.util.concurrent.Callable;
+
+import static tools.unsafe.Unsafe.tryGetJavaVersion;
+import static tools.unsafe.vm.VirtualMachineFamily.ANDROID;
 
 // TODO: create a way to create wrappers which throw certain Exceptions
 public class Methods {
@@ -80,6 +82,62 @@ public class Methods {
         } catch (Exception e) {
             throw Unsafe.throwException(e);
         }
+    }
+
+    private final static Object pfso = new Object();
+
+    // TODO: return Lookup using multi-release jars
+    // TODO: move to separate Java 7+ only class
+    public static MethodHandles.Lookup trustedLookup(Class<?> context) {
+        //return null;
+
+        try {
+
+            // TODO: two lines below are Java9+ only
+            /*if (true) //noinspection Since15
+                return MethodHandles.privateLookupIn(context, MethodHandles.lookup());*/
+
+            @SuppressWarnings("BlockedPrivateApi") Field declaredField = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");
+            Unsafe.setAccessible(declaredField);
+            MethodHandles.Lookup implLookup = (MethodHandles.Lookup) declaredField.get(null);
+            return implLookup;
+        } catch (Exception e) {
+            throw Unsafe.throwException(e);
+        }
+    }
+
+    private static VarHandle enableFinalAccess(Field field) throws Exception {
+        Unsafe.setAccessible(field);
+        if (Modifier.isFinal(field.getModifiers()) && tryGetJavaVersion(8) < 16 && ANDROID != UnsafeVirtualMachine.getFamily()) {
+            // remove final
+
+            // TODO: would it work on GraalVM ?
+
+            /*
+            Field accessFlagsField = Field.class.getDeclaredField("accessFlags");
+accessFlagsField.setAccessible(true);
+accessFlagsField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+https://stackoverflow.com/questions/3301635/change-private-static-final-field-using-java-reflection
+             */
+
+            try {
+                Field modifiersField = Field.class.getDeclaredField("modifiers");
+                Unsafe.setAccessible(modifiersField);
+                modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+            } catch (Exception e) {
+                throw Unsafe.throwException(e);
+            }
+        }
+        //return Methods.privateLookupIn()
+        // TODO: implement privileged lookup
+        return trustedLookup(Methods.class).unreflectVarHandle(field);
+    }
+
+    public static void main(String... args) throws Exception {
+
+        VarHandle varHandle = enableFinalAccess(Methods.class.getDeclaredField("pfso"));
+        varHandle.set(new Object());
+
     }
 
     public static AccessibleObject accessibleObject(AccessibleObject accessibleObject) {
