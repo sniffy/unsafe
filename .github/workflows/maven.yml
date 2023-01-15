@@ -63,33 +63,14 @@ jobs:
       - uses: robinraju/release-downloader@v1.6
         with:
           repository: "sniffy/archived-jdks"
-          tag: "jdk-1_2_2_017-linux-i586.tar.gz"
-          fileName: "jdk-1_2_2_017-linux-i586.tar.gz"
+          tag: "j2sdk-1_3_1_20-linux-i586.bin"
+          fileName: "j2sdk-1_3_1_20-linux-i586.bin"
       - name: install JDK
-        run: tar -xzvf jdk-1_2_2_017-linux-i586.tar.gz
-      - name: Patch 1
-        run: sed -i 's/ia32/ia32 | ia64 | x86_64 | i?86/g' ./jdk1.2.2/bin/.java_wrapper
-      - name: Patch 2
-        run: sed -i 's/ia32/ia32 | ia64 | x86_64 | i?86/g' ./jdk1.2.2/jre/bin/.java_wrapper
-      - name: Patch 3
-        run: sed -i 's/ia32/ia32 | ia64 | x86_64 | i?86/g' ./jdk1.2.2/jre/bin/realpath
-      - name: install lib32z1
-        run: sudo apt-get install gcc-multilib
-        # check that we actually need it
-      - name: Java 2 version
-        run: ./jdk1.2.2/bin/java -version
-
-      - name: cat /var/lib/apport/coredump
-        if: always()
-        run: cat /var/lib/apport/coredump
-
-      - name: cat /var/lib/systemd/coredump
-        if: always()
-        run: cat /var/lib/systemd/coredump
-
-      - name: tree /home/runner/work/unsafe/unsafe
-        if: always()
-        run: tree /home/runner/work/unsafe/unsafe
+        run: chmod +x ./j2sdk-1_3_1_20-linux-i586.bin && yes | ./j2sdk-1_3_1_20-linux-i586.bin.bin
+      - name: list files
+        run: ls -la
+      - name: Java 3 version
+        run: ./j2sdk-1_3_1_20/bin/java -version
 
 
       - name: Set up JDK 8
