@@ -94,7 +94,12 @@
                 </property>
             </activation>
             <properties>
+                <!-- source should be 1.2 for target 1.1 - otherwise compiler gives an error -->
+                <java.0>1.1</java.0>
                 <java.1>1.1</java.1>
+                <java.2>1.2</java.2>
+                <maven.compiler.source>${java.2}</maven.compiler.source>
+                <maven.compiler.target>${java.0}</maven.compiler.target>
             </properties>
             <build>
                 <plugins>
