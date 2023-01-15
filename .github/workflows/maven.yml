@@ -63,10 +63,10 @@ jobs:
       - uses: robinraju/release-downloader@v1.6
         with:
           repository: "sniffy/archived-jdks"
-          tag: "j2sdk-1_4_2_19-linux-ia64.bin"
-          fileName: "j2sdk-1_4_2_19-linux-ia64.bin"
+          tag: "j2sdk-1_4_2_19-linux-i586.bin"
+          fileName: "j2sdk-1_4_2_19-linux-i586.bin"
       - name: install JDK
-        run: chmod +x ./j2sdk-1_4_2_19-linux-ia64.bin && yes | ./j2sdk-1_4_2_19-linux-ia64.bin
+        run: chmod +x ./j2sdk-1_4_2_19-linux-i586.bin && yes | ./j2sdk-1_4_2_19-linux-i586.bin
       - name: ls -la
         run: ls -la
       - name: tree ./j2sdk1.4.2_19
