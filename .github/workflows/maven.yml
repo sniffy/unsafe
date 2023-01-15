@@ -67,8 +67,8 @@ jobs:
           fileName: "j2sdk-1_3_1_20-linux-i586.bin"
       - name: install JDK
         run: chmod +x ./j2sdk-1_3_1_20-linux-i586.bin && yes | ./j2sdk-1_3_1_20-linux-i586.bin
-      - name: list files
-        run: ls -la
+      - name: tree ./jdk1.3.1_20
+        run: tree ./jdk1.3.1_20
       - name: Patch 1
         run: sed -i 's/ia32/ia32 | ia64 | x86_64 | i?86/g' ./jdk1.3.1_20/bin/.java_wrapper
       - name: Patch 2
