@@ -70,7 +70,7 @@ jobs:
       - name: list files
         run: ls -la
       - name: Java 3 version
-        run: ./j2sdk-1_3_1_20/bin/java -version
+        run: ./jdk1.3.1_20/bin/java -version
 
 
       - name: Set up JDK 8
