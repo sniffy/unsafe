@@ -16,6 +16,10 @@ public class ReflectionExceptionServiceProvider implements ExceptionServiceProvi
             if (UnsafeToolsLogging.stdErrEnabled()) {
                 e.printStackTrace();
             }
+        } catch (Throwable e) {
+            if (UnsafeToolsLogging.stdErrEnabled()) {
+                e.printStackTrace();
+            }
         } finally {
             ExceptionThrower.exceptionPerThread.set(null);
         }
