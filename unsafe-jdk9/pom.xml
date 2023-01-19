@@ -26,4 +26,17 @@
 
     <!-- TODO: add animal sniffer -->
 
+    <profiles>
+        <profile>
+            <id>jdk8minus</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <jdk>(,1.8]</jdk>
+            </activation>
+            <properties>
+                <java.9>8</java.9>
+            </properties>
+        </profile>
+    </profiles>
+
 </project>
