@@ -50,7 +50,7 @@ public class SampleClassTest {
             f = null;
         }
         fooField = f;
-        fooOffset = tools.unsafe.Unsafe.getSunMiscUnsafe().staticFieldOffset(fooField);
+        fooOffset = tools.unsafe.Unsafe.getSunMiscUnsafe().staticFieldOffset(f);
     }
 
     private static <T> T privateLookup(Class clazz) throws IllegalAccessException, NoSuchMethodException {
