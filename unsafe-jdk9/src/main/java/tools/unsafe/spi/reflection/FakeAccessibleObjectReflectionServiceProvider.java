@@ -59,7 +59,8 @@ public class FakeAccessibleObjectReflectionServiceProvider implements Reflection
                 long overrideOffset = Unsafe.getSunMiscUnsafe().objectFieldOffset(FakeAccessibleObject.class.getDeclaredField("override"));
                 Unsafe.getSunMiscUnsafe().putBoolean(ao, overrideOffset, true);
                 System.out.println("Making " + ao + " accessible via Unsafe and FakeAccessibleObject");
-            } catch (NoSuchFieldException e) {
+            } catch (Exception e) {
+                e.printStackTrace();
                 throw Exceptions.throwException(e);
             }
 

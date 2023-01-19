@@ -1,6 +1,7 @@
 package tools.unsafe.spi;
 
 import tools.unsafe.spi.constructor.ConstructorInvokerServiceProviderVintageAdapter;
+import tools.unsafe.spi.exception.GenericsExceptionServiceProvider;
 import tools.unsafe.spi.unsafe.SunMiscUnsafeServiceProviderVintageAdapter;
 
 public class Java5Providers {
@@ -18,6 +19,8 @@ public class Java5Providers {
 
         serviceProviders.setSunMiscUnsafeServiceProvider(new SunMiscUnsafeServiceProviderVintageAdapter());
         serviceProviders.setConstructorInvokerServiceProvider(new ConstructorInvokerServiceProviderVintageAdapter());
+
+        serviceProviders.setExceptionServiceProvider(new GenericsExceptionServiceProvider());
     }
 
 }

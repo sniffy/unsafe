@@ -23,7 +23,7 @@ public class ReflectionExceptionServiceProvider implements ExceptionServiceProvi
         } finally {
             ExceptionThrower.exceptionPerThread.set(null);
         }
-        throw new RuntimeException("Should not have reached here");
+        throw new RuntimeException("Should not have reached here; cause was" + exception);
     }
 
 }
