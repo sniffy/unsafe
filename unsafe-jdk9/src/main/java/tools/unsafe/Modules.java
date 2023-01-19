@@ -13,7 +13,7 @@ public class Modules {
     static {
         Method method = null;
         try {
-            method = Module.class.getDeclaredMethod("implAddOpens", String.class);
+            method = Class.forName("java.lang.Module").getDeclaredMethod("implAddOpens", String.class);
             Reflections.setAccessible(method);
         } catch (Throwable e) {
             if (UnsafeToolsLogging.stdErrEnabled()) {
@@ -32,9 +32,9 @@ public class Modules {
     }*/
 
     // Do not link statically to java.land.Module since it's not available before Java 9
-    private final Module module;
+    private final Object module;
 
-    public Modules(Module module) {
+    public Modules(Object module) {
         this.module = module;
     }
 
