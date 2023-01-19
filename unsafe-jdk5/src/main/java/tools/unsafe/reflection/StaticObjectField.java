@@ -34,6 +34,7 @@ public class StaticObjectField<T> {
         try {
             return fieldOffsetSupplier.offset(Unsafe.getSunMiscUnsafe());
         } catch (Throwable e) {
+            e.printStackTrace();
             throw Exceptions.throwException(e);
         }
     }
