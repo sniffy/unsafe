@@ -14,7 +14,6 @@ import tools.unsafe.reflection.x.StaticReferenceFieldV3;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
-import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -223,7 +222,7 @@ public class SampleClassTest {
 
     }
 
-    @Test
+    /*@Test
     @Ignore
     public void testVarHandle() throws Exception {
 
@@ -234,36 +233,12 @@ public class SampleClassTest {
         Reflections.setAccessible(declaredField);
         Reflections.removeFinalModifier(declaredField);
 
-        /*Object obj = new Object();
-        declaredField.set(null, obj);
-        assertEquals(obj, SampleClass.getFoo());*/
-
         VarHandle varHandle = Lookups.trustedLookup().findStaticVarHandle(SampleClass.class, "foo", Object.class);
 
-        /*Class<?> constructorClass = Class.forName("java.lang.invoke.DirectMethodHandle$Constructor");
-        Field initMethodField = constructorClass.getDeclaredField("initMethod");
-        long initMethodFieldOffset = unsafe.objectFieldOffset(initMethodField);
-        Object initMemberName = unsafe.getObject(constructor, initMethodFieldOffset);
-
-        Class<?> memberNameClass = Class.forName("java.lang.invoke.MemberName");
-        Field flagsField = memberNameClass.getDeclaredField("flags");
-        long flagsFieldOffset = unsafe.objectFieldOffset(flagsField);
-        int flags = unsafe.getInt(initMemberName, flagsFieldOffset);
-
-        flags &= ~0x00020000; // remove "is constructor"
-        flags |= 0x00010000; // add "is (non-constructor) method"
-
-        unsafe.putInt(initMemberName, flagsFieldOffset, flags);*/
-
-
-        //VarHandle varHandle = Lookups.trustedLookup().unreflectVarHandle(declaredField);
-
-
-        //VarHandle varHandle = MethodHandles.privateLookupIn(SampleClass.class, MethodHandles.lookup()).findStaticVarHandle(SampleClass.class, "foo", Object.class);
         Object newObject = new Object();
         varHandle.set(newObject);
         assertEquals(newObject, SampleClass.getFoo());
-    }
+    }*/
 
     @Test
     @Ignore
