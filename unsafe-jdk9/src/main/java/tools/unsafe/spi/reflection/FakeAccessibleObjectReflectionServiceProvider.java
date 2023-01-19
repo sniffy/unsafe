@@ -118,6 +118,7 @@ public class FakeAccessibleObjectReflectionServiceProvider implements Reflection
                     }
                 }
             } catch (Exception ex) {
+                ex.printStackTrace();
                 throw Exceptions.throwException(e);
             }
             throw e;
