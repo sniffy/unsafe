@@ -10,6 +10,21 @@ public final class Java {
     }
 
     // TODO: can we return something like enum here with Java Virtual Machine Family ?
+    public static VirtualMachineFamily virtualMachineFamily() {
+        if ("executable".equals(System.getProperty("org.graalvm.nativeimage.kind"))) {
+            return VirtualMachineFamily.GRAALVM_NATIVE;
+        }
+        try {
+            Class.forName("android.app.Activity");
+            return VirtualMachineFamily.ANDROID;
+        } catch (Exception e) {
+            if (System.getProperty("java.vendor").toLowerCase().indexOf("ibm") >= 0) {
+                return VirtualMachineFamily.J9;
+            } else {
+                return VirtualMachineFamily.HOTSPOT;
+            }
+        }
+    }
 
     public static int version() {
         String version = System.getProperty("java.version");

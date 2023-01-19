@@ -1,4 +1,4 @@
-package tools.unsafe;
+package io.sniffy.unsafe;
 
 public class SampleClass {
 

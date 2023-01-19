@@ -42,51 +42,17 @@ public final class Unsafe {
     private Unsafe() {
     }
 
-    static {
-        // siblingClass wouldn't work on GraalVM properly - maybe move it to separate "fluent reflection" class
-        /*if (tryGetJavaVersion(8) >= 7) {
-            UnresolvedClassRef<Object> classRef = UnresolvedClassRef.of("io.sniffy.unsafe.JDK7Providers");
-            assert classRef.isResolved();
-        }*/
-        ProvidersBootstrap.registerProviders();
-    }
-
     public static int tryGetJavaVersion(int fallbackJavaVersion) {
         return Java.versionWithFallback(fallbackJavaVersion);
     }
 
     public static @Nonnull RuntimeException throwException(@Nonnull Throwable e) {
-        Unsafe.<RuntimeException>throwAny(e);
-        return new RuntimeException(e);
-    }
-
-    @SuppressWarnings("unchecked")
-    private static <E extends Throwable> void throwAny(@Nonnull Throwable e) throws E {
-        throw (E) e;
-    }
-
-    private static class SunMiscUnsafeHolder {
-
-        private final static @Nonnull sun.misc.Unsafe UNSAFE;
-
-        static {
-            sun.misc.Unsafe unsafe = null;
-            try {
-                Field f = sun.misc.Unsafe.class.getDeclaredField("theUnsafe"); // TODO: check THE_ONE for Android as well
-                f.setAccessible(true);
-                unsafe = (sun.misc.Unsafe) f.get(null);
-            } catch (Throwable e) {
-                e.printStackTrace();
-                assert false : e;
-            }
-            UNSAFE = unsafe;
-        }
-
+        return Exceptions.throwException(e);
     }
 
     // Consider also jdk.internal.misc.Unsafe and jdk.internal.reflect.Unsafe
     public static @Nonnull sun.misc.Unsafe getSunMiscUnsafe() {
-        return SunMiscUnsafeHolder.UNSAFE;
+        return Unsafe.getSunMiscUnsafe();
     }
 
     private static volatile Future<Instrumentation> instrumentationFuture;

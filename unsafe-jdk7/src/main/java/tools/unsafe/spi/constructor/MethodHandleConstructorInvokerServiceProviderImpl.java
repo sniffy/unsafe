@@ -73,6 +73,7 @@ public class MethodHandleConstructorInvokerServiceProviderImpl implements Constr
                         )
                 );
 
+                // this makes animal sniffer fail
                 handle = (MethodHandle) getDirectMethodHandle.invoke(implLookup, (byte) 5, clazz, initMemberName, implLookup);
 
             } else //noinspection RedundantSuppression

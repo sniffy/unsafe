@@ -5,7 +5,6 @@ import tools.unsafe.spi.assertion.NotAvailableInLegacyJavaAssertionServiceProvid
 public class Java0Providers {
 
     static {
-        registerProviders();
     }
 
     private Java0Providers() {

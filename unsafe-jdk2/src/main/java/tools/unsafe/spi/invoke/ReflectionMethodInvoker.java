@@ -1,6 +1,7 @@
-package tools.unsafe.ng.impl;
+package tools.unsafe.spi.invoke;
 
-import tools.unsafe.Unsafe;
+import tools.unsafe.Exceptions;
+import tools.unsafe.internal.UnsafeToolsLogging;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -18,9 +19,12 @@ public class ReflectionMethodInvoker implements MethodInvoker {
         try {
             return method.invoke(null, args);
         } catch (InvocationTargetException e) {
-            throw Unsafe.throwException(e.getTargetException());
+            throw Exceptions.throwException(e.getTargetException());
         } catch (Exception e) {
-            throw Unsafe.throwException(e);
+            if (UnsafeToolsLogging.stdErrEnabled()) {
+                e.printStackTrace();
+            }
+            throw Exceptions.throwException(e);
         }
     }
 

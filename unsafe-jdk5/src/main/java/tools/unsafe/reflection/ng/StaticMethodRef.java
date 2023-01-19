@@ -1,4 +1,4 @@
-package tools.unsafe.ng;
+package tools.unsafe.reflection.ng;
 
 import tools.unsafe.Reflections;
 
@@ -34,24 +34,24 @@ public class StaticMethodRef extends AbstractMethodRef {
 
     // cast methods
 
-    public StaticMethodRef.VoidNoParams asVoidMethod() {
+    public VoidNoParams asVoidMethod() {
         validateVoidSignature();
-        return new StaticMethodRef.VoidNoParams();
+        return new VoidNoParams();
     }
 
-    public <P1> StaticMethodRef.VoidOneParam<P1> asVoidMethod(Class<P1> p1) {
+    public <P1> VoidOneParam<P1> asVoidMethod(Class<P1> p1) {
         validateVoidSignature(p1);
-        return new StaticMethodRef.VoidOneParam<P1>();
+        return new VoidOneParam<P1>();
     }
 
-    public <R> StaticMethodRef.NonVoidNoParams<R> asNonVoidMethod(Class<R> r) {
+    public <R> NonVoidNoParams<R> asNonVoidMethod(Class<R> r) {
         validateNonVoidSignature(r);
-        return new StaticMethodRef.NonVoidNoParams<R>();
+        return new NonVoidNoParams<R>();
     }
 
-    public <R, P1> StaticMethodRef.NonVoidOneParam<R, P1> asNonVoidMethod(Class<R> r, Class<P1> p1) {
+    public <R, P1> NonVoidOneParam<R, P1> asNonVoidMethod(Class<R> r, Class<P1> p1) {
         validateNonVoidSignature(r, p1);
-        return new StaticMethodRef.NonVoidOneParam<R, P1>();
+        return new NonVoidOneParam<R, P1>();
     }
 
     public class VoidNoParams {

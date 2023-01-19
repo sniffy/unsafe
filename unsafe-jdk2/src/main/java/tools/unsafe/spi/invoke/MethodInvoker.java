@@ -1,4 +1,4 @@
-package tools.unsafe.ng.impl;
+package tools.unsafe.spi.invoke;
 
 public interface MethodInvoker {
 

@@ -9,7 +9,7 @@ public final class Exceptions {
 
     }
 
-    public static RuntimeException throwException(Throwable e) {
+    public static /*@Nonnull*/ RuntimeException throwException(Throwable e) {
         VintageServiceProviders serviceProviders = VintageServiceProviders.getInstance();
         if (null == serviceProviders) {
             return null;

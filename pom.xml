@@ -22,9 +22,9 @@
         <module>unsafe-jdk8</module>
         <module>unsafe-jdk9</module>
 
-        <module>unsafe-agent</module>
-        <module>unsafe-poet</module>
-        <module>unsafe-tools</module>
+        <!--<module>unsafe-agent</module>
+        <module>unsafe-poet</module>-->
+        <!--<module>unsafe-tools</module>-->
         <!--<module>unsafe-android-integration-tests</module>-->
         <module>unsafe-graalvm-integration-tests</module>
     </modules>
@@ -124,7 +124,6 @@
                 <java.2>1.4</java.2>
                 <java.3>1.4</java.3>
                 <java.4>1.4</java.4>
-                <java.9>8</java.9> <!-- INSTEAD SKIP MODULE ON JAVA 8-->
             </properties>
         </profile>
         <profile>
@@ -155,6 +154,22 @@
             </activation>
             <properties>
                 <java.5>6</java.5>
+            </properties>
+        </profile>
+        <profile>
+            <!-- https://stackoverflow.com/questions/63541942/why-is-javac-source-1-5-allowing-override-on-interface-methods -->
+            <!-- https://youtrack.jetbrains.com/issue/IDEA-85478 -->
+            <id>ide-jdk9plus</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>idea.maven.embedder.version</name>
+
+                </property>
+                <jdk>[1.9,)</jdk>
+            </activation>
+            <properties>
+                <java.5>7</java.5>
             </properties>
         </profile>
     </profiles>
