@@ -24,7 +24,18 @@ public class SunMiscUnsafeServiceProviderImpl implements VintageSunMiscUnsafeSer
     }
 
     public Object getSunMiscUnsafe() {
-        return UNSAFE;
+        //return UNSAFE;
+        try {
+            Field f = sun.misc.Unsafe.class.getDeclaredField("theUnsafe"); // TODO: check THE_ONE for Android as well
+            f.setAccessible(true);
+            return f.get(null);
+        } catch (Throwable e) {
+            if (UnsafeToolsLogging.stdErrEnabled()) {
+                e.printStackTrace();
+            }
+            assert false : e;
+        }
+        return null;
     }
 
 }
