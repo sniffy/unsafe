@@ -21,6 +21,7 @@ public class Java5Providers {
         serviceProviders.setConstructorInvokerServiceProvider(new ConstructorInvokerServiceProviderVintageAdapter());
 
         serviceProviders.setExceptionServiceProvider(new GenericsExceptionServiceProvider());
+        vintageServiceProviders.setExceptionServiceProvider(new GenericsExceptionServiceProvider());
     }
 
 }
