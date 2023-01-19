@@ -14,8 +14,8 @@ public class ReflectionMethodInvoker implements MethodInvoker {
         this.method = method;
     }
 
-    @Override
-    public Object invoke(Object obj, Object... args) {
+    //@Override
+    public Object invoke(Object obj, Object[] args) {
         try {
             return method.invoke(null, args);
         } catch (InvocationTargetException e) {
