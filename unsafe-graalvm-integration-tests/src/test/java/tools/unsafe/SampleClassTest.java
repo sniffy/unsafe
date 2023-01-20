@@ -23,7 +23,7 @@ public class SampleClassTest {
     @Test
     public void testStaticReferenceField() throws Throwable {
 
-        //tools.unsafe.Unsafe.getSunMiscUnsafe().ensureClassInitialized(SampleClass.class);
+        tools.unsafe.Unsafe.getSunMiscUnsafe().ensureClassInitialized(SampleClass.class);
 
         StaticReferenceField ref = new StaticReferenceField(
                 () -> SampleClass.class.getDeclaredField("foo"),
