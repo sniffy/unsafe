@@ -1,6 +1,7 @@
 package tools.unsafe.reflection.x;
 
 import tools.unsafe.Unsafe;
+import tools.unsafe.UnsafeProvider;
 import tools.unsafe.reflection.FieldBaseSupplier;
 import tools.unsafe.reflection.FieldOffsetSupplier;
 import tools.unsafe.reflection.FieldSupplier;
@@ -20,7 +21,7 @@ public class StaticReferenceField {
     }
 
     public void set(Object reference) throws Throwable {
-        sun.misc.Unsafe unsafe = Unsafe.getSunMiscUnsafe();
+        sun.misc.Unsafe unsafe = UnsafeProvider.getSunMiscUnsafe();
         Field field = fieldSupplier.field();
         Object fieldBase = fieldBaseSupplier.base(unsafe);
         long fieldOffset = fieldOffsetSupplier.offset(unsafe);
