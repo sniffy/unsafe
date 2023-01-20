@@ -3,9 +3,35 @@ package tools.unsafe;
 import org.junit.Test;
 import tools.unsafe.reflection.x.StaticReferenceField;
 
+import java.lang.reflect.Field;
+
 import static org.junit.Assert.assertEquals;
 
 public class SampleClassTest {
+
+    // Consider also jdk.internal.misc.Unsafe and jdk.internal.reflect.Unsafe
+    public static sun.misc.Unsafe getSunMiscUnsafe() {
+        return SunMiscUnsafeHolder.UNSAFE;
+    }
+
+    @Test
+    public void testStaticReferenceField() throws Throwable {
+
+        getSunMiscUnsafe().ensureClassInitialized(SampleClass.class);
+
+        StaticReferenceField ref = new StaticReferenceField(
+                () -> SampleClass.class.getDeclaredField("foo"),
+                (unsafe) -> unsafe.staticFieldBase(SampleClass.class.getDeclaredField("foo")),
+                (unsafe) -> unsafe.staticFieldOffset(SampleClass.class.getDeclaredField("foo"))
+        );
+
+        Object o = new Object();
+
+        ref.set(o);
+
+        assertEquals(o, SampleClass.getFoo());
+
+    }
 
     @Test
     public void testSystemProperties() {
@@ -19,23 +45,22 @@ public class SampleClassTest {
             (unsafe) -> unsafe.staticFieldOffset(SampleClass.class.getDeclaredField("foo"))
     );*/
 
+    private static class SunMiscUnsafeHolder {
 
-    @Test
-    public void testStaticReferenceField() throws Throwable {
+        private final static sun.misc.Unsafe UNSAFE;
 
-        tools.unsafe.Unsafe.getSunMiscUnsafe().ensureClassInitialized(SampleClass.class);
-
-        StaticReferenceField ref = new StaticReferenceField(
-                () -> SampleClass.class.getDeclaredField("foo"),
-                (unsafe) -> unsafe.staticFieldBase(SampleClass.class.getDeclaredField("foo")),
-                (unsafe) -> unsafe.staticFieldOffset(SampleClass.class.getDeclaredField("foo"))
-        );
-
-        Object o = new Object();
-
-        ref.set(o);
-
-        assertEquals(o, SampleClass.getFoo());
+        static {
+            sun.misc.Unsafe unsafe = null;
+            try {
+                Field f = sun.misc.Unsafe.class.getDeclaredField("theUnsafe"); // TODO: check THE_ONE for Android as well
+                f.setAccessible(true);
+                unsafe = (sun.misc.Unsafe) f.get(null);
+            } catch (Throwable e) {
+                e.printStackTrace();
+                assert false : e;
+            }
+            UNSAFE = unsafe;
+        }
 
     }
 /*
