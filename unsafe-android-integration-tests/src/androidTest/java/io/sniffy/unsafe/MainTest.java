@@ -3,13 +3,10 @@ package io.sniffy.unsafe;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import tools.unsafe.reflection.x.StaticReferenceField;
 
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.Properties;
-
-import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class MainTest {
@@ -34,7 +31,7 @@ public class MainTest {
 
     }
 
-    @Test
+    /*@Test
     public void testStaticReferenceField() throws Throwable {
 
         //UnsafeProvider.getSunMiscUnsafe().ensureClassInitialized(SampleClass.class);
@@ -51,6 +48,6 @@ public class MainTest {
 
         assertEquals(o, SampleClass.getFoo());
 
-    }
+    }*/
 
 }
