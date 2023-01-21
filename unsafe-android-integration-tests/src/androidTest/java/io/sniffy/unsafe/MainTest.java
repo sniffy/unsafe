@@ -19,6 +19,7 @@ public class MainTest {
             String key = (String) keys.nextElement();
             String value = (String) p.get(key);
             System.out.println(key + " >>>> " + value);
+            System.err.println(key + " >>>> " + value);
         }
     }
 
@@ -26,6 +27,7 @@ public class MainTest {
     public void testUnsafe() throws Exception {
         for (Method method : Class.forName("sun.misc.Unsafe").getDeclaredMethods()) {
             System.out.println(method.getName());
+            System.err.println(method.getName());
         }
 
 
