@@ -37,7 +37,7 @@ public class MainTest {
     @Test
     public void testStaticReferenceField() throws Throwable {
 
-        UnsafeProvider.getSunMiscUnsafe().ensureClassInitialized(SampleClass.class);
+        //UnsafeProvider.getSunMiscUnsafe().ensureClassInitialized(SampleClass.class);
 
         StaticReferenceField ref = new StaticReferenceField(
                 () -> SampleClass.class.getDeclaredField("foo"),
