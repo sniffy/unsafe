@@ -1,6 +1,5 @@
 package tools.unsafe.reflection.x;
 
-import tools.unsafe.Unsafe;
 import tools.unsafe.UnsafeProvider;
 
 import java.lang.reflect.Field;
@@ -13,12 +12,15 @@ public class StaticReferenceFieldV3 {
 
     public StaticReferenceFieldV3(Field field) {
         this.field = field;
-        this.base = Unsafe.getSunMiscUnsafe().staticFieldBase(field);
-        this.offset = Unsafe.getSunMiscUnsafe().staticFieldOffset(field);
+        sun.misc.Unsafe unsafe = UnsafeProvider.getSunMiscUnsafe();
+
+        this.base = unsafe.staticFieldBase(field);
+        this.offset = unsafe.staticFieldOffset(field);
     }
 
     public void set(Object reference) throws Throwable {
-        Unsafe.getSunMiscUnsafe().putObjectVolatile(base /*field.getDeclaringClass()*/, offset, reference);
+        sun.misc.Unsafe unsafe = UnsafeProvider.getSunMiscUnsafe();
+        unsafe.putObjectVolatile(base /*field.getDeclaringClass()*/, offset, reference);
         UnsafeProvider.getSunMiscUnsafe().putObjectVolatile(base /*field.getDeclaringClass()*/, offset, reference);
 
     }
