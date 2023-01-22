@@ -2,7 +2,13 @@ package tools.unsafe;
 
 public class SampleClass {
 
+    @SuppressWarnings("unused")
+    private static final Object unusedObject1 = new Object();
+
     private static final Object foo = new Object();
+
+    @SuppressWarnings("unused")
+    private static final Object unusedObject2 = new Object();
 
     private static final Object bar = new Object();
 
