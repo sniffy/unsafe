@@ -2,6 +2,8 @@ package tools.unsafe;
 
 import org.junit.Test;
 import tools.unsafe.reflection.x.StaticReferenceField;
+import tools.unsafe.reflection.x.StaticReferenceFieldV2;
+import tools.unsafe.reflection.x.StaticReferenceFieldV3;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,7 +12,7 @@ public class SampleClassTest {
     // Consider also jdk.internal.misc.Unsafe and jdk.internal.reflect.Unsafe
 
 
-    /*private final static StaticReferenceField REF = new StaticReferenceField(
+    private final static StaticReferenceField REF = new StaticReferenceField(
             () -> SampleClass.class.getDeclaredField("foo"),
             (unsafe) -> unsafe.staticFieldBase(SampleClass.class.getDeclaredField("foo")),
             (unsafe) -> unsafe.staticFieldOffset(SampleClass.class.getDeclaredField("foo"))
@@ -20,7 +22,18 @@ public class SampleClassTest {
     public void testSystemProperties() {
         System.out.println(System.getProperties());
 
-    }*/
+    }
+
+    @Test
+    public void testStaticReferenceFieldV2_field() throws Throwable {
+
+        Object o = new Object();
+
+        REF.set(o);
+
+        assertEquals(o, SampleClass.getFoo());
+
+    }
 
     @Test
     public void testStaticReferenceField() throws Throwable {
@@ -41,7 +54,7 @@ public class SampleClassTest {
 
     }
 
-    /*@Test
+    @Test
     public void testStaticReferenceFieldV2() throws Throwable {
 
         UnsafeProvider.getSunMiscUnsafe().ensureClassInitialized(SampleClass.class);
@@ -56,17 +69,6 @@ public class SampleClassTest {
         Object o = new Object();
 
         ref.set(o);
-
-        assertEquals(o, SampleClass.getFoo());
-
-    }
-
-    @Test
-    public void testStaticReferenceFieldV2_field() throws Throwable {
-
-        Object o = new Object();
-
-        REF.set(o);
 
         assertEquals(o, SampleClass.getFoo());
 
@@ -89,6 +91,6 @@ public class SampleClassTest {
 
         assertEquals(o, SampleClass.getFoo());
 
-    }*/
+    }
 
 }
