@@ -142,9 +142,9 @@
                                 <configuration>
                                     <buildArgs>
                                         <!-- Important for updating final static fields-->
-                                        <arg>
-                                            --initialize-at-run-time=tools.unsafe.SampleClass,tools.unsafe.SampleClassUpdater
-                                        </arg>
+                                        <!--<arg>
+                                            &#45;&#45;initialize-at-run-time=tools.unsafe.SampleClass,tools.unsafe.SampleClassUpdater
+                                        </arg>-->
                                         <!--<arg>&#45;&#45;trace-class-initialization=tools.unsafe.SampleClass</arg>-->
                                     </buildArgs>
                                 </configuration>
