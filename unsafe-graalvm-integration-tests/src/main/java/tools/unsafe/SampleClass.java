@@ -2,7 +2,7 @@ package tools.unsafe;
 
 public class SampleClass {
 
-    private static Object foo = new Object();
+    private static final Object foo = new Object();
 
     private static final Object bar = new Object();
 
