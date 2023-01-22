@@ -1,4 +1,4 @@
-package io.sniffy.unsafe;
+package tools.unsafe;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Test;

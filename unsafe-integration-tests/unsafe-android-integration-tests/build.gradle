@@ -31,6 +31,7 @@ android {
 
 dependencies {
     androidTestImplementation 'io.sniffy.unsafe:unsafe-impl:1.0-SNAPSHOT'
+    androidTestImplementation 'io.sniffy.unsafe:unsafe-compatibility-kit:1.0-SNAPSHOT'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
