@@ -16,7 +16,9 @@
     <modules>
         <module>unsafe-compatibility-kit</module>
         <module>unsafe-graalvm-integration-tests</module>
-        <module>unsafe-android-integration-tests</module>
+        <!-- code below is commented out because IDEA goes mad because of it -->
+        <!-- TODO: refactor the whole project to gradle -->
+        <!--<module>unsafe-android-integration-tests</module>-->
     </modules>
 
 </project>
