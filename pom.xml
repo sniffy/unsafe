@@ -27,7 +27,7 @@
         <!--<module>unsafe-tools</module>-->
         <!--<module>unsafe-android-integration-tests</module>-->
         <module>unsafe-impl</module>
-        <module>unsafe-graalvm-integration-tests</module>
+        <module>unsafe-integration-tests</module>
     </modules>
 
     <properties>
