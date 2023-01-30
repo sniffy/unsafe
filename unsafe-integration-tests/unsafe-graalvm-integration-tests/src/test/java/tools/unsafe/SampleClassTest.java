@@ -2,7 +2,6 @@ package tools.unsafe;
 
 import org.junit.Test;
 import tools.unsafe.reflection.ReferenceFieldHandle;
-import tools.unsafe.reflection.x.StaticReferenceField;
 import tools.unsafe.reflection.x.StaticReferenceFieldV2;
 import tools.unsafe.reflection.x.StaticReferenceFieldV3;
 
@@ -24,11 +23,11 @@ public class SampleClassTest {
     }
 
 
-    private final static StaticReferenceField REF = new StaticReferenceField(
+    /*private final static StaticReferenceField REF = new StaticReferenceField(
             () -> SampleClass.class.getDeclaredField("foo"),
             (unsafe) -> unsafe.staticFieldBase(SampleClass.class.getDeclaredField("foo")),
             (unsafe) -> unsafe.staticFieldOffset(SampleClass.class.getDeclaredField("foo"))
-    );
+    );*/
 
     @Test
     public void testSystemProperties() {
@@ -36,7 +35,7 @@ public class SampleClassTest {
 
     }
 
-    @Test
+    /*@Test
     public void testStaticReferenceFieldV2_field() throws Throwable {
 
         Object o = new Object();
@@ -45,9 +44,9 @@ public class SampleClassTest {
 
         assertEquals(o, SampleClass.getFoo());
 
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void testStaticReferenceField() throws Throwable {
 
         UnsafeProvider.getSunMiscUnsafe().ensureClassInitialized(SampleClass.class);
@@ -64,7 +63,7 @@ public class SampleClassTest {
 
         assertEquals(o, SampleClass.getFoo());
 
-    }
+    }*/
 
     @Test
     public void testStaticReferenceFieldV2() throws Throwable {

@@ -1,5 +1,15 @@
 # unsafe
 
+### Vision
+
+- many apps rely on Unsafe to deal with final or private fields via reflection in a ninja style
+- This is wrong and must be addressed properly (raising incididents for librarty maintainers to open their API)
+- When not possible it must be dealt with using instrumentation
+- unsafe tools provide API which is firendly to static analysis
+- unsafe tools provide a way forward to migrate to new JDK APIS (code evolution)
+- unsafe tools provide an extremely compatible API (HotSport 5-21, J9, Android, GraalVM native images)
+- unsafe tools provide a helper to run instrumentation
+
 ### TODO
 
 Duck Typing and mimicking

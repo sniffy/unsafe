@@ -28,7 +28,7 @@ public class ReferenceFieldHandle<T> {
         Unsafe unsafe;
         Throwable throwable;
         try {
-            field = fieldSupplier.field();
+            field = fieldSupplier.call();
             unsafe = UnsafeProvider.getSunMiscUnsafe();
             base = unsafe.staticFieldBase(field);
             offset = unsafe.staticFieldOffset(field);

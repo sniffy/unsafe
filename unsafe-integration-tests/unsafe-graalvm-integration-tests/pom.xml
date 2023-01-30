@@ -50,6 +50,17 @@
             <version>19.3.6</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>9.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm-util</artifactId>
+            <version>9.4</version>
+        </dependency>
+
     </dependencies>
 
     <profiles>
@@ -154,6 +165,8 @@
                                 <phase>test</phase>
                                 <configuration>
                                     <buildArgs>
+                                        <arg>--trace-class-initialization=tools.unsafe.SampleClass</arg>
+                                        <arg>-H:+ReportExceptionStackTraces</arg>
                                         <!-- Important for updating final static fields-->
                                         <!--<arg>
                                             &#45;&#45;initialize-at-run-time=tools.unsafe.SampleClass,tools.unsafe.SampleClassUpdater

@@ -21,7 +21,7 @@ public class StaticReferenceField {
 
     public void set(Object reference) throws Throwable {
         sun.misc.Unsafe unsafe = UnsafeProvider.getSunMiscUnsafe();
-        Field field = fieldSupplier.field();
+        Field field = fieldSupplier.call();
         Object fieldBase = fieldBaseSupplier.base(unsafe);
         long fieldOffset = fieldOffsetSupplier.offset(unsafe);
         UnsafeProvider.getSunMiscUnsafe().putObjectVolatile(fieldBase /*field.getDeclaringClass()*/, fieldOffset, reference);
