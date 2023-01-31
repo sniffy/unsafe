@@ -8,6 +8,8 @@ import java.lang.reflect.Field;
 
 public class ReferenceStaticUnsafeFieldHandle<T> extends AbstractUnsafeFieldHandle {
 
+    private Field field;
+    private Unsafe unsafe;
     private Object base;
     private long offset;
 
@@ -15,8 +17,8 @@ public class ReferenceStaticUnsafeFieldHandle<T> extends AbstractUnsafeFieldHand
         super(fieldSupplier);
         try {
             Field call = fieldSupplier.call();
-            Unsafe unsafe = UnsafeProvider.getSunMiscUnsafe();
-            unsafe.ensureClassInitialized(call.getDeclaringClass());
+            field = call;
+            unsafe = UnsafeProvider.getSunMiscUnsafe();
             base = unsafe.staticFieldBase(call);
             offset = unsafe.staticFieldOffset(call);
         } catch (Exception e) {
@@ -38,13 +40,15 @@ public class ReferenceStaticUnsafeFieldHandle<T> extends AbstractUnsafeFieldHand
         // TODO: throw throwable if it is not null
         UnsafeFieldTuple fieldTuple = resolve();
         //noinspection unchecked
-        return (T) unsafe().getObject(base, offset);
+        unsafe.ensureClassInitialized(field.getDeclaringClass());
+        return (T) unsafe.getObject(base, offset);
         //return (T) unsafe().getObject(fieldTuple.base, fieldTuple.offset);
     }
 
     public void set(T value) {
         UnsafeFieldTuple fieldTuple = resolve();
-        unsafe().putObject(base, offset, value);
+        unsafe.ensureClassInitialized(field.getDeclaringClass());
+        unsafe.putObject(base, offset, value);
         //unsafe().putObject(fieldTuple.base, fieldTuple.offset, value);
     }
 
