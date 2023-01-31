@@ -1,5 +1,7 @@
 package tools.unsafe.field.impl;
 
+import sun.misc.Unsafe;
+import tools.unsafe.UnsafeProvider;
 import tools.unsafe.field.FieldSupplier;
 
 import java.lang.reflect.Field;
@@ -13,8 +15,9 @@ public class ReferenceStaticUnsafeFieldHandle<T> extends AbstractUnsafeFieldHand
         super(fieldSupplier);
         try {
             Field call = fieldSupplier.call();
-            base = unsafe().staticFieldBase(call);
-            offset = unsafe().staticFieldOffset(call);
+            Unsafe unsafe = UnsafeProvider.getSunMiscUnsafe();
+            base = unsafe.staticFieldBase(call);
+            offset = unsafe.staticFieldOffset(call);
         } catch (Exception e) {
             e.printStackTrace();
         }
