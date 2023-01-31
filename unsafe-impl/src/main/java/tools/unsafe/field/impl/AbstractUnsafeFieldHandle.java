@@ -30,7 +30,7 @@ public abstract class AbstractUnsafeFieldHandle implements Callable<UnsafeFieldT
 
     protected abstract long fieldOffset(Field field);
 
-    protected sun.misc.Unsafe unsafe() {
+    protected static sun.misc.Unsafe unsafe() {
         return UnsafeProvider.getSunMiscUnsafe();
     }
 
