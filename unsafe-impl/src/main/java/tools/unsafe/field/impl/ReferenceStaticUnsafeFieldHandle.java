@@ -6,8 +6,18 @@ import java.lang.reflect.Field;
 
 public class ReferenceStaticUnsafeFieldHandle<T> extends AbstractUnsafeFieldHandle {
 
+    private Object base;
+    private long offset;
+
     public ReferenceStaticUnsafeFieldHandle(FieldSupplier fieldSupplier) {
         super(fieldSupplier);
+        try {
+            Field call = fieldSupplier.call();
+            base = unsafe().staticFieldBase(call);
+            offset = unsafe().staticFieldOffset(call);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -24,12 +34,14 @@ public class ReferenceStaticUnsafeFieldHandle<T> extends AbstractUnsafeFieldHand
         // TODO: throw throwable if it is not null
         UnsafeFieldTuple fieldTuple = resolve();
         //noinspection unchecked
-        return (T) unsafe().getObject(fieldTuple.base, fieldTuple.offset);
+        return (T) unsafe().getObject(base, offset);
+        //return (T) unsafe().getObject(fieldTuple.base, fieldTuple.offset);
     }
 
     public void set(T value) {
         UnsafeFieldTuple fieldTuple = resolve();
-        unsafe().putObject(fieldTuple.base, fieldTuple.offset, value);
+        unsafe().putObject(base, offset, value);
+        //unsafe().putObject(fieldTuple.base, fieldTuple.offset, value);
     }
 
 }
