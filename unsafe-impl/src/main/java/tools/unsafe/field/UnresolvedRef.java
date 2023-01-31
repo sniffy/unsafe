@@ -1,4 +1,4 @@
-package tools.unsafe.reflection;
+package tools.unsafe.field;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -16,11 +16,11 @@ public class UnresolvedRef<T> {
     private final Future<T> future;
     private final AtomicReference<RefOrException<T>> refOrExceptionAtomicReference = new AtomicReference<RefOrException<T>>();
 
-    protected UnresolvedRef(@Nonnull Callable<T> refSupplier) {
+    public UnresolvedRef(@Nonnull Callable<T> refSupplier) {
         future = new CallableFuture<T>(refSupplier);
     }
 
-    public @Nonnull T resolve() throws Throwable /* or what? */ {
+    public @Nonnull T resolve() {
         RefOrException<T> refOrException = getRefOrException();
         if (isResolved()) {
             //noinspection ConstantConditions
