@@ -1,7 +1,7 @@
 package tools.unsafe;
 
 import org.junit.Test;
-import tools.unsafe.reflection.ReferenceFieldHandle;
+import tools.unsafe.field.ReferenceFieldHandle;
 
 import static org.junit.Assert.assertEquals;
 
