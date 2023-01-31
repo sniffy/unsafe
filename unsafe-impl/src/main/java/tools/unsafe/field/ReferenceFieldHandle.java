@@ -2,7 +2,6 @@ package tools.unsafe.field;
 
 import sun.misc.Unsafe;
 import tools.unsafe.UnsafeProvider;
-import tools.unsafe.reflection.FieldSupplier;
 
 import java.lang.reflect.Field;
 

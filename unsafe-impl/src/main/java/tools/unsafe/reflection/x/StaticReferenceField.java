@@ -1,9 +1,9 @@
 package tools.unsafe.reflection.x;
 
 import tools.unsafe.UnsafeProvider;
+import tools.unsafe.field.FieldSupplier;
 import tools.unsafe.reflection.FieldBaseSupplier;
 import tools.unsafe.reflection.FieldOffsetSupplier;
-import tools.unsafe.reflection.FieldSupplier;
 
 import java.lang.reflect.Field;
 
