@@ -13,7 +13,7 @@ public class ReferenceFieldHandle<T> {
     }
 
     public ReferenceFieldHandle(FieldSupplier fieldSupplier, boolean resolve) {
-        impl = new ReferenceStaticUnsafeFieldHandle<>(fieldSupplier);
+        impl = new ReferenceStaticUnsafeFieldHandle<T>(fieldSupplier);
         if (resolve) {
             impl.resolve();
         }

@@ -14,7 +14,7 @@ public abstract class AbstractUnsafeFieldHandle implements Callable<UnsafeFieldT
 
     public AbstractUnsafeFieldHandle(FieldSupplier fieldSupplier) {
         this.fieldSupplier = fieldSupplier;
-        unresolvedRef = new UnresolvedRef<>(this);
+        unresolvedRef = new UnresolvedRef<UnsafeFieldTuple>(this);
     }
 
     @Override
