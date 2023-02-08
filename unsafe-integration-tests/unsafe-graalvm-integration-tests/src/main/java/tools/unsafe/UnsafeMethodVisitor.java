@@ -23,7 +23,8 @@ public class UnsafeMethodVisitor extends MethodVisitor {
         System.out.println(descriptor);
         System.out.println(bootstrapMethodHandle);
         System.out.println(Arrays.toString(bootstrapMethodArguments));*/
-        if ("()Ltools/unsafe/reflection/FieldSupplier;".equals(descriptor)) {
+        if ("()Ltools/unsafe/reflection/FieldSupplier;".equals(descriptor) ||
+                "()Ltools/unsafe/field/FieldSupplier;".equals(descriptor)) {
             if ("altMetafactory".equals(bootstrapMethodHandle.getName())) {
                 Object lambda = bootstrapMethodArguments[1];
                 //System.out.println("Detected lambda of type " + lambda.getClass() + " = " + lambda);
