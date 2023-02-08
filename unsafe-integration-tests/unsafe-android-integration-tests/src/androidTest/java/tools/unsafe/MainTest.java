@@ -9,6 +9,8 @@ import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import static org.junit.Assert.assertEquals;
+
 @RunWith(AndroidJUnit4.class)
 public class MainTest {
 
