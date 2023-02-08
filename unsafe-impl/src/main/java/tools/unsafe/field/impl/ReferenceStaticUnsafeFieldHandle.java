@@ -16,7 +16,6 @@ public class ReferenceStaticUnsafeFieldHandle<T> extends AbstractUnsafeFieldHand
         try {
             Field call = fieldSupplier.call();
             Unsafe unsafe = UnsafeProvider.getSunMiscUnsafe();
-            unsafe.ensureClassInitialized(call.getDeclaringClass());
             base = unsafe.staticFieldBase(call);
             offset = unsafe.staticFieldOffset(call);
         } catch (Exception e) {
