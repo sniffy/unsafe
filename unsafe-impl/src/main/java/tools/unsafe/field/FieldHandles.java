@@ -34,7 +34,7 @@ public class FieldHandles {
 
         @Override
         protected ReferenceStaticUnsafeFieldHandle<T> createImpl(FieldSupplier fieldSupplier) {
-            return new ReferenceStaticUnsafeFieldHandle<>(fieldSupplier);
+            return new ReferenceStaticUnsafeFieldHandle<T>(fieldSupplier);
         }
 
         public T get() {
