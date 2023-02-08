@@ -1,6 +1,7 @@
 package tools.unsafe;
 
 import org.junit.Test;
+import tools.unsafe.field.FieldHandles;
 import tools.unsafe.field.ReferenceFieldHandle;
 
 import static org.junit.Assert.assertEquals;
@@ -9,7 +10,7 @@ public class SampleClassTest {
 
     // Consider also jdk.internal.misc.Unsafe and jdk.internal.reflect.Unsafe
 
-    private final static ReferenceFieldHandle<Object> fieldHandle = new ReferenceFieldHandle<>(() -> SampleClass.class.getDeclaredField("foo"));
+    private final static ReferenceFieldHandle<Object> fieldHandle = FieldHandles.staticReferenceField(() -> SampleClass.class.getDeclaredField("foo"));
 
     @Test
     public void testReferenceFieldHandle() {
