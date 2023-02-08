@@ -35,6 +35,7 @@ public abstract class AbstractUnsafeFieldHandle implements Callable<UnsafeFieldT
     }
 
     public UnsafeFieldTuple resolve() {
+        // TODO: do unsafe.ensureClassInitialized(call.getDeclaringClass());
         return unresolvedRef.resolve();
     }
 

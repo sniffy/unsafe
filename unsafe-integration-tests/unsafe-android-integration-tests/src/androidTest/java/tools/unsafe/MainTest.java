@@ -3,6 +3,7 @@ package tools.unsafe;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import tools.unsafe.field.FieldHandles;
 
 import java.lang.reflect.Method;
 import java.util.Enumeration;
@@ -10,6 +11,17 @@ import java.util.Properties;
 
 @RunWith(AndroidJUnit4.class)
 public class MainTest {
+
+    private final static FieldHandles.ReferenceStaticFieldHandle<Object> fieldHandle = FieldHandles.staticReferenceField(() -> SampleClass.class.getDeclaredField("foo"));
+
+    @Test
+    public void testReferenceFieldHandle() {
+        Object o = new Object();
+        fieldHandle.set(o);
+        assertEquals(o, SampleClass.getFoo());
+        assertEquals(SampleClass.getFoo(), fieldHandle.get());
+
+    }
 
     @Test
     public void testSystemProperties() {
