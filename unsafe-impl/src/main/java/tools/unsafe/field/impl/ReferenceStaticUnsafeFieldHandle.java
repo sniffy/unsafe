@@ -34,7 +34,9 @@ public class ReferenceStaticUnsafeFieldHandle<T> extends AbstractUnsafeFieldHand
         if (VirtualMachineFamily.ANDROID == UnsafeVirtualMachine.getFamily()) {
             return unsafe().objectFieldOffset(field);
         } else {
-            return unsafe().staticFieldOffset(field);
+            return unsafe().objectFieldOffset(field);
+
+            //return unsafe().staticFieldOffset(field);
         }
     }
 
