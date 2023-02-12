@@ -28,11 +28,12 @@ public class ReferenceStaticUnsafeFieldHandle<T> extends AbstractUnsafeFieldHand
 
     @Override
     protected long fieldOffset(Field field) {
-        if (VirtualMachineFamily.ANDROID != UnsafeVirtualMachine.getFamily()) {
+        return unsafe().staticFieldOffset(field);
+        /*if (VirtualMachineFamily.ANDROID != UnsafeVirtualMachine.getFamily()) {
             return unsafe().objectFieldOffset(field);
         } else {
             return unsafe().staticFieldOffset(field);
-        }
+        }*/
     }
 
     public T get() {
