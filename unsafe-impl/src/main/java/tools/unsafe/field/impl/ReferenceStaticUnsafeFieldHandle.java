@@ -15,7 +15,7 @@ public class ReferenceStaticUnsafeFieldHandle<T> extends AbstractUnsafeFieldHand
     @Override
     protected Object fieldBase(Field field) {
         try {
-            if (VirtualMachineFamily.ANDROID != UnsafeVirtualMachine.getFamily()) {
+            if (VirtualMachineFamily.ANDROID == UnsafeVirtualMachine.getFamily()) {
                 return field.getDeclaringClass();
             } else {
                 return unsafe().staticFieldBase(field);
@@ -28,12 +28,12 @@ public class ReferenceStaticUnsafeFieldHandle<T> extends AbstractUnsafeFieldHand
 
     @Override
     protected long fieldOffset(Field field) {
-        return unsafe().staticFieldOffset(field);
-        /*if (VirtualMachineFamily.ANDROID != UnsafeVirtualMachine.getFamily()) {
+        //return unsafe().staticFieldOffset(field);
+        if (VirtualMachineFamily.ANDROID == UnsafeVirtualMachine.getFamily()) {
             return unsafe().objectFieldOffset(field);
         } else {
             return unsafe().staticFieldOffset(field);
-        }*/
+        }
     }
 
     public T get() {
