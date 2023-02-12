@@ -1,8 +1,9 @@
-package tools.unsafe.field.impl;
+package tools.unsafe.field.impl.unsafe;
 
 import tools.unsafe.UnsafeProvider;
 import tools.unsafe.field.FieldSupplier;
 import tools.unsafe.field.UnresolvedRef;
+import tools.unsafe.field.impl.AbstractFieldHandleImpl;
 import tools.unsafe.vm.UnsafeVirtualMachine;
 import tools.unsafe.vm.VirtualMachineFamily;
 
@@ -41,6 +42,11 @@ public abstract class AbstractUnsafeFieldHandle implements Callable<UnsafeFieldT
     public UnsafeFieldTuple resolve() {
         // TODO: do unsafe.ensureClassInitialized(call.getDeclaringClass());
         return unresolvedRef.resolve();
+    }
+
+    //@Override
+    public Field asField() {
+        return resolve().field;
     }
 
 }

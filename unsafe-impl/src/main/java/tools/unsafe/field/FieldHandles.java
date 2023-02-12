@@ -1,8 +1,13 @@
 package tools.unsafe.field;
 
-import tools.unsafe.field.impl.ReferenceStaticUnsafeFieldHandle;
+import tools.unsafe.field.impl.ReferenceStaticFieldHandleImpl;
+import tools.unsafe.field.impl.reflection.ReferenceStaticReflectionFieldHandle;
+import tools.unsafe.field.impl.unsafe.ReferenceStaticUnsafeFieldHandle;
+import tools.unsafe.vm.UnsafeVirtualMachine;
 
 import java.lang.reflect.Field;
+
+import static tools.unsafe.vm.VirtualMachineFamily.ANDROID;
 
 public class FieldHandles {
 
@@ -14,7 +19,7 @@ public class FieldHandles {
         return new ReferenceStaticFieldHandle<T>(fieldSupplier, resolve);
     }
 
-    public static class ReferenceStaticFieldHandle<T> extends AbstractFieldHandle<ReferenceStaticUnsafeFieldHandle<T>> {
+    public static class ReferenceStaticFieldHandle<T> extends AbstractFieldHandle<ReferenceStaticFieldHandleImpl<T>> {
 
         public ReferenceStaticFieldHandle(FieldSupplier fieldSupplier) {
             super(fieldSupplier);
@@ -33,8 +38,12 @@ public class FieldHandles {
         }
 
         @Override
-        protected ReferenceStaticUnsafeFieldHandle<T> createImpl(FieldSupplier fieldSupplier) {
-            return new ReferenceStaticUnsafeFieldHandle<T>(fieldSupplier);
+        protected ReferenceStaticFieldHandleImpl<T> createImpl(FieldSupplier fieldSupplier) {
+            if (ANDROID == UnsafeVirtualMachine.getFamily()) {
+                return new ReferenceStaticReflectionFieldHandle<T>(fieldSupplier);
+            } else {
+                return new ReferenceStaticUnsafeFieldHandle<T>(fieldSupplier);
+            }
         }
 
         public T get() {

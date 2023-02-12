@@ -1,10 +1,11 @@
 package tools.unsafe.field;
 
-import tools.unsafe.field.impl.AbstractUnsafeFieldHandle;
+import tools.unsafe.field.impl.AbstractFieldHandleImpl;
+import tools.unsafe.field.impl.unsafe.AbstractUnsafeFieldHandle;
 
 import java.lang.reflect.Field;
 
-public abstract class AbstractFieldHandle<IMPL extends AbstractUnsafeFieldHandle> {
+public abstract class AbstractFieldHandle<IMPL extends AbstractFieldHandleImpl> {
 
     protected final IMPL impl;
 
@@ -34,8 +35,7 @@ public abstract class AbstractFieldHandle<IMPL extends AbstractUnsafeFieldHandle
     }
 
     public Field asField() {
-        return impl.resolve().field;
+        return impl.asField();
     }
-
 
 }
