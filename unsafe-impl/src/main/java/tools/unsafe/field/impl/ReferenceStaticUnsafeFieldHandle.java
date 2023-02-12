@@ -12,7 +12,12 @@ public class ReferenceStaticUnsafeFieldHandle<T> extends AbstractUnsafeFieldHand
 
     @Override
     protected Object fieldBase(Field field) {
-        return unsafe().staticFieldBase(field);
+        try {
+            return unsafe().staticFieldBase(field);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            return field.getDeclaringClass();
+        }
     }
 
     @Override
