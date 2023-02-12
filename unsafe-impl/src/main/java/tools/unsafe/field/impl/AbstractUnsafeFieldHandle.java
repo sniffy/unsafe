@@ -3,6 +3,8 @@ package tools.unsafe.field.impl;
 import tools.unsafe.UnsafeProvider;
 import tools.unsafe.field.FieldSupplier;
 import tools.unsafe.field.UnresolvedRef;
+import tools.unsafe.vm.UnsafeVirtualMachine;
+import tools.unsafe.vm.VirtualMachineFamily;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.Callable;
@@ -20,7 +22,9 @@ public abstract class AbstractUnsafeFieldHandle implements Callable<UnsafeFieldT
     @Override
     public UnsafeFieldTuple call() throws Exception {
         Field field = fieldSupplier.call();
-        unsafe().ensureClassInitialized(field.getDeclaringClass());
+        if (VirtualMachineFamily.ANDROID != UnsafeVirtualMachine.getFamily()) {
+            unsafe().ensureClassInitialized(field.getDeclaringClass());
+        }
         Object base = fieldBase(field);
         long offset = fieldOffset(field);
         return new UnsafeFieldTuple(field, base, offset);
