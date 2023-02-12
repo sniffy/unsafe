@@ -1,6 +1,8 @@
 package tools.unsafe.field.impl;
 
 import tools.unsafe.field.FieldSupplier;
+import tools.unsafe.vm.UnsafeVirtualMachine;
+import tools.unsafe.vm.VirtualMachineFamily;
 
 import java.lang.reflect.Field;
 
@@ -13,7 +15,11 @@ public class ReferenceStaticUnsafeFieldHandle<T> extends AbstractUnsafeFieldHand
     @Override
     protected Object fieldBase(Field field) {
         try {
-            return unsafe().staticFieldBase(field);
+            if (VirtualMachineFamily.ANDROID != UnsafeVirtualMachine.getFamily()) {
+                return field.getDeclaringClass();
+            } else {
+                return unsafe().staticFieldBase(field);
+            }
         } catch (Throwable e) {
             e.printStackTrace();
             return field.getDeclaringClass();
@@ -22,7 +28,11 @@ public class ReferenceStaticUnsafeFieldHandle<T> extends AbstractUnsafeFieldHand
 
     @Override
     protected long fieldOffset(Field field) {
-        return unsafe().staticFieldOffset(field);
+        if (VirtualMachineFamily.ANDROID != UnsafeVirtualMachine.getFamily()) {
+            return unsafe().objectFieldOffset(field);
+        } else {
+            return unsafe().staticFieldOffset(field);
+        }
     }
 
     public T get() {

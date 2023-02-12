@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(AndroidJUnit4.class)
 public class MainTest {
 
-    /*private final static FieldHandles.ReferenceStaticFieldHandle<Object> fieldHandle = FieldHandles.staticReferenceField(() -> SampleClass.class.getDeclaredField("foo"));
+    private final static FieldHandles.ReferenceStaticFieldHandle<Object> fieldHandle = FieldHandles.staticReferenceField(() -> SampleClass.class.getDeclaredField("foo"));
 
     @Test
     public void testReferenceFieldHandle() {
@@ -23,7 +23,7 @@ public class MainTest {
         assertEquals(o, SampleClass.getFoo());
         assertEquals(SampleClass.getFoo(), fieldHandle.get());
 
-    }*/
+    }
 
     @Test
     public void testSystemProperties() {
