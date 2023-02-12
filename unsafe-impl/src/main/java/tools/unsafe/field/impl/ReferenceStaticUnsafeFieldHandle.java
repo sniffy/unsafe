@@ -18,7 +18,9 @@ public class ReferenceStaticUnsafeFieldHandle<T> extends AbstractUnsafeFieldHand
             if (VirtualMachineFamily.ANDROID == UnsafeVirtualMachine.getFamily()) {
                 return field.getDeclaringClass();
             } else {
-                return unsafe().staticFieldBase(field);
+                //return unsafe().staticFieldBase(field);
+                return field.getDeclaringClass();
+
             }
         } catch (Throwable e) {
             e.printStackTrace();
