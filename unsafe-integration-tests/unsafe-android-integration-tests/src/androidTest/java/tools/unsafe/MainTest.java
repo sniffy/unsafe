@@ -48,17 +48,6 @@ public class MainTest {
 
     }
 
-    @Test
-    public void testUnsafeFromNewJava() throws Exception {
-        System.err.println("new unsafe");
-        for (Method method : Class.forName("jdk.internal.misc.Unsafe").getDeclaredMethods()) {
-            System.out.println(method.getName());
-            System.err.println(method.getName());
-        }
-
-
-    }
-
     /*@Test
     public void testStaticReferenceField() throws Throwable {
 
