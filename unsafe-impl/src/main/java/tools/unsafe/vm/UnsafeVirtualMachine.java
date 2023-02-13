@@ -42,6 +42,7 @@ public class UnsafeVirtualMachine {
         }
         try {
             Class.forName("android.app.Activity");
+            System.out.println("Android detected");
             return ANDROID;
         } catch (Exception e) {
             e.printStackTrace();
