@@ -9,6 +9,7 @@ import tools.unsafe.vm.UnsafeVirtualMachine;
 import tools.unsafe.vm.VirtualMachineFamily;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 public class ReferenceStaticReflectionFieldHandle<T> implements ReferenceStaticFieldHandleImpl<T> {
 
@@ -22,7 +23,7 @@ public class ReferenceStaticReflectionFieldHandle<T> implements ReferenceStaticF
     public T get() {
         // TODO: add resolve() here
         try {
-            return (T) fieldSupplier.call().get(null);
+            return (T) resolve().get(null);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -31,7 +32,7 @@ public class ReferenceStaticReflectionFieldHandle<T> implements ReferenceStaticF
 
     public void set(T value) {
         try {
-            fieldSupplier.call().set(null, value);
+            resolve().set(null, value);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,9 +49,30 @@ public class ReferenceStaticReflectionFieldHandle<T> implements ReferenceStaticF
     }
 
     @Override
-    public Object resolve() {
+    public Field resolve() {
         try {
-            return fieldSupplier.call();
+            Field field = fieldSupplier.call();
+
+            if (!field.isAccessible()) {
+                field.setAccessible(true);
+            }
+
+            try {
+                Field modifiersField = Field.class.getDeclaredField("modifiers");
+                modifiersField.setAccessible(true);
+                modifiersField.set(field, field.getModifiers() & ~Modifier.FINAL);
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+                try {
+                    Field modifiersField = Field.class.getDeclaredField("accessFlags");
+                    modifiersField.setAccessible(true);
+                    modifiersField.set(field, field.getModifiers() & ~Modifier.FINAL);
+                } catch (NoSuchFieldException e1) {
+                    e1.printStackTrace();
+                }
+            }
+
+            return field;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
