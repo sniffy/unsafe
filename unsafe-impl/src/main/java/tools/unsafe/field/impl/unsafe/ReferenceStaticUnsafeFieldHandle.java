@@ -15,12 +15,22 @@ public class ReferenceStaticUnsafeFieldHandle<T> extends AbstractUnsafeFieldHand
 
     @Override
     protected Object fieldBase(Field field) {
-        return unsafe().staticFieldBase(field);
+        try {
+            return unsafe().staticFieldBase(field);
+        } catch (Error e) {
+            e.printStackTrace();
+            return field.getDeclaringClass();
+        }
     }
 
     @Override
     protected long fieldOffset(Field field) {
-        return unsafe().staticFieldOffset(field);
+        try {
+            return unsafe().staticFieldOffset(field);
+        } catch (Error e) {
+            e.printStackTrace();
+            return unsafe().objectFieldOffset(field);
+        }
     }
 
     public T get() {
