@@ -39,6 +39,7 @@ public class FieldHandles {
 
         @Override
         protected ReferenceStaticFieldHandleImpl<T> createImpl(FieldSupplier fieldSupplier) {
+            System.out.println("UnsafeVirtualMachine.getFamily()=" + UnsafeVirtualMachine.getFamily());
             if (ANDROID == UnsafeVirtualMachine.getFamily()) {
                 return new ReferenceStaticReflectionFieldHandle<T>(fieldSupplier);
             } else {
