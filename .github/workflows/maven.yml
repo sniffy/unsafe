@@ -37,7 +37,7 @@ jobs:
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: 33
           script: cd unsafe-integration-tests/unsafe-android-integration-tests && chmod +x ./gradlew && ./gradlew cAT
       - name: print test output
         run: find . -name 'logcat*' -print0 | xargs -0 cat
