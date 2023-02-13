@@ -41,6 +41,7 @@ jobs:
           script: cd unsafe-integration-tests/unsafe-android-integration-tests && chmod +x ./gradlew && ./gradlew cAT
       - name: print test output
         run: find . -name 'logcat*' -print0 | xargs -0 cat
+        if: always()
   build:
     timeout-minutes: 10
     runs-on: ubuntu-latest

@@ -15,6 +15,7 @@ public class ReferenceStaticReflectionFieldHandle<T> implements ReferenceStaticF
     private final FieldSupplier fieldSupplier;
 
     public ReferenceStaticReflectionFieldHandle(FieldSupplier fieldSupplier) {
+        System.out.println("Using ReferenceStaticReflectionFieldHandle");
         this.fieldSupplier = fieldSupplier;
     }
 
