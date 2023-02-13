@@ -45,11 +45,20 @@ public class UnsafeVirtualMachine {
             return ANDROID;
         } catch (Exception e) {
             e.printStackTrace();
-            if (System.getProperty("java.vendor").toLowerCase().contains("ibm")) {
-                return J9;
-            } else {
-                return HOTSPOT;
+
+            try {
+                Class.forName("android.os.SystemProperties");
+                return ANDROID;
+
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                if (System.getProperty("java.vendor").toLowerCase().contains("ibm")) {
+                    return J9;
+                } else {
+                    return HOTSPOT;
+                }
             }
+
         }
     }
 
