@@ -44,6 +44,7 @@ public class UnsafeVirtualMachine {
             Class.forName("android.app.Activity");
             return ANDROID;
         } catch (Exception e) {
+            e.printStackTrace();
             if (System.getProperty("java.vendor").toLowerCase().contains("ibm")) {
                 return J9;
             } else {
