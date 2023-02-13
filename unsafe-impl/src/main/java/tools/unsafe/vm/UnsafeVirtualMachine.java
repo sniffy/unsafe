@@ -38,6 +38,8 @@ public class UnsafeVirtualMachine {
 
     public static VirtualMachineFamily getFamily() {
         if ("executable".equals(System.getProperty("org.graalvm.nativeimage.kind"))) {
+            System.out.println("GraalVM detected");
+
             return GRAALVM_NATIVE;
         }
         try {
@@ -45,17 +47,23 @@ public class UnsafeVirtualMachine {
             System.out.println("Android detected");
             return ANDROID;
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.err);
 
             try {
                 Class.forName("android.os.SystemProperties");
+                System.out.println("Android detected");
+
                 return ANDROID;
 
             } catch (Exception e1) {
-                e1.printStackTrace();
+                e1.printStackTrace(System.err);
                 if (System.getProperty("java.vendor").toLowerCase().contains("ibm")) {
+                    System.out.println("J9 detected");
+
                     return J9;
                 } else {
+                    System.out.println("Hotspot detected");
+
                     return HOTSPOT;
                 }
             }
