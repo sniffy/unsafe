@@ -25,7 +25,7 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt-hotspot'
-          cache: Gradle
+          cache: gradle
       - name: Build with Gradle
         run: ./gradlew build
       - name: Set up JDK 11
@@ -33,7 +33,7 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt-hotspot'
-          cache: Gradle
+          cache: gradle
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -76,7 +76,7 @@ jobs:
         with:
           java-version: '8'
           distribution: 'temurin'
-          cache: Gradle
+          cache: gradle
       - name: Build with Gradle
         run: ./gradlew build -Djdk5.home=./jdk1.5.0_22 -Djdk4.home=$(pwd)/j2sdk1.4.2_19
       - name: Set up JDK 17
@@ -84,7 +84,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: Gradle
+          cache: gradle
       - name: Build with Gradle
         run: ./gradlew build
       - name: Set up JDK 8 J9
@@ -92,7 +92,7 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt-openj9'
-          cache: Gradle
+          cache: gradle
       - name: Build with Gradle
         run: ./gradlew build
       - name: Set up JDK EA
