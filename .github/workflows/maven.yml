@@ -38,6 +38,18 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
+          # Workaround for https://github.com/ReactiveCircus/android-emulator-runner/issues/160, but newer version.
+          emulator-build: 9322596 # 31.3.14.0 got it via `emulator -version`
+          # Override default "-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim"
+          # See emulator manual for reference: https://developer.android.com/studio/run/emulator-commandline
+          emulator-options: >
+            -no-window
+            -gpu swiftshader_indirect
+            -no-snapshot
+            -noaudio
+            -no-boot-anim
+            -camera-back none
+            -camera-front none
           script: ./gradlew cAT
       - name: print test output
         run: find . -name 'logcat*' -print0 | xargs -0 cat
