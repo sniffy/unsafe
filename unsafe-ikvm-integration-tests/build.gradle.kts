@@ -42,6 +42,8 @@ dotnet {
         // Default values applied
         ////version = project.version
         ////packageVersion = project.version
+        version = project.version.toString()
+        packageVersion = project.version.toString()
     }
 
     test {
