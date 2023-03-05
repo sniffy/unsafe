@@ -12,9 +12,16 @@ namespace ikvm_test
         }
 
         [Test]
+        public void TestCurrentWorkingDirectory()
+        {
+            java.io.File file = new java.io.File(".");
+            throw new RuntimeException(file.getAbsolutePath() + " is absolute path of current working directory")
+        }
+
+        [Test]
         public void Test1()
         {
-            java.net.URL url = new java.net.URL("file:../../unsafe-impl/build/libs/unsafe-impl.jar");
+            java.net.URL url = new java.net.URL("file:../../../unsafe-impl/build/libs/unsafe-impl.jar");
             // Create an array of all URLS
             java.net.URL[] urls = { url };
             // Create a ClassLoader
