@@ -2,6 +2,8 @@ plugins {
     id("com.itiviti.dotnet") version "1.9.5"
 }
 
+project.version = "1.0-SNAPSHOT"
+
 dotnet {
 
     projectName = "unsafe-ikvm-integration-tests"
