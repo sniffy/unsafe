@@ -14,7 +14,7 @@ namespace ikvm_test
         [Test]
         public void Test1()
         {
-            java.net.URL url = new java.net.URL("file:C:\\work\\github\\unsafe\\unsafe-impl\\build\\libs\\unsafe-impl.jar");
+            java.net.URL url = new java.net.URL("file:../unsafe-impl/build/libs/unsafe-impl.jar");
             // Create an array of all URLS
             java.net.URL[] urls = { url };
             // Create a ClassLoader
