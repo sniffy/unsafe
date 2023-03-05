@@ -15,7 +15,7 @@ namespace ikvm_test
         public void TestCurrentWorkingDirectory()
         {
             java.io.File file = new java.io.File(".");
-            throw new RuntimeException(file.getAbsolutePath() + " is absolute path of current working directory")
+            throw new java.lang.RuntimeException(file.getAbsolutePath() + " is absolute path of current working directory");
         }
 
         [Test]
