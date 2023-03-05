@@ -1,5 +1,5 @@
 plugins {
-    id("com.itiviti.dotnet") version "1.6.1"
+    id("com.itiviti.dotnet") version "1.9.5"
 }
 
 dotnet {
