@@ -16,7 +16,7 @@ public class SampleClass {
         System.out.println("I'm called via reflection with argument " + argument);
     }
 
-    protected static Object getFoo() {
+    public static Object getFoo() {
         return foo;
     }
 
