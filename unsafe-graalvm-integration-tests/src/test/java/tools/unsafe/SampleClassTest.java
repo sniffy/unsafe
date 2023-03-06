@@ -2,6 +2,7 @@ package tools.unsafe;
 
 import org.junit.Test;
 import tools.unsafe.field.FieldHandles;
+import tools.unsafe.sut.SampleClass;
 
 import static org.junit.Assert.assertEquals;
 

@@ -4,6 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import tools.unsafe.field.FieldHandles;
+import tools.unsafe.sut.SampleClass;
 
 import java.lang.reflect.Method;
 import java.util.Enumeration;

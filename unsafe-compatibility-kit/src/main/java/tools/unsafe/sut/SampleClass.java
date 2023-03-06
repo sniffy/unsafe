@@ -1,4 +1,4 @@
-package tools.unsafe;
+package tools.unsafe.sut;
 
 public class SampleClass {
 
