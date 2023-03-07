@@ -1,11 +1,11 @@
+plugins {
+    `java-library`
+    //application
+
+    id("org.graalvm.buildtools.native") version "0.9.18"
+}
+
 if (project.hasProperty("graalvm-test")) {
-
-    plugins {
-        `java-library`
-        //application
-
-        id("org.graalvm.buildtools.native") version "0.9.18"
-    }
 
     graalvmNative {
         binaries.all {

@@ -1,8 +1,8 @@
-if (project.hasProperty("android-test")) {
+plugins {
+    id("com.android.application") version "7.2.0"
+}
 
-    plugins {
-        id("com.android.application") version "7.2.0"
-    }
+if (project.hasProperty("android-test")) {
 
     //group("io.sniffy.unsafe")
     //version("1.0-SNAPSHOT")

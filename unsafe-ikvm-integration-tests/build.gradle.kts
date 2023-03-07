@@ -1,8 +1,8 @@
-if (project.hasProperty("dotnet-test")) {
+plugins {
+    id("com.itiviti.dotnet") version "1.9.5"
+}
 
-    plugins {
-        id("com.itiviti.dotnet") version "1.9.5"
-    }
+if (project.hasProperty("dotnet-test")) {
 
     project.version = "1.0-SNAPSHOT"
 
