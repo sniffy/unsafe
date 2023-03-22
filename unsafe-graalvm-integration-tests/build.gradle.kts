@@ -13,8 +13,14 @@ graalvmNative {
 }
 
 tasks.test {
+    // Discover and execute JUnit4-based tests
+    useJUnit()
     // Use JUnit Platform for unit tests.
-    useJUnitPlatform()
+    //useJUnitPlatform()
+
+    testLogging {     // This is for logging and can be removed.
+        events("passed", "skipped", "failed")
+    }
 }
 
 
@@ -25,6 +31,7 @@ dependencies {
     compileOnly(group = "org.graalvm.nativeimage", name = "svm", version = "20.2.0")
 
     testImplementation(group = "junit", name = "junit", version = "4.13.2")
+    //testCompileOnly(group = "org.junit.jupiter", name = "junit-jupiter", version = "5.6.0")
 
     implementation(project(":unsafe-compatibility-kit"))
     implementation(project(":unsafe-impl"))

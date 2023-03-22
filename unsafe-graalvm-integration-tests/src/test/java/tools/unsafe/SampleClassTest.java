@@ -2,6 +2,7 @@ package tools.unsafe;
 
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
+import org.junit.runner.Result;
 import tools.unsafe.field.FieldHandles;
 import tools.unsafe.sut.SampleClass;
 
@@ -31,7 +32,10 @@ public class SampleClassTest {
 
     @Test
     public void testCompatibilityKit() {
-        JUnitCore.runClasses(ReferenceStaticFieldHandleTest.class);
+        System.out.println("Running TCK!");
+        Result result = JUnitCore.runClasses(ReferenceStaticFieldHandleTest.class);
+        System.out.println(result.getFailures());
+        assertEquals(0, result.getFailureCount());
     }
 
 }
