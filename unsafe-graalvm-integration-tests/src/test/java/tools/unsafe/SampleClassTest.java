@@ -1,6 +1,7 @@
 package tools.unsafe;
 
 import org.junit.Test;
+import org.junit.runner.JUnitCore;
 import tools.unsafe.field.FieldHandles;
 import tools.unsafe.sut.SampleClass;
 
@@ -26,6 +27,11 @@ public class SampleClassTest {
     public void testSystemProperties() {
         System.out.println(System.getProperties());
 
+    }
+
+    @Test
+    public void testCompatibilityKit() {
+        JUnitCore.runClasses(ReferenceStaticFieldHandleTest.class);
     }
 
 }
